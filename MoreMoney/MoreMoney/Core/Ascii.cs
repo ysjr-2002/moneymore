@@ -12,5 +12,7 @@ namespace MoreMoney.Core
         public const int R = 0x52;
         public const int S = 0x53;
         public const int T = 0x54;
+
+        public const string mxo = "MXP";
     }
 }
