@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace MoreMoney.Core
 {
@@ -19,8 +20,15 @@ namespace MoreMoney.Core
         public static void Out(string str)
         {
             var document = log.Document;
-            Paragraph p1 = new Paragraph(new Run("Out:" + str.Replace('\r', ' ')));
-            Run run = new Run(str);
+            var run = new Run("Out:" + str.Replace('\r', ' '));
+            Paragraph p1 = new Paragraph(run);
+            document.Blocks.Add(p1);
+        }
+
+        public static void In(string str)
+        {
+            var document = log.Document;
+            Paragraph p1 = new Paragraph(new Run("In:" + str.Replace('\r', ' ')));
             document.Blocks.Add(p1);
         }
     }

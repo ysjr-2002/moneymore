@@ -36,7 +36,14 @@ namespace MoreMoney.Core
                 data.Add(b);
             }
             data.Add(Package.EOM);
-            return data.ToArray();
+
+            if (Package.check_receive_lrc(data.ToArray()))
+                return data.ToArray();
+            else
+            {
+                Log.Out("校验码错误!");
+                return null;
+            }
         }
 
         public void write(byte[] data)

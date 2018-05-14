@@ -16,7 +16,7 @@ namespace MoreMoney.Core
         /// <summary>
         /// READ CASSETTE-ID
         /// </summary>
-        public const int cmd_read = 0x35;
+        public const int cmd_read_cassetteid = 0x35;
         /// <summary>
         /// 
         /// </summary>
@@ -24,11 +24,11 @@ namespace MoreMoney.Core
         /// <summary>
         /// CLOSE CASSETTE 
         /// </summary>
-        public const int cmd_close = 0x37;
+        public const int cmd_close_cassette = 0x37;
         /// <summary>
         ///  OPEN CASSETTE
         /// </summary>
-        public const int cmd_open = 0x38;
+        public const int cmd_open_cassette = 0x38;
 
         public const int cmd_PROGRAM_ID = 0x41;
 
@@ -55,26 +55,26 @@ namespace MoreMoney.Core
             return list.ToArray();
         }
 
-        public static byte[] open()
+        public static byte[] open_cassette()
         {
             List<byte> list = new List<byte>();
-            list.Add(cmd_open);
+            list.Add(cmd_open_cassette);
             composite(list);
             return list.ToArray();
         }
 
-        public static byte[] read()
+        public static byte[] read_cassetteid()
         {
             List<byte> list = new List<byte>();
-            list.Add(cmd_read);
+            list.Add(cmd_read_cassetteid);
             composite(list);
             return list.ToArray();
         }
 
-        public static byte[] close()
+        public static byte[] close_cassette()
         {
             List<byte> list = new List<byte>();
-            list.Add(cmd_close);
+            list.Add(cmd_close_cassette);
             composite(list);
             return list.ToArray();
         }
@@ -149,6 +149,25 @@ namespace MoreMoney.Core
 
             var lx1 = l1.ToString("X2");
             var lx2 = l2.ToString("X2");
+        }
+
+        public static bool check_receive_lrc(byte[] source)
+        {
+            byte send_l1, send_l2;
+            var len = source.Length;
+            send_l1 = source[len - 3];
+            send_l2 = source[len - 2];
+
+            byte[] data = new byte[source.Length - 3];
+            Array.Copy(source, data, data.Length);
+
+            byte l1, l2;
+            lrc(data, out l1, out l2);
+
+            if (send_l1 == l1 && send_l2 == l2)
+                return true;
+            else
+                return false;
         }
     }
 }

@@ -26,14 +26,24 @@ namespace MoreMoney.Core
 
         public void ReadId()
         {
-            var send = Package.read();
+            var send = Package.read_cassetteid();
             com.write(send);
             var receive = com.receive();
+            if (receive != null)
+            {
+                var list = Util.getRepeatbuffer(receive, 7);
+                foreach (var buffer in list)
+                {
+                    //HFGGGGG
+                    var str = buffer.byteToAscii();
+                    Log.In(str);
+                }
+            }
         }
 
         public void Open()
         {
-            var send = Package.open();
+            var send = Package.open_cassette();
             com.write(send);
             var receive = com.receive();
         }
@@ -41,21 +51,21 @@ namespace MoreMoney.Core
         public void Work()
         {
             byte[] send;
-            send = Package.open();
+            send = Package.open_cassette();
             com.write(send);
 
-            send = Package.read();
+            send = Package.read_cassetteid();
             com.write(send);
 
 
-            send = Package.close();
+            send = Package.close_cassette();
             com.write(send);
 
         }
 
         internal void Close()
         {
-            var send = Package.close();
+            var send = Package.close_cassette();
             com.write(send);
             var receive = com.receive();
         }
@@ -65,6 +75,12 @@ namespace MoreMoney.Core
             var send = Package.readPROGRAMID();
             com.write(send);
             var receive = com.receive();
+            if (receive != null)
+            {
+                var no = Encoding.ASCII.GetString(receive, 2, 8);
+                Log.In("no->" + no);
+            }
+            Log.In("shit");
         }
 
         internal void Counter()
