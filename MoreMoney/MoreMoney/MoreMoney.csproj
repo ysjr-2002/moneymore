@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\Ascii.cs" />
     <Compile Include="Core\Constrant.cs" />
+    <Compile Include="Core\Ext.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\Package.cs" />
     <Compile Include="Core\SerialCom.cs" />
