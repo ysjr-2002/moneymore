@@ -47,11 +47,11 @@ namespace MoreMoney.Core
             //X’57’ X’44’	WRITE DATA
         }
 
-        public static byte[] reset()
+        public static byte[] Reset()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_reset);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
@@ -59,48 +59,48 @@ namespace MoreMoney.Core
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_open_cassette);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
-        public static byte[] read_cassetteid()
+        public static byte[] Read_cassetteid()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_read_cassetteid);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
-        public static byte[] close_cassette()
+        public static byte[] Close_cassette()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_close_cassette);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
-        public static byte[] readPROGRAM()
+        public static byte[] ReadPROGRAM()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_PROGRAM_ID);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
-        public static byte[] selftest()
+        public static byte[] SelfTest()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_self_test);
-            composite(list);
+            Composite(list);
             return list.ToArray();
         }
 
-        public static byte[] counter()
+        public static byte[] Counter()
         {
             var cmd = "RD/303";
             List<byte> list = new List<byte>();
-            list.AddRange(Encoding.ASCII.GetBytes(cmd));
-            composite(list);
+            list.AddRange(cmd.ToAscii());
+            Composite(list);
             return list.ToArray();
         }
 
@@ -114,24 +114,44 @@ namespace MoreMoney.Core
             return list.ToArray();
         }
 
-        public static byte[] readPROGRAMID()
+        public static byte[] ReadProgramID()
         {
             List<byte> list = new List<byte>();
-            list.Add((byte)'A');
-            composite(list);
+            list.AddRange("A".ToAscii());
+            Composite(list);
             return list.ToArray();
         }
 
-        public static void composite(List<byte> list)
+        public static byte[] ReadData(string item)
+        {
+            var head = "RD/";
+            var data = string.Concat(head, item);
+            List<byte> list = new List<byte>();
+            list.AddRange(data.ToAscii());
+            Composite(list);
+            return list.ToArray();
+        }
+
+        public static byte[] WriteData(string item)
+        {
+            var head = "WD/";
+            var data = string.Concat(head, item);
+            List<byte> list = new List<byte>();
+            list.AddRange(data.ToAscii());
+            Composite(list);
+            return list.ToArray();
+        }
+
+        public static void Composite(List<byte> list)
         {
             byte l1, l2;
-            lrc(list.ToArray(), out l1, out l2);
+            Lrc(list.ToArray(), out l1, out l2);
             list.Add(l1);
             list.Add(l2);
             list.Add(EOM);
         }
 
-        public static void lrc(byte[] bytes, out byte l1, out byte l2)
+        public static void Lrc(byte[] bytes, out byte l1, out byte l2)
         {
             byte v = 0x00;
             l1 = 0;
@@ -151,7 +171,7 @@ namespace MoreMoney.Core
             var lx2 = l2.ToString("X2");
         }
 
-        public static bool check_receive_lrc(byte[] source)
+        public static bool Check_Receive_Lrc(byte[] source)
         {
             byte send_l1, send_l2;
             var len = source.Length;
@@ -162,7 +182,7 @@ namespace MoreMoney.Core
             Array.Copy(source, data, data.Length);
 
             byte l1, l2;
-            lrc(data, out l1, out l2);
+            Lrc(data, out l1, out l2);
 
             if (send_l1 == l1 && send_l2 == l2)
                 return true;

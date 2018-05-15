@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:MoreMoney"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="window"
-    Title="MainWindow"
+    Title="Run_Test"
     Width="800"
     Height="500"
     WindowStartupLocation="CenterScreen"
@@ -41,7 +41,7 @@
             Grid.Row="0"
             Margin="5"
             Orientation="Horizontal">
-            <Label Content="选层器串口:" />
+            <Label Content="Select port:" />
             <ComboBox
                 Name="cmbPorts"
                 Width="100"
@@ -49,38 +49,26 @@
             <Button
                 Name="btnOpenPort"
                 Click="btnOpenPort_Click"
-                Content="打开" />
+                Content="Open" />
         </StackPanel>
 
         <WrapPanel
             Grid.Row="1"
             Width="{Binding ActualWidth, ElementName=window}"
             Orientation="Horizontal">
-            <Button
-                Name="btnReset"
-                Click="btnReset_Click"
-                Content="Reset" />
-
-            <Button
-                Name="btnReadId"
-                Click="btnReadId_Click"
-                Content="Read caseete id" />
-
-            <Button
-                Name="btnOpenCassette"
-                Click="btnOpenCassette_Click"
-                Content="OpenCassette" />
-
+            <Button Click="btnReset_Click" Content="Reset" />
+            <Button Click="btnReadId_Click" Content="Read caseete id" />
+            <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
             <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
             <Button Click="btnReadProgram_Click" Content="ReadProgram" />
             <Button Click="btnReadCounter_Click" Content="ReadCounter" />
             <Button Click="btnSelfTest_Click" Content="SelfTest" />
-
         </WrapPanel>
 
         <RichTextBox
             Name="log"
             Grid.Row="2"
+            Margin="5,0"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto">
             <RichTextBox.Resources>

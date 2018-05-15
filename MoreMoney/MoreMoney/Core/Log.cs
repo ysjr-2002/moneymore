@@ -9,9 +9,9 @@ using System.Windows.Media;
 
 namespace MoreMoney.Core
 {
-    class Log
+    public class Log
     {
-        static RichTextBox log;
+        private static RichTextBox log;
         public static void Set(RichTextBox log)
         {
             Log.log = log;
@@ -20,8 +20,7 @@ namespace MoreMoney.Core
         public static void Out(string str)
         {
             var document = log.Document;
-            var run = new Run("Out:" + str.Replace('\r', ' '));
-            Paragraph p1 = new Paragraph(run);
+            Paragraph p1 = new Paragraph(new Run("Out:" + str.Replace('\r', ' ')));
             document.Blocks.Add(p1);
         }
 

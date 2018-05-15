@@ -22,24 +22,12 @@ namespace MoreMoney
     /// </summary>
     public partial class MainWindow : Window
     {
+        Constrant constrant = new Constrant(new SerialCom());
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
-            test();
             Log.Set(log);
-        }
-
-        private void test()
-        {
-            var bytes = Encoding.ASCII.GetBytes("202005");
-            byte l1, l2;
-            Package.lrc(bytes, out l1, out l2);
-            List<byte> temp = new List<byte>();
-            temp.AddRange(bytes);
-            temp.Add(l1);
-            temp.Add(l2);
-            var str = Encoding.ASCII.GetString(temp.ToArray());
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -66,7 +54,6 @@ namespace MoreMoney
 
         }
 
-        Constrant constrant = new Constrant(new SerialCom());
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
             constrant.Reset();
@@ -79,12 +66,12 @@ namespace MoreMoney
 
         private void btnOpenCassette_Click(object sender, RoutedEventArgs e)
         {
-            constrant.Open();
+            constrant.OpenCassette();
         }
 
         private void btnCloseCassette_Click(object sender, RoutedEventArgs e)
         {
-            constrant.Close();
+            constrant.CloseCassette();
         }
 
         private void btnReadProgram_Click(object sender, RoutedEventArgs e)

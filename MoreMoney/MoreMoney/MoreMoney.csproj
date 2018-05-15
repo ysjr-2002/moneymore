@@ -64,10 +64,11 @@
     </ApplicationDefinition>
     <Compile Include="Core\Ascii.cs" />
     <Compile Include="Core\Constrant.cs" />
-    <Compile Include="Core\Ext.cs" />
+    <Compile Include="Core\FunExt.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\Package.cs" />
     <Compile Include="Core\SerialCom.cs" />
+    <Compile Include="Core\StatusCode.cs" />
     <Compile Include="Core\Util.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -105,6 +106,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="document\8030981_01.docx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

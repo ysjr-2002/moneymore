@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MoreMoney.Core
 {
-    class Util
+    public static class Util
     {
         /// <summary>
         /// 读取返回字节的重复命令
@@ -22,6 +22,7 @@ namespace MoreMoney.Core
             Array.Copy(data, 1, repeatArray, 0, repeatArray.Length);
             while (true)
             {
+                //拷贝重复项
                 byte[] temp = new byte[len];
                 Array.Copy(data, pos, temp, 0, len);
                 list.Add(temp);

@@ -7,37 +7,46 @@ using System.Threading.Tasks;
 
 namespace MoreMoney.Core
 {
-    class SerialCom
+    public class SerialCom
     {
-        SerialPort sp;
+        private SerialPort port;
+
         public bool Open(string com)
         {
             try
             {
-                sp = new SerialPort(com, 9600, Parity.Even, 8, StopBits.One);
-                sp.Open();
+                port = new SerialPort(com, 9600, Parity.Even, 8, StopBits.One);
+                port.Open();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
         }
 
-        public byte[] receive()
+        public void Close()
         {
-            if (sp == null)
+            if (port != null && port.IsOpen)
+                port.Close();
+
+            port = null;
+        }
+
+        public byte[] Receive()
+        {
+            if (port == null)
                 return null;
 
             List<byte> data = new List<byte>();
             byte b = 0;
-            while ((b = (byte)sp.ReadByte()) != Package.EOM)
+            while ((b = (byte)port.ReadByte()) != Package.EOM)
             {
                 data.Add(b);
             }
             data.Add(Package.EOM);
 
-            if (Package.check_receive_lrc(data.ToArray()))
+            if (Package.Check_Receive_Lrc(data.ToArray()))
                 return data.ToArray();
             else
             {
@@ -46,17 +55,11 @@ namespace MoreMoney.Core
             }
         }
 
-        public void write(byte[] data)
+        public void Write(byte[] data)
         {
-            log(data);
-            if (sp != null && sp.IsOpen)
-                sp.Write(data, 0, data.Length);
-        }
-
-        private void log(byte[] data)
-        {
-            var log = Encoding.ASCII.GetString(data);
-            Log.Out(log);
+            Log.Out(data.ToAscii());
+            if (port != null && port.IsOpen)
+                port.Write(data, 0, data.Length);
         }
     }
 }
