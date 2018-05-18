@@ -22,20 +22,41 @@ namespace MoreMoney.Core
             var send = Package.Reset();
             com.Write(send);
             var receive = com.Receive();
+            if (receive != null)
+            {
+                if (receive.Length == 4)
+                {
+                    //S LL E
+                }
+                else
+                {
+                    //S HFNNN HFGGGGG ….. LL E
+                    var str = receive.ToAscii(1, 4);
+                    Log.In("HFNNN->" + str);
+
+                    var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
+                    foreach (var item in repeatBuffer)
+                    {
+                        str = item.ToArray().ToAscii();
+                        Log.In("HFGGGGG->" + str);
+                    }
+                }
+            }
         }
 
         public void ReadId()
         {
-            var send = Package.Read_cassetteid();
+            var send = Package.Read_Cassetteid();
             com.Write(send);
             var receive = com.Receive();
             if (receive != null)
             {
-                var list = Util.getRepeatbuffer(receive, 7);
-                foreach (var buffer in list)
+                var repeatBuffer = Util.getRepeatbuffer(receive, 1, 7);
+                foreach (var item in repeatBuffer)
                 {
                     //HFGGGGG
-                    var str = buffer.ToAscii();
+                    //var h = 
+                    var str = item.ToAscii(2, 5);
                     Log.In(str);
                 }
             }
@@ -43,7 +64,7 @@ namespace MoreMoney.Core
 
         public void OpenCassette()
         {
-            var send = Package.open_cassette();
+            var send = Package.Open_Cassette();
             com.Write(send);
             var receive = com.Receive();
         }
@@ -51,19 +72,19 @@ namespace MoreMoney.Core
         public void Work()
         {
             byte[] send;
-            send = Package.open_cassette();
+            send = Package.Open_Cassette();
             com.Write(send);
 
-            send = Package.Read_cassetteid();
+            send = Package.Read_Cassetteid();
             com.Write(send);
 
-            send = Package.Close_cassette();
+            send = Package.Close_Cassette();
             com.Write(send);
         }
 
         public void CloseCassette()
         {
-            var send = Package.Close_cassette();
+            var send = Package.Close_Cassette();
             com.Write(send);
             var receive = com.Receive();
         }
@@ -107,6 +128,34 @@ namespace MoreMoney.Core
             var send = Package.WriteData("");
             com.Write(send);
             var receive = com.Receive();
+        }
+
+        public void MoveForward(byte hn, string money)
+        {
+            var send = Package.MoveForward(hn, money);
+            com.Write(send);
+            var receive = com.Receive();
+            if (receive != null)
+            {
+                var s = (char)receive[0];
+                Log.In("status code->" + s);
+                if (s == '0')
+                {
+                    var repeatbuffer = Util.getRepeatbuffer(receive, 1, 5);
+                    foreach (var item in repeatbuffer)
+                    {
+                        //HFNNN
+                        var h = (char)item[0];
+                        var f = (char)item[1];
+                        var number = item.ToArray().ToAscii(2, 3);
+                        Log.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
+                    }
+                }
+                else
+                {
+                    //the command X’36’ Check Delivered Notes
+                }
+            }
         }
     }
 }

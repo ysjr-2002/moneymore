@@ -12,7 +12,7 @@ namespace MoreMoney.Core
         /// <summary>
         /// MOVE FORWARD
         /// </summary>
-        public const int cmd_forward = 0x32;
+        public const int cmd_moveforward = 0x32;
         /// <summary>
         /// READ CASSETTE-ID
         /// </summary>
@@ -55,7 +55,7 @@ namespace MoreMoney.Core
             return list.ToArray();
         }
 
-        public static byte[] open_cassette()
+        public static byte[] Open_Cassette()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_open_cassette);
@@ -63,7 +63,18 @@ namespace MoreMoney.Core
             return list.ToArray();
         }
 
-        public static byte[] Read_cassetteid()
+        public static byte[] MoveForward(byte hoppernumber, string hopenotes)
+        {
+            List<byte> list = new List<byte>();
+            list.Add(cmd_open_cassette);
+            list.Add(0x30);
+            list.Add(hoppernumber);
+            list.AddRange(hopenotes.ToAscii());
+            Composite(list);
+            return list.ToArray();
+        }
+
+        public static byte[] Read_Cassetteid()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_read_cassetteid);
@@ -71,7 +82,7 @@ namespace MoreMoney.Core
             return list.ToArray();
         }
 
-        public static byte[] Close_cassette()
+        public static byte[] Close_Cassette()
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_close_cassette);

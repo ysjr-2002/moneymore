@@ -14,12 +14,14 @@ namespace MoreMoney.Core
         /// <param name="data"></param>
         /// <param name="len"></param>
         /// <returns></returns>
-        public static List<byte[]> getRepeatbuffer(byte[] data, int len)
+        public static List<byte[]> getRepeatbuffer(byte[] data, int index, int len)
         {
             var pos = 0;
             var list = new List<byte[]>();
-            var repeatArray = new byte[data.Length - 4];
-            Array.Copy(data, 1, repeatArray, 0, repeatArray.Length);
+            //index 起始
+            //3     后3位
+            var repeatArray = new byte[data.Length - index - 3];
+            Array.Copy(data, index, repeatArray, 0, repeatArray.Length);
             while (true)
             {
                 //拷贝重复项

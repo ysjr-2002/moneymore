@@ -13,5 +13,11 @@ namespace MoreMoney
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            MainWindow x = new MainWindow();
+            x.Show();
+            base.OnStartup(e);
+        }
     }
 }

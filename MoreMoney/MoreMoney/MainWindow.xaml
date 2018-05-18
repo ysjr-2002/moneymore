@@ -15,6 +15,7 @@
         <Style TargetType="TextBox">
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="24" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
         <Style BasedOn="{StaticResource MyButton}" TargetType="Button">
@@ -24,14 +25,20 @@
         </Style>
 
         <Style TargetType="Label">
-            <Setter Property="Width" Value="80" />
+            <Setter Property="Width" Value="120" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Right" />
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="24" />
         </Style>
 
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition />
@@ -41,7 +48,7 @@
             Grid.Row="0"
             Margin="5"
             Orientation="Horizontal">
-            <Label Content="Select port:" />
+            <Label Content="Cash-&gt;Select port:" />
             <ComboBox
                 Name="cmbPorts"
                 Width="100"
@@ -52,12 +59,27 @@
                 Content="Open" />
         </StackPanel>
 
-        <WrapPanel
+        <StackPanel
             Grid.Row="1"
+            Margin="5"
+            Orientation="Horizontal">
+            <Label Content="Card-&gt;Select port:" />
+            <ComboBox
+                Name="cmbICPorts"
+                Width="100"
+                Height="24" />
+            <Button
+                Name="btnICOpenPort"
+                Click="btnICOpenPort_Click"
+                Content="Open" />
+        </StackPanel>
+
+        <WrapPanel
+            Grid.Row="2"
             Width="{Binding ActualWidth, ElementName=window}"
             Orientation="Horizontal">
             <Button Click="btnReset_Click" Content="Reset" />
-            <Button Click="btnReadId_Click" Content="Read caseete id" />
+            <Button Click="btnReadId_Click" Content="Read CassetteId" />
             <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
             <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
             <Button Click="btnReadProgram_Click" Content="ReadProgram" />
@@ -65,9 +87,32 @@
             <Button Click="btnSelfTest_Click" Content="SelfTest" />
         </WrapPanel>
 
+        <WrapPanel
+            Grid.Row="3"
+            Width="{Binding ActualWidth, ElementName=window}"
+            Orientation="Horizontal">
+
+            <Label Content="Hopper number:" />
+            <ComboBox Name="cmbHn" SelectedIndex="1">
+                <ComboBoxItem Content="1" />
+                <ComboBoxItem Content="2" />
+                <ComboBoxItem Content="3" />
+                <ComboBoxItem Content="4" />
+            </ComboBox>
+
+            <Label Content="number of notes to pickup:" />
+            <TextBox
+                Name="txtMoney"
+                Width="30"
+                MaxLength="3"
+                Text="30" />
+            <Button Click="btnMoveForeward_Click" Content="Move Forward" />
+
+        </WrapPanel>
+
         <RichTextBox
             Name="log"
-            Grid.Row="2"
+            Grid.Row="4"
             Margin="5,0"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto">

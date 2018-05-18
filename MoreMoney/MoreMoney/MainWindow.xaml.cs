@@ -39,19 +39,39 @@ namespace MoreMoney
         {
             var ports = Utility.SerialPorts();
             cmbPorts.ItemsSource = ports;
+            cmbICPorts.ItemsSource = ports;
             if (ports.Count <= 1)
             {
                 cmbPorts.SelectedIndex = 0;
+                cmbICPorts.SelectedIndex = 0;
             }
             else
             {
                 cmbPorts.SelectedIndex = 1;
+                cmbICPorts.SelectedIndex = 0;
             }
         }
 
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        SerialComIC comIC = null;
+        private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
+        {
+            comIC = new SerialComIC(cmbICPorts.Text);
+            var msg = "";
+            var open = comIC.Open(out msg);
+            if (!open)
+            {
+                Log.In(msg);
+                return;
+            }
+            comIC.OnReadCardNo += (s, no) =>
+            {
+                Log.In(no);
+            };
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -87,6 +107,15 @@ namespace MoreMoney
         private void btnSelfTest_Click(object sender, RoutedEventArgs e)
         {
             constrant.SelfTest();
+        }
+
+        private void btnMoveForeward_Click(object sender, RoutedEventArgs e)
+        {
+            var content = Convert.ToChar((((ComboBoxItem)cmbHn.SelectedItem).Content));
+            var hn = (byte)content;
+            var hn_hex = hn.ToString("x2");
+            var hopenotes = txtMoney.Text.PadLeft(3, '0');
+            constrant.MoveForward(hn, hopenotes);
         }
     }
 }
