@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CCNET, Version=1.0.0.41, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\CCNET.dll</HintPath>
+    </Reference>
     <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\Common.dll</HintPath>
@@ -63,11 +67,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\Ascii.cs" />
+    <Compile Include="Core\CashCore\Charge.cs" />
+    <Compile Include="Core\CashCore\Enums.cs" />
+    <Compile Include="Core\CashCore\MoneyReceiver.cs" />
+    <Compile Include="Core\CoinCore\CoinChanger.cs" />
     <Compile Include="Core\Constrant.cs" />
     <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Core\FunExt.cs" />
+    <Compile Include="Core\DataItems.cs" />
     <Compile Include="Core\Log.cs" />
+    <Compile Include="Core\MoneyBus.cs" />
     <Compile Include="Core\Package.cs" />
+    <Compile Include="Core\Print.cs" />
     <Compile Include="Core\SerialCom.cs" />
     <Compile Include="Core\SerialComIC.cs" />
     <Compile Include="Core\StatusCode.cs" />

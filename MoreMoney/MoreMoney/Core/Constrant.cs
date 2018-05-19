@@ -31,9 +31,35 @@ namespace MoreMoney.Core
                 else
                 {
                     //S HFNNN HFGGGGG ….. LL E
-                    var str = receive.ToAscii(1, 4);
+                    var str = receive.ToAscii(1, 5);
                     Log.In("HFNNN->" + str);
 
+                    var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
+                    foreach (var item in repeatBuffer)
+                    {
+                        str = item.ToArray().ToAscii();
+                        Log.In("HFGGGGG->" + str);
+                    }
+                }
+            }
+        }
+
+        public void ClearTransport()
+        {
+            var send = Package.ClearTransport();
+            com.Write(send);
+            var receive = com.Receive();
+            if (receive != null)
+            {
+                if (receive.Length == 4)
+                {
+                    //S LL E
+                }
+                else
+                {
+                    //S HFNNN HFGGGGG ….. LL E
+                    var str = receive.ToAscii(1, 5);
+                    Log.In("HFNNN->" + str);
                     var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
                     foreach (var item in repeatBuffer)
                     {
@@ -51,13 +77,51 @@ namespace MoreMoney.Core
             var receive = com.Receive();
             if (receive != null)
             {
+                var s = (char)receive[0];
+                if( s == '7' || s == '8' || s == 'N')
+                {
+                    Log.In("is error");
+                    return;
+                }
                 var repeatBuffer = Util.getRepeatbuffer(receive, 1, 7);
+                Log.In(string.Format("共{0}个", repeatBuffer.Count));
                 foreach (var item in repeatBuffer)
                 {
                     //HFGGGGG
-                    //var h = 
+                    var h = (char)item[0];
+                    if (h == '0')
+                    {
+                        Log.In("拒绝保险库");
+                    }
+                    var f = (char)item[1];
                     var str = item.ToAscii(2, 5);
-                    Log.In(str);
+                    Log.In(string.Format("HFGGGGG {0} {1} {2}", h, f, str));
+                }
+            }
+        }
+
+        public void CheckDelivered()
+        {
+            var send = Package.Check_delivered();
+            com.Write(send);
+            var receive = com.Receive();
+            if (receive != null)
+            {
+                var s = (char)receive[0];
+               
+                var repeatBuffer = Util.getRepeatbuffer(receive, 1, 5);
+                Log.In(string.Format("共{0}个", repeatBuffer.Count));
+                foreach (var item in repeatBuffer)
+                {
+                    //HFNNN
+                    var h = (char)item[0];
+                    if (h == '0')
+                    {
+                        Log.In("拒绝保险库");
+                    }
+                    var f = (char)item[1];
+                    var str = item.ToAscii(2, 3);
+                    Log.In(string.Format("HFNNN {0} {1} {2}", h, f, str));
                 }
             }
         }
@@ -116,9 +180,9 @@ namespace MoreMoney.Core
             var receive = com.Receive();
         }
 
-        public void ReadData()
+        public void ReadData(string item)
         {
-            var send = Package.ReadData("");
+            var send = Package.ReadData(item);
             com.Write(send);
             var receive = com.Receive();
         }
@@ -154,6 +218,7 @@ namespace MoreMoney.Core
                 else
                 {
                     //the command X’36’ Check Delivered Notes
+                    CheckDelivered();
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Common;
 using MoreMoney.Core;
+using MoreMoney.Core.CashCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace MoreMoney
     /// </summary>
     public partial class MainWindow : Window
     {
-        Constrant constrant = new Constrant(new SerialCom());
+        Constrant constrant = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,28 +34,55 @@ namespace MoreMoney
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             InitPorts();
+
+            DataItems.Init();
+            cmbReadDataItem.ItemsSource = DataItems.Items;
+            cmbReadDataItem.DisplayMemberPath = "Text";
+            cmbReadDataItem.SelectedValuePath = "Code";
+            cmbReadDataItem.SelectedIndex = 0;
         }
 
         private void InitPorts()
         {
             var ports = Utility.SerialPorts();
-            cmbPorts.ItemsSource = ports;
+            cmbCashNotePorts.ItemsSource = ports;
+            cmbCoinPorts.ItemsSource = ports;
             cmbICPorts.ItemsSource = ports;
-            if (ports.Count <= 1)
-            {
-                cmbPorts.SelectedIndex = 0;
-                cmbICPorts.SelectedIndex = 0;
-            }
-            else
-            {
-                cmbPorts.SelectedIndex = 1;
-                cmbICPorts.SelectedIndex = 0;
-            }
+
+            cmbCashNotePorts.SelectedIndex = 1;
+            cmbICPorts.SelectedIndex = 1;
+            cmbCoinPorts.SelectedIndex = 1;
         }
 
+        MoneyReceiver money = null;
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
+            //money = new MoneyReceiver(cmbCashNotePorts.Text);
+            //var msg = "";
+            //var open = money.Open(out msg);
+            //if (!open)
+            //{
+            //    Log.In(msg);
+            //    return;
+            //}
 
+            //money.OnAcceptMoney += (s, m) =>
+            //{
+            //    totalMoney += m;
+            //    Application.Current.Dispatcher.Invoke(new Action(() =>
+            //    {
+            //        if (totalMoney > txtNeed.Text.ToInt32())
+            //            txtHave.Text = totalMoney.ToString();
+            //    }));
+            //};
+            MoneyBus.Init();
+            MoneyBus.OnAcceptMoneyWithAll += (s, m, t) =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    txtHave.Text = t.ToString();
+                }));
+            };
         }
 
         SerialComIC comIC = null;
@@ -116,6 +144,54 @@ namespace MoreMoney
             var hn_hex = hn.ToString("x2");
             var hopenotes = txtMoney.Text.PadLeft(3, '0');
             constrant.MoveForward(hn, hopenotes);
+        }
+
+        private void btnCheckDelivered_Click(object sender, RoutedEventArgs e)
+        {
+            constrant.CheckDelivered();
+        }
+
+        private void btnCleartransport_Click(object sender, RoutedEventArgs e)
+        {
+            constrant.ClearTransport();
+        }
+
+        private void btnReadData_Click(object sender, RoutedEventArgs e)
+        {
+            var dataitem = cmbReadDataItem.SelectedItem as DataItem;
+            var code = dataitem.code;
+            constrant.ReadData(code);
+        }
+
+        private void btnPool_click(object sender, RoutedEventArgs e)
+        {
+            var money = txtNeed.Text.ToInt32();
+            txtNeed.Text = money.ToString();
+            txtHave.Text = "0";
+            MoneyBus.ReadPool(money);
+        }
+
+        private void btnStopPool_click(object sender, RoutedEventArgs e)
+        {
+            //money.Stop();
+            MoneyBus.StopPool();
+        }
+
+        private void btnCoinOpenPort_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnChargeTest_click(object sender, RoutedEventArgs e)
+        {
+            var all = txtNeed.Text.ToInt32();
+            int m1, m5, m50, m100;
+            Charge.GetCount(all, out m1, out m5, out m50, out m100);
+            Log.In("1元->" + m1);
+            Log.In("5元->" + m5);
+            Log.In("50元->" + m50);
+            Log.In("100元->" + m100);
+            Log.In("all->" + (m1 + (m5 * 5) + (m50 * 50) + (m100 * 100)));
         }
     }
 }

@@ -26,9 +26,18 @@ namespace MoreMoney.Core
 
         public static void In(string str)
         {
-            var document = log.Document;
-            Paragraph p1 = new Paragraph(new Run("In:" + str.Replace('\r', ' ')));
-            document.Blocks.Add(p1);
+            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                var document = log.Document;
+                if( document.Blocks.Count >100)
+                {
+                    document.Blocks.Clear();
+                }
+                Paragraph p1 = new Paragraph(new Run("In:" + str.Replace('\r', ' ')));
+                document.Blocks.Add(p1);
+                log.ScrollToEnd();
+            }));
+
         }
     }
 }

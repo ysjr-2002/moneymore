@@ -5,7 +5,7 @@
     xmlns:local="clr-namespace:MoreMoney">
 
     <SolidColorBrush x:Key="Button.Cancel.Border.Brush" Color="#FFCECECE" />
-    <SolidColorBrush x:Key="Button.Cancel.Border.MouseOver.Brush" Color="#FF2E69C5" />
+    <SolidColorBrush x:Key="Button.Cancel.Border.MouseOver.Brush" Color="#FFDBD6E9" />
     <SolidColorBrush x:Key="Button.Cancel.Background.ClickBrush" Color="#FFF0F9FF" />
     <!--  默认字体  -->
     <FontFamily x:Key="DefaultFontFamily">Microsoft YaHei</FontFamily>
@@ -41,7 +41,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="NeiLine" Property="BorderBrush" Value="{StaticResource Button.Cancel.Border.MouseOver.Brush}" />
+                            <Setter TargetName="NeiLine" Property="Background" Value="{StaticResource Button.Cancel.Border.MouseOver.Brush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="NeiLine" Property="Background" Value="{StaticResource Button.Cancel.Background.ClickBrush}" />

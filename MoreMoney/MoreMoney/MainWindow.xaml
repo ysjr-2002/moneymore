@@ -1,21 +1,32 @@
-﻿<Window
-    x:Class="MoreMoney.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:MoreMoney"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Name="window"
-    Title="Run_Test"
-    Width="800"
-    Height="500"
-    WindowStartupLocation="CenterScreen"
-    mc:Ignorable="d">
+﻿<Window x:Class="MoreMoney.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:MoreMoney"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Name="window"
+        Title="Run_Test"
+        Width="800"
+        Height="600"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="24" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="money" TargetType="TextBox">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Foreground" Value="#00ff00" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Text" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
         <Style BasedOn="{StaticResource MyButton}" TargetType="Button">
@@ -39,83 +50,117 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel
-            Grid.Row="0"
-            Margin="5"
-            Orientation="Horizontal">
-            <Label Content="Cash-&gt;Select port:" />
-            <ComboBox
-                Name="cmbPorts"
-                Width="100"
-                Height="24" />
-            <Button
-                Name="btnOpenPort"
-                Click="btnOpenPort_Click"
-                Content="Open" />
-        </StackPanel>
-
-        <StackPanel
-            Grid.Row="1"
-            Margin="5"
-            Orientation="Horizontal">
+        <StackPanel Grid.Row="0"
+                    Margin="5"
+                    Orientation="Horizontal">
             <Label Content="Card-&gt;Select port:" />
-            <ComboBox
-                Name="cmbICPorts"
-                Width="100"
-                Height="24" />
-            <Button
-                Name="btnICOpenPort"
-                Click="btnICOpenPort_Click"
-                Content="Open" />
+            <ComboBox Name="cmbICPorts"
+                      Width="100"
+                      Height="24" />
+            <Button Name="btnICOpenPort"
+                    Click="btnICOpenPort_Click"
+                    Content="Open" />
+
+            <Label Width="60" Content="应收:" />
+            <TextBox Name="txtNeed"
+                     Style="{StaticResource money}"
+                     Text="15" />
+
+            <Label Width="60" Content="实收:" />
+            <TextBox Name="txtHave" Style="{StaticResource money}" />
+
+            <Label Width="60" Content="找零:" />
+            <TextBox Name="txtCharge" Style="{StaticResource money}" />
         </StackPanel>
 
-        <WrapPanel
-            Grid.Row="2"
-            Width="{Binding ActualWidth, ElementName=window}"
-            Orientation="Horizontal">
-            <Button Click="btnReset_Click" Content="Reset" />
-            <Button Click="btnReadId_Click" Content="Read CassetteId" />
-            <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
-            <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
-            <Button Click="btnReadProgram_Click" Content="ReadProgram" />
-            <Button Click="btnReadCounter_Click" Content="ReadCounter" />
-            <Button Click="btnSelfTest_Click" Content="SelfTest" />
-        </WrapPanel>
+        <TabControl Grid.Row="1" Height="200">
+            <TabItem Header="纸币接收">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Select port:" />
+                        <ComboBox Name="cmbCashNotePorts"
+                                  Width="100"
+                                  Height="24" />
+                        <Button Name="btnOpenPort"
+                                Click="btnOpenPort_Click"
+                                Content="Open" />
+                    </StackPanel>
+                    <WrapPanel>
+                        <Button Click="btnPool_click" Content="Pool" />
+                        <Button Click="btnStopPool_click" Content="Stop" />
 
-        <WrapPanel
-            Grid.Row="3"
-            Width="{Binding ActualWidth, ElementName=window}"
-            Orientation="Horizontal">
+                        <Button Click="btnChargeTest_click" Content="Charge" />
+                    </WrapPanel>
+                </StackPanel>
 
-            <Label Content="Hopper number:" />
-            <ComboBox Name="cmbHn" SelectedIndex="1">
-                <ComboBoxItem Content="1" />
-                <ComboBoxItem Content="2" />
-                <ComboBoxItem Content="3" />
-                <ComboBoxItem Content="4" />
-            </ComboBox>
+            </TabItem>
+            <TabItem Header="硬币接收">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Select port:" />
+                        <ComboBox Name="cmbCoinPorts"
+                                  Width="100"
+                                  Height="24" />
+                        <Button Name="btnCoinOpenPort"
+                                Click="btnCoinOpenPort_Click"
+                                Content="Open" />
+                    </StackPanel>
+                    <WrapPanel>
+                        <Button Click="btnPool_click" Content="Pool" />
+                        <Button Click="btnStopPool_click" Content="Stop" />
+                    </WrapPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="纸币找零">
+                <WrapPanel Grid.Row="2"
+                           Width="{Binding ActualWidth,
+                                           ElementName=window}"
+                           Orientation="Horizontal">
+                    <Button Click="btnReset_Click" Content="Reset" />
+                    <Button Click="btnReadId_Click" Content="Read CassetteId" />
+                    <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
+                    <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
+                    <Button Click="btnReadProgram_Click" Content="ReadProgram" />
+                    <Button Click="btnReadCounter_Click" Content="ReadCounter" />
+                    <Button Click="btnSelfTest_Click" Content="SelfTest" />
 
-            <Label Content="number of notes to pickup:" />
-            <TextBox
-                Name="txtMoney"
-                Width="30"
-                MaxLength="3"
-                Text="30" />
-            <Button Click="btnMoveForeward_Click" Content="Move Forward" />
+                    <Label Content="Hopper number:" />
+                    <ComboBox Name="cmbHn" SelectedIndex="1">
+                        <ComboBoxItem Content="1" />
+                        <ComboBoxItem Content="2" />
+                        <ComboBoxItem Content="3" />
+                        <ComboBoxItem Content="4" />
+                    </ComboBox>
 
-        </WrapPanel>
+                    <Label Width="160" Content="number of notes to pickup:" />
+                    <TextBox Name="txtMoney"
+                             Width="30"
+                             MaxLength="3"
+                             Text="30" />
+                    <Button Width="180"
+                            Click="btnMoveForeward_Click"
+                            Content="Move Forward(读钱?)" />
 
-        <RichTextBox
-            Name="log"
-            Grid.Row="4"
-            Margin="5,0"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <Button Click="btnCheckDelivered_Click" Content="CheckDelivered" />
+
+                    <Button Click="btnCleartransport_Click" Content="Cleartransport" />
+
+                    <ComboBox Name="cmbReadDataItem" Width="200" />
+                    <Button Click="btnReadData_Click" Content="ReadData" />
+                </WrapPanel>
+            </TabItem>
+            <TabItem Header="硬币找零" />
+        </TabControl>
+
+
+        <RichTextBox Name="log"
+                     Grid.Row="2"
+                     Margin="5,0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
             <RichTextBox.Resources>
                 <Style TargetType="RichTextBox">
                     <Setter Property="FontSize" Value="14" />

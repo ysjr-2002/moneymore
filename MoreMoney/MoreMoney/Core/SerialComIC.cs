@@ -19,7 +19,7 @@ namespace MoreMoney.Core
 
         public SerialComIC(string com)
         {
-            port = new SerialPort(com, 9600, Parity.Even, 8, StopBits.One);
+            port = new SerialPort(com, 9600, Parity.None, 8, StopBits.One);
         }
 
         public bool Open(out string msg)
@@ -63,13 +63,16 @@ namespace MoreMoney.Core
             {
                 byte b = 0;
                 List<byte> bytes = new List<byte>();
-                while ((b = (byte)port.ReadByte()) != etx_end2)
+                while ((b = (byte)port.ReadByte()) > 0)
                 {
-                    bytes.Add(b);
+                    if (b != etx_end2 && b != etx_end1)
+                        bytes.Add(b);
+
+                    if (b == etx_end1)
+                        break;
                 }
                 var temp = bytes.ToArray().ToAscii();
-                var cardNo = temp.PadLeft(16, '0');
-                return cardNo;
+                return temp;
             }
             catch
             {
@@ -82,8 +85,6 @@ namespace MoreMoney.Core
             stop = true;
             if (port != null && port.IsOpen)
                 port.Close();
-
-            port = null;
         }
     }
 }

@@ -34,6 +34,8 @@ namespace MoreMoney.Core
 
         public const int cmd_self_test = 0x47;
 
+        public const int cmd_clear_transport = 0x52;
+
         /// <summary>
         /// 结束符
         /// </summary>
@@ -78,6 +80,14 @@ namespace MoreMoney.Core
         {
             List<byte> list = new List<byte>();
             list.Add(cmd_read_cassetteid);
+            Composite(list);
+            return list.ToArray();
+        }
+
+        public static byte[] Check_delivered()
+        {
+            List<byte> list = new List<byte>();
+            list.Add(cmd_checkdevilier);
             Composite(list);
             return list.ToArray();
         }
@@ -129,6 +139,14 @@ namespace MoreMoney.Core
         {
             List<byte> list = new List<byte>();
             list.AddRange("A".ToAscii());
+            Composite(list);
+            return list.ToArray();
+        }
+
+        public static byte[] ClearTransport()
+        {
+            List<byte> list = new List<byte>();
+            list.Add(cmd_clear_transport);
             Composite(list);
             return list.ToArray();
         }
