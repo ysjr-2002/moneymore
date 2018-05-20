@@ -18,12 +18,12 @@
         </Style>
 
         <Style x:Key="money" TargetType="TextBox">
+            <Setter Property="Height" Value="40" />
             <Setter Property="Width" Value="60" />
-            <Setter Property="Height" Value="24" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="#00ff00" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="20" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Text" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -48,7 +48,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -152,7 +152,29 @@
                     <Button Click="btnReadData_Click" Content="ReadData" />
                 </WrapPanel>
             </TabItem>
-            <TabItem Header="硬币找零" />
+            <TabItem Header="硬币找零">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="M1 charge Ports：" />
+                        <ComboBox Name="cmbM1Ports" />
+                        <Button Click="btnM1Open_click" Content="Open" />
+
+                        <Label Content="个数：" />
+                        <TextBox Name="txtM1Count" Width="60"  Text="1" />
+                        <Button Click="btnM1ChargeStart_click" Content="Start" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="M5 charge Ports：" />
+                        <ComboBox Name="cmbM5Ports" />
+                        <Button Click="btnM5Open_click" Content="Open" />
+
+                        <Label Content="个数：" />
+                        <TextBox Name="txtM5Count" Width="60"  Text="1" />
+                        <Button Click="btnM5ChargeStart_click" Content="Start" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
         </TabControl>
 
 

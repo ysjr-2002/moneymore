@@ -41,6 +41,9 @@ namespace MoreMoney.Core
         /// </summary>
         public const int EOM = 0X0d;
 
+        /// <summary>
+        /// 需要发送Data的指令
+        /// </summary>
         public static void Musthavedata()
         {
             //X’32’	MOVE FORWARD

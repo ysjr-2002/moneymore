@@ -28,9 +28,9 @@ namespace MoreMoney.Core
             {
                 port.Open();
                 stop = false;
+                msg = string.Empty;
                 thread = new Thread(Run);
                 thread.Start();
-                msg = string.Empty;
                 return true;
             }
             catch (Exception ex)

@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace MoreMoney.Core.CashCore
 {
-    public class MoneyReceiver
+    public class CashReceiver
     {
         private string port = "";
         private Iccnet objCCNET = null;
         private bool stop = false;
         private Thread thread = null;
+        private const int poo_sleep_time = 100;
 
         public event OnAcceptMoneyEventHandler OnAcceptMoney;
-        public MoneyReceiver(string port)
+        public CashReceiver(string port)
         {
             this.port = port;
         }
@@ -36,11 +37,15 @@ namespace MoreMoney.Core.CashCore
             }
         }
 
-        public void Pool()
+        public bool Pool()
         {
+            if (!stop == false)
+                return false;
             stop = false;
             thread = new Thread(Run);
             thread.Start();
+
+            return true;
         }
 
         private void Run()
@@ -49,6 +54,8 @@ namespace MoreMoney.Core.CashCore
             Print.Log("reset->" + back.Message);
             back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
             Print.Log("security->" + back.Message);
+
+            //币类
             //0d 1,5,10
             //
             back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[3] { 0, 0, 0xff });
@@ -57,6 +64,11 @@ namespace MoreMoney.Core.CashCore
             {
                 back = objCCNET.RunCommand(CCNETCommand.Poll);
                 var item = back.ReceivedData;
+                if (item == null)
+                {
+                    stop = true;
+                    break;
+                }
                 BVStatus bvs = (BVStatus)item[3];
                 Print.Log("data len->" + item.Length);
                 switch (bvs)
@@ -121,7 +133,7 @@ namespace MoreMoney.Core.CashCore
                         }
                         break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(poo_sleep_time);
             }
         }
 

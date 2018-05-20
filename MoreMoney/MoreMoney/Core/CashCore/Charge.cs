@@ -22,17 +22,17 @@ namespace MoreMoney.Core.CashCore
             m50 = 0;
             m5 = 0;
             m1 = 0;
-            if (charge > 100)
+            if (charge >= 100)
             {
                 m100 = charge / 100;
                 charge = charge - (m100 * 100);
             }
-            if (charge > 50)
+            if (charge >= 50)
             {
                 m50 = charge / 50;
                 charge = charge - (m50 * 50);
             }
-            if (charge > 5)
+            if (charge >= 5)
             {
                 m5 = charge / 5;
                 charge = charge - (m5 * 5);

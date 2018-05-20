@@ -69,19 +69,19 @@
     <Compile Include="Core\Ascii.cs" />
     <Compile Include="Core\CashCore\Charge.cs" />
     <Compile Include="Core\CashCore\Enums.cs" />
-    <Compile Include="Core\CashCore\MoneyReceiver.cs" />
+    <Compile Include="Core\CashCore\CashReceiver.cs" />
     <Compile Include="Core\CoinCore\CoinChanger.cs" />
-    <Compile Include="Core\Constrant.cs" />
+    <Compile Include="Core\CashCharge\Constrant.cs" />
     <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Core\FunExt.cs" />
-    <Compile Include="Core\DataItems.cs" />
+    <Compile Include="Core\CashCharge\DataItems.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\MoneyBus.cs" />
-    <Compile Include="Core\Package.cs" />
+    <Compile Include="Core\CashCharge\Package.cs" />
     <Compile Include="Core\Print.cs" />
-    <Compile Include="Core\SerialCom.cs" />
-    <Compile Include="Core\SerialComIC.cs" />
-    <Compile Include="Core\StatusCode.cs" />
+    <Compile Include="Core\Com\SerialCom.cs" />
+    <Compile Include="Core\Com\SerialComIC.cs" />
+    <Compile Include="Core\CashCharge\StatusCode.cs" />
     <Compile Include="Core\Util.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -134,6 +134,7 @@
     <Content Include="dll\Iaspec.Net.Common.dll" />
     <Resource Include="document\需求要点.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

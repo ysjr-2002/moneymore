@@ -48,13 +48,17 @@ namespace MoreMoney
             cmbCashNotePorts.ItemsSource = ports;
             cmbCoinPorts.ItemsSource = ports;
             cmbICPorts.ItemsSource = ports;
+            cmbM1Ports.ItemsSource = ports;
+            cmbM5Ports.ItemsSource = ports;
 
             cmbCashNotePorts.SelectedIndex = 1;
             cmbICPorts.SelectedIndex = 1;
             cmbCoinPorts.SelectedIndex = 1;
+            cmbM1Ports.SelectedIndex = 1;
+            cmbM5Ports.SelectedIndex = 1;
         }
 
-        MoneyReceiver money = null;
+        CashReceiver money = null;
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
             //money = new MoneyReceiver(cmbCashNotePorts.Text);
@@ -76,11 +80,15 @@ namespace MoreMoney
             //    }));
             //};
             MoneyBus.Init();
-            MoneyBus.OnAcceptMoneyWithAll += (s, m, t) =>
+            MoneyBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    txtHave.Text = t.ToString();
+                    txtHave.Text = total.ToString();
+                    if(total >m)
+                    {
+                        txtCharge.Text = (total - m).ToString();
+                    }
                 }));
             };
         }
@@ -192,6 +200,42 @@ namespace MoreMoney
             Log.In("50元->" + m50);
             Log.In("100元->" + m100);
             Log.In("all->" + (m1 + (m5 * 5) + (m50 * 50) + (m100 * 100)));
+        }
+
+        CoinChanger c1;
+        private void btnM1Open_click(object sender, RoutedEventArgs e)
+        {
+            c1 = new Core.CoinChanger(cmbM1Ports.Text, ChargeMoneyType.M1);
+            var msg = "";
+            var open = c1.Open(out msg);
+            if(!open)
+            {
+                MessageBox.Show(msg);
+                return;
+            }
+        }
+
+        private void btnM1ChargeStart_click(object sender, RoutedEventArgs e)
+        {
+            c1.Charge(txtM1Count.Text);
+        }
+
+        CoinChanger c5;
+        private void btnM5Open_click(object sender, RoutedEventArgs e)
+        {
+            c5 = new Core.CoinChanger(cmbM5Ports.Text, ChargeMoneyType.M5);
+            var msg = "";
+            var open = c5.Open(out msg);
+            if (!open)
+            {
+                MessageBox.Show(msg);
+                return;
+            }
+        }
+
+        private void btnM5ChargeStart_click(object sender, RoutedEventArgs e)
+        {
+            c5.Charge(txtM5Count.Text);
         }
     }
 }

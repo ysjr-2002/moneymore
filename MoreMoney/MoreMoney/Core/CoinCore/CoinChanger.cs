@@ -30,8 +30,8 @@ namespace MoreMoney.Core
             {
                 sp.Open();
                 stop = false;
-                Run();
                 msg = "";
+                Read();
                 return true;
             }
             catch (Exception ex)
@@ -41,37 +41,32 @@ namespace MoreMoney.Core
             }
         }
 
-        private void Run()
+        private void Read()
         {
             Task.Factory.StartNew(() =>
             {
-                Read();
+                while (!stop)
+                {
+                    byte b = (byte)sp.ReadByte();
+                    if (b == 0x4F)
+                    {
+                        Log.In("Hopper Empty");
+                        if (OnHopperEmpty != null)
+                        {
+                            OnHopperEmpty(this, EventArgs.Empty);
+                        }
+                    }
+                    if (b == 0x52)
+                    {
+                        //每出一个，设备返回一个
+                        Log.In("OK");
+                        if (OnCharging != null)
+                        {
+                            OnCharging(this, new ChargeItem { ChargeMoneyType = chargeType });
+                        }
+                    }
+                }
             });
-        }
-
-        private void Read()
-        {
-            while (!stop)
-            {
-                byte b = (byte)sp.ReadByte();
-                if (b == 0x4F)
-                {
-                    Console.WriteLine("Hopper Empty");
-                    if (OnHopperEmpty != null)
-                    {
-                        OnHopperEmpty(this, EventArgs.Empty);
-                    }
-                }
-                if (b == 0x52)
-                {
-                    //每出一个，设备返回一个
-                    Console.WriteLine("OK");
-                    if (OnCharging != null)
-                    {
-                        OnCharging(this, new ChargeItem { ChargeMoneyType = chargeType });
-                    }
-                }
-            }
         }
 
         /// <summary>

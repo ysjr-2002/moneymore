@@ -16,7 +16,7 @@ namespace MoreMoney.Core
         public static event OnChargeEventHandler OnChargeOver;
 
         static SerialComIC com1;
-        static MoneyReceiver com2;
+        static CashReceiver com2;
         static CoinChanger coin1_com3;
         static CoinChanger coin5_com4;
 
@@ -42,7 +42,7 @@ namespace MoreMoney.Core
             };
 
 
-            com2 = new MoneyReceiver("COM1");
+            com2 = new CashReceiver("COM1");
             open = com2.Open(out msg);
             if (!open)
             {
@@ -81,9 +81,11 @@ namespace MoreMoney.Core
 
         public static void ReadPool(int expectMoney)
         {
-            acceptMoney = 0;
-            MoneyBus.expectMoney = expectMoney;
-            com2.Pool();
+            if (com2.Pool())
+            {
+                acceptMoney = 0;
+                MoneyBus.expectMoney = expectMoney;
+            }
         }
 
         public static void StopPool()
@@ -94,6 +96,10 @@ namespace MoreMoney.Core
         private static void Com2_OnAcceptMoney(object sender, int money)
         {
             acceptMoney += money;
+            if (OnAcceptMoneyWithAll != null)
+            {
+                OnAcceptMoneyWithAll(sender, money, acceptMoney);
+            }
             if (acceptMoney > expectMoney)
             {
                 //缴费多，需要找零
@@ -114,11 +120,6 @@ namespace MoreMoney.Core
             if (OnAcceptMoney != null)
             {
                 OnAcceptMoney(sender, money);
-            }
-
-            if (OnAcceptMoneyWithAll != null)
-            {
-                OnAcceptMoneyWithAll(sender, money, acceptMoney);
             }
         }
 
