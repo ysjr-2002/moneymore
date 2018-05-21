@@ -58,56 +58,30 @@ namespace MoreMoney
             cmbM5Ports.SelectedIndex = 1;
         }
 
-        CashReceiver money = null;
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
-            //money = new MoneyReceiver(cmbCashNotePorts.Text);
-            //var msg = "";
-            //var open = money.Open(out msg);
-            //if (!open)
-            //{
-            //    Log.In(msg);
-            //    return;
-            //}
-
-            //money.OnAcceptMoney += (s, m) =>
-            //{
-            //    totalMoney += m;
-            //    Application.Current.Dispatcher.Invoke(new Action(() =>
-            //    {
-            //        if (totalMoney > txtNeed.Text.ToInt32())
-            //            txtHave.Text = totalMoney.ToString();
-            //    }));
-            //};
-            MoneyBus.Init();
-            MoneyBus.OnAcceptMoneyWithAll += (s, m, total) =>
+            DeviceBus.Init();
+            DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     txtHave.Text = total.ToString();
-                    if(total >m)
+                    if (total > m)
                     {
                         txtCharge.Text = (total - m).ToString();
                     }
                 }));
             };
-        }
 
-        SerialComIC comIC = null;
-        private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
-        {
-            comIC = new SerialComIC(cmbICPorts.Text);
-            var msg = "";
-            var open = comIC.Open(out msg);
-            if (!open)
-            {
-                Log.In(msg);
-                return;
-            }
-            comIC.OnReadCardNo += (s, no) =>
+            DeviceBus.OnReadCardNo += (s, no) =>
             {
                 Log.In(no);
             };
+        }
+
+        private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.Init();
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -176,13 +150,12 @@ namespace MoreMoney
             var money = txtNeed.Text.ToInt32();
             txtNeed.Text = money.ToString();
             txtHave.Text = "0";
-            MoneyBus.ReadPool(money);
+            DeviceBus.ReadPool(money);
         }
 
         private void btnStopPool_click(object sender, RoutedEventArgs e)
         {
-            //money.Stop();
-            MoneyBus.StopPool();
+            DeviceBus.StopPool();
         }
 
         private void btnCoinOpenPort_Click(object sender, RoutedEventArgs e)
@@ -205,12 +178,12 @@ namespace MoreMoney
         CoinChanger c1;
         private void btnM1Open_click(object sender, RoutedEventArgs e)
         {
-            c1 = new Core.CoinChanger(cmbM1Ports.Text, ChargeMoneyType.M1);
+            c1 = new CoinChanger(cmbM1Ports.Text, ChargeMoneyType.M1);
             var msg = "";
             var open = c1.Open(out msg);
-            if(!open)
+            if (!open)
             {
-                MessageBox.Show(msg);
+                Log.In(msg);
                 return;
             }
         }
@@ -223,12 +196,12 @@ namespace MoreMoney
         CoinChanger c5;
         private void btnM5Open_click(object sender, RoutedEventArgs e)
         {
-            c5 = new Core.CoinChanger(cmbM5Ports.Text, ChargeMoneyType.M5);
+            c5 = new CoinChanger(cmbM5Ports.Text, ChargeMoneyType.M5);
             var msg = "";
             var open = c5.Open(out msg);
             if (!open)
             {
-                MessageBox.Show(msg);
+                Log.In(msg);
                 return;
             }
         }

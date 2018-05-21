@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MoreMoney.Core
 {
     /// <summary>
-    /// 投币机的约定
+    /// 纸币找零的约定
     /// </summary>
     public class Constrant
     {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MoreMoney.Core
 {
-    public static class MoneyBus
+    public static class DeviceBus
     {
         public static event OnReadCardEventHandle OnReadCardNo;
         public static event OnAcceptMoneyEventHandler OnAcceptMoney;
@@ -28,8 +28,13 @@ namespace MoreMoney.Core
         static int s_m1, s_m5, s_m50, s_m100;
         static AutoResetEvent are = new AutoResetEvent(false);
 
+        static bool bInit = false;
+
         public static void Init()
         {
+            if (bInit)
+                return;
+
             var msg = "";
             var open = false;
             com1 = new SerialComIC("COM1");
@@ -41,40 +46,41 @@ namespace MoreMoney.Core
                 }
             };
 
+            //com2 = new CashReceiver("COM1");
+            //open = com2.Open(out msg);
+            //if (!open)
+            //{
+            //    return;
+            //}
+            //com2.OnAcceptMoney += Com2_OnAcceptMoney;
 
-            com2 = new CashReceiver("COM1");
-            open = com2.Open(out msg);
-            if (!open)
-            {
-                return;
-            }
-            com2.OnAcceptMoney += Com2_OnAcceptMoney;
+            //coin1_com3 = new CoinChanger("COM3", ChargeMoneyType.M1);
+            //coin5_com4 = new CoinChanger("COM4", ChargeMoneyType.M5);
 
-            coin1_com3 = new CoinChanger("COM3", ChargeMoneyType.M1);
-            coin5_com4 = new CoinChanger("COM4", ChargeMoneyType.M5);
+            //coin1_com3.OnCharging += M1_Change;
+            //coin5_com4.OnCharging += M5_Change;
 
-            coin1_com3.OnCharging += M1_Change;
-            coin5_com4.OnCharging += M5_Change;
+            //coin1_com3.OnHopperEmpty += M1_HopperEmtpy;
+            //coin5_com4.OnHopperEmpty += M5_HopperEmtpy;
 
-            coin1_com3.OnHopperEmpty += M1_HopperEmtpy;
-            coin5_com4.OnHopperEmpty += M5_HopperEmtpy;
-
-            coin1_com3.Open(out msg);
-            coin5_com4.Open(out msg);
+            //coin1_com3.Open(out msg);
+            //coin5_com4.Open(out msg);
+            bInit = true;
         }
 
-        public static bool ReadReadCard()
+        public static bool ReadyCardRead()
         {
             var msg = "";
             var open = com1.Open(out msg);
-            if (open)
+            if (!open)
             {
+                Log.In(msg);
                 return false;
             }
             return true;
         }
 
-        public static void CloseReadCard()
+        public static void CloseCardRead()
         {
             com1.Close();
         }
@@ -84,7 +90,7 @@ namespace MoreMoney.Core
             if (com2.Pool())
             {
                 acceptMoney = 0;
-                MoneyBus.expectMoney = expectMoney;
+                DeviceBus.expectMoney = expectMoney;
             }
         }
 

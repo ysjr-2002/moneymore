@@ -58,7 +58,7 @@ namespace MoreMoney.Core.CashCore
             //币类
             //0d 1,5,10
             //
-            back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[3] { 0, 0, 0xff });
+            back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[6] { 0, 0, 0xff, 0, 0, 0 });
             Print.Log("enable bill types->" + back.Message);
             while (!stop)
             {

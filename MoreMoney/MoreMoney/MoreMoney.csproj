@@ -76,7 +76,7 @@
     <Compile Include="Core\FunExt.cs" />
     <Compile Include="Core\CashCharge\DataItems.cs" />
     <Compile Include="Core\Log.cs" />
-    <Compile Include="Core\MoneyBus.cs" />
+    <Compile Include="Core\DeviceBus.cs" />
     <Compile Include="Core\CashCharge\Package.cs" />
     <Compile Include="Core\Print.cs" />
     <Compile Include="Core\Com\SerialCom.cs" />

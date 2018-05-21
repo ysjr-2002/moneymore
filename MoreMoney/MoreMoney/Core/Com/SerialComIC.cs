@@ -12,7 +12,7 @@ namespace MoreMoney.Core
     {
         private SerialPort port;
         private Thread thread;
-        private bool stop = false;
+        private bool bRun = false;
         private const byte etx_end2 = 0x0D;
         private const byte etx_end1 = 0x0A;
         public event OnReadCardEventHandle OnReadCardNo;
@@ -27,27 +27,27 @@ namespace MoreMoney.Core
             try
             {
                 port.Open();
-                stop = false;
+                bRun = true;
                 msg = string.Empty;
                 thread = new Thread(Run);
                 thread.Start();
-                return true;
             }
             catch (Exception ex)
             {
                 msg = ex.Message;
-                return false;
+                bRun = false;
             }
+            return bRun;
         }
 
         private void Run()
         {
-            while (!stop)
+            while (bRun)
             {
                 var cardNo = ReadData();
                 if (string.IsNullOrEmpty(cardNo))
                 {
-                    stop = true;
+                    bRun = false;
                     break;
                 }
                 if (OnReadCardNo != null)
@@ -74,7 +74,7 @@ namespace MoreMoney.Core
                 var temp = bytes.ToArray().ToAscii();
                 return temp;
             }
-            catch
+            catch (Exception ex)
             {
                 return string.Empty;
             }
@@ -82,7 +82,7 @@ namespace MoreMoney.Core
 
         public void Close()
         {
-            stop = true;
+            bRun = false;
             if (port != null && port.IsOpen)
                 port.Close();
         }
