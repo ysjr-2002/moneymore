@@ -54,14 +54,18 @@ namespace MoreMoney.Core
             if (table.ContainsKey(key))
             {
                 var remark = table[key];
-                if( remark.Type != "W")
+                if (remark.Type != "W")
                 {
-
+                    return remark.MNEMONICNAME;
+                }
+                else
+                {
+                    return "It's ok";
                 }
             }
             else
             {
-
+                return key + "->Key not exist";
             }
         }
     }

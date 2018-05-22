@@ -138,6 +138,7 @@
   <ItemGroup>
     <Content Include="dll\Common.dll" />
     <Content Include="dll\Iaspec.Net.Common.dll" />
+    <Resource Include="document\接收.txt" />
     <Resource Include="document\需求要点.txt" />
   </ItemGroup>
   <ItemGroup />
