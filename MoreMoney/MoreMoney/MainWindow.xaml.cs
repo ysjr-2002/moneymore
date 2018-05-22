@@ -3,6 +3,7 @@ using MoreMoney.Core;
 using MoreMoney.Core.CashCore;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,12 +48,14 @@ namespace MoreMoney
             var ports = Utility.SerialPorts();
             cmbCashNotePorts.ItemsSource = ports;
             cmbCoinPorts.ItemsSource = ports;
+            cmbCashChargePorts.ItemsSource = ports;
             cmbICPorts.ItemsSource = ports;
             cmbM1Ports.ItemsSource = ports;
             cmbM5Ports.ItemsSource = ports;
 
             cmbCashNotePorts.SelectedIndex = 1;
             cmbICPorts.SelectedIndex = 1;
+            cmbCashChargePorts.SelectedIndex = 1;
             cmbCoinPorts.SelectedIndex = 1;
             cmbM1Ports.SelectedIndex = 1;
             cmbM5Ports.SelectedIndex = 1;
@@ -175,10 +178,10 @@ namespace MoreMoney
             Log.In("all->" + (m1 + (m5 * 5) + (m50 * 50) + (m100 * 100)));
         }
 
-        CoinChanger c1;
+        CoinCharge c1;
         private void btnM1Open_click(object sender, RoutedEventArgs e)
         {
-            c1 = new CoinChanger(cmbM1Ports.Text, ChargeMoneyType.M1);
+            c1 = new CoinCharge(cmbM1Ports.Text, ChargeMoneyType.M1);
             var msg = "";
             var open = c1.Open(out msg);
             if (!open)
@@ -193,10 +196,10 @@ namespace MoreMoney
             c1.Charge(txtM1Count.Text);
         }
 
-        CoinChanger c5;
+        CoinCharge c5;
         private void btnM5Open_click(object sender, RoutedEventArgs e)
         {
-            c5 = new CoinChanger(cmbM5Ports.Text, ChargeMoneyType.M5);
+            c5 = new CoinCharge(cmbM5Ports.Text, ChargeMoneyType.M5);
             var msg = "";
             var open = c5.Open(out msg);
             if (!open)
@@ -209,6 +212,20 @@ namespace MoreMoney
         private void btnM5ChargeStart_click(object sender, RoutedEventArgs e)
         {
             c5.Charge(txtM5Count.Text);
+        }
+
+        SerialCom com = null;
+        private void btnCashChargOpenPort_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = "";
+            com = new SerialCom(cmbCashChargePorts.Text);
+            if (com.Open(out msg) == false)
+            {
+                Log.In(msg);
+                return;
+            }
+            wrapPanel.IsEnabled = true;
+            constrant = new Constrant(com);
         }
     }
 }

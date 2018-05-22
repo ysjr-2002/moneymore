@@ -1,4 +1,5 @@
 ﻿using MoreMoney.Core.CashCore;
+using MoreMoney.Core.CoinCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,30 @@ using System.Threading.Tasks;
 
 namespace MoreMoney.Core
 {
+    /// <summary>
+    /// 一个读卡器
+    /// 一个纸币接收机 
+    /// 一个硬币接收机
+    /// 一个一元硬币找零机
+    /// 一个五元硬币找零机
+    /// 一个纸币找零机
+    /// </summary>
     public static class DeviceBus
     {
+        /// <summary>
+        /// 读取到卡号
+        /// </summary>
         public static event OnReadCardEventHandle OnReadCardNo;
-        public static event OnAcceptMoneyEventHandler OnAcceptMoney;
         public static event OnAcceptMoneyWithAllEventHandler OnAcceptMoneyWithAll;
         public static event OnChargeEventHandler OnChargeOver;
 
+        public static event OnChargingEventHandler OnCharging;
+        public static event OnHopperEmptyEventHandler OnHopperEmpty;
+
         static SerialComIC com1;
         static CashReceiver com2;
-        static CoinChanger coin1_com3;
-        static CoinChanger coin5_com4;
+        static CoinCharge coin1_com3;
+        static CoinCharge coin5_com4;
 
         //应收
         static int expectMoney = 0;
@@ -119,13 +133,8 @@ namespace MoreMoney.Core
                 //缴费相同，通知结束
                 if (OnChargeOver != null)
                 {
-                    OnChargeOver(null, new List<ChargeItem>());
+                    OnChargeOver(null, new List<ChargeMoneyType>());
                 }
-            }
-
-            if (OnAcceptMoney != null)
-            {
-                OnAcceptMoney(sender, money);
             }
         }
 
@@ -141,10 +150,28 @@ namespace MoreMoney.Core
             are.Reset();
             if (s_m5 > 0)
             {
-                Log.In("5元找零->" + s_m5);
-                coin5_com4.Charge(s_m5.ToString());
                 //5元找完，再找1元
-                are.WaitOne();
+                Log.In("5元找零->" + s_m5);
+                for (var i = 1; i <= m5; i++)
+                {
+                    CoinChargeAnswer answer = coin5_com4.Charge();
+                    if (answer == CoinChargeAnswer.OK)
+                    {
+                        s_m5--;
+                        if (OnCharging != null)
+                        {
+                            OnCharging(null, ChargeMoneyType.M5);
+                        }
+                    }
+                    else
+                    {
+                        if (OnHopperEmpty != null)
+                        {
+                            OnHopperEmpty(null, ChargeMoneyType.M5);
+                        }
+                        break;
+                    }
+                }
             }
 
             if (s_m5 > 0)
@@ -155,38 +182,57 @@ namespace MoreMoney.Core
             if (s_m1 > 0)
             {
                 Log.In("1元找零->" + s_m1);
-                coin1_com3.Charge(s_m1.ToString());
+                for (int i = 1; i < s_m1; i++)
+                {
+                    CoinChargeAnswer answer = coin1_com3.Charge();
+                    if (answer == CoinChargeAnswer.OK)
+                    {
+                        s_m1--;
+                        if (OnCharging != null)
+                        {
+                            OnCharging(null, ChargeMoneyType.M1);
+                        }
+                    }
+                    else
+                    {
+                        if (OnHopperEmpty != null)
+                        {
+                            OnHopperEmpty(null, ChargeMoneyType.M1);
+                        }
+                        break;
+                    }
+                }
             }
         }
 
-        private static void M5_Change(object sender, ChargeItem item)
-        {
-            s_m5--;
-            if (s_m5 == 0)
-            {
-                //5元找零结束
-                are.Set();
-            }
-        }
+        //private static void M5_Change(object sender, ChargeItem item)
+        //{
+        //    s_m5--;
+        //    if (s_m5 == 0)
+        //    {
+        //        //5元找零结束
+        //        are.Set();
+        //    }
+        //}
 
-        private static void M5_HopperEmtpy(object sender, EventArgs e)
-        {
-            //5元找零箱空
-            are.Set();
-        }
+        //private static void M5_HopperEmtpy(object sender, EventArgs e)
+        //{
+        //    //5元找零箱空
+        //    are.Set();
+        //}
 
-        private static void M1_Change(object sender, ChargeItem item)
-        {
-            s_m1--;
-            if (s_m1 == 0)
-            {
-                //1元找零结束
-            }
-        }
+        //private static void M1_Change(object sender, ChargeItem item)
+        //{
+        //    s_m1--;
+        //    if (s_m1 == 0)
+        //    {
+        //        //1元找零结束
+        //    }
+        //}
 
-        private static void M1_HopperEmtpy(object sender, EventArgs e)
-        {
-            //1元找零箱空
-        }
+        //private static void M1_HopperEmtpy(object sender, EventArgs e)
+        //{
+        //    //1元找零箱空
+        //}
     }
 }

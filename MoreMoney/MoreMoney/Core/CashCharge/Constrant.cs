@@ -30,6 +30,7 @@ namespace MoreMoney.Core
                 }
                 else
                 {
+                    //0 00000 1000001 2000002 00
                     //S HFNNN HFGGGGG ….. LL E
                     var str = receive.ToAscii(1, 5);
                     Log.In("HFNNN->" + str);
@@ -78,11 +79,16 @@ namespace MoreMoney.Core
             if (receive != null)
             {
                 var s = (char)receive[0];
-                if( s == '7' || s == '8' || s == 'N')
+                if (s == '7' || s == '8' || s == 'N')
                 {
                     Log.In("is error");
                     return;
                 }
+                //0
+                //0060000
+                //1000001
+                //2000002
+                //06
                 var repeatBuffer = Util.getRepeatbuffer(receive, 1, 7);
                 Log.In(string.Format("共{0}个", repeatBuffer.Count));
                 foreach (var item in repeatBuffer)

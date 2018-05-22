@@ -9,18 +9,26 @@ namespace MoreMoney.Core
 {
     public class SerialCom
     {
+        private string com = "";
         private SerialPort port;
 
-        public bool Open(string com)
+        public SerialCom(string com)
+        {
+            this.com = com;
+        }
+
+        public bool Open(out string msg)
         {
             try
             {
-                port = new SerialPort(com, 9600, Parity.Even, 8, StopBits.One);
+                port = new SerialPort(com, 9600, Parity.Odd, 8, StopBits.None);
                 port.Open();
+                msg = string.Empty;
                 return true;
             }
             catch (Exception ex)
             {
+                msg = ex.Message;
                 return false;
             }
         }
@@ -38,19 +46,28 @@ namespace MoreMoney.Core
             if (port == null)
                 return null;
 
-            List<byte> data = new List<byte>();
-            byte b = 0;
-            while ((b = (byte)port.ReadByte()) != Package.EOM)
+            try
             {
-                data.Add(b);
-            }
-            data.Add(Package.EOM);
+                List<byte> data = new List<byte>();
+                byte b = 0;
+                while ((b = (byte)port.ReadByte()) != Package.EOM)
+                {
+                    Log.In(b.ToString());
+                    data.Add(b);
+                }
+                data.Add(Package.EOM);
 
-            if (Package.Check_Receive_Lrc(data.ToArray()))
-                return data.ToArray();
-            else
+                if (Package.Check_Receive_Lrc(data.ToArray()))
+                    return data.ToArray();
+                else
+                {
+                    Log.In("校验码错误!");
+                    return null;
+                }
+            }
+            catch (Exception ex)
             {
-                Log.Out("校验码错误!");
+                Log.In("errro->" + ex.Message);
                 return null;
             }
         }

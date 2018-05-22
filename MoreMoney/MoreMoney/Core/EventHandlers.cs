@@ -9,18 +9,19 @@ namespace MoreMoney.Core
     public delegate void OnReadCardEventHandle(object sender, string cardNo);
 
     public delegate void OnAcceptMoneyEventHandler(object sender, int money);
+    /// <summary>
+    /// 投钱
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="money">应收</param>
+    /// <param name="total">实收</param>
     public delegate void OnAcceptMoneyWithAllEventHandler(object sender, int money, int total);
 
-    public delegate void OnChargeEventHandler(object sender, List<ChargeItem> items);
+    public delegate void OnChargeEventHandler(object sender, List<ChargeMoneyType> items);
 
-    public delegate void OnChargingEventHandler(object sender, ChargeItem item);
+    public delegate void OnChargingEventHandler(object sender, ChargeMoneyType item);
 
-    public delegate void OnHopperEmptyEventHandler(object sender, EventArgs e);
-
-    public class ChargeItem
-    {
-        public ChargeMoneyType ChargeMoneyType { get; set; }
-    }
+    public delegate void OnHopperEmptyEventHandler(object sender, ChargeMoneyType item);
 
     /// <summary>
     /// 找零枚举

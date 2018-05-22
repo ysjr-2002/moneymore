@@ -124,44 +124,55 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="纸币找零">
-                <WrapPanel
-                    Grid.Row="2"
-                    Width="{Binding ActualWidth, ElementName=window}"
-                    Orientation="Horizontal">
-                    <Button Click="btnReset_Click" Content="Reset" />
-                    <Button Click="btnReadId_Click" Content="Read CassetteId" />
-                    <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
-                    <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
-                    <Button Click="btnReadProgram_Click" Content="ReadProgram" />
-                    <Button Click="btnReadCounter_Click" Content="ReadCounter" />
-                    <Button Click="btnSelfTest_Click" Content="SelfTest" />
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Select port:" />
+                        <ComboBox
+                            Name="cmbCashChargePorts"
+                            Width="100"
+                            Height="24" />
+                        <Button Click="btnCashChargOpenPort_Click" Content="Open" />
+                    </StackPanel>
+                    <WrapPanel
+                        Name="wrapPanel"
+                        Width="{Binding ActualWidth, ElementName=window}"
+                        IsEnabled="False"
+                        Orientation="Horizontal">
+                        <Button Click="btnReset_Click" Content="Reset" />
+                        <Button Click="btnReadId_Click" Content="Read CassetteId" />
+                        <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
+                        <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
+                        <Button Click="btnReadProgram_Click" Content="ReadProgram" />
+                        <Button Click="btnReadCounter_Click" Content="ReadCounter" />
+                        <Button Click="btnSelfTest_Click" Content="SelfTest" />
+                        <Label Content="Hopper number:" />
+                        <ComboBox Name="cmbHn" SelectedIndex="1">
+                            <ComboBoxItem Content="1" />
+                            <ComboBoxItem Content="2" />
+                            <ComboBoxItem Content="3" />
+                            <ComboBoxItem Content="4" />
+                        </ComboBox>
 
-                    <Label Content="Hopper number:" />
-                    <ComboBox Name="cmbHn" SelectedIndex="1">
-                        <ComboBoxItem Content="1" />
-                        <ComboBoxItem Content="2" />
-                        <ComboBoxItem Content="3" />
-                        <ComboBoxItem Content="4" />
-                    </ComboBox>
+                        <Label Width="160" Content="number of notes to pickup:" />
+                        <TextBox
+                            Name="txtMoney"
+                            Width="30"
+                            MaxLength="3"
+                            Text="30" />
+                        <Button
+                            Width="180"
+                            Click="btnMoveForeward_Click"
+                            Content="Move Forward(读钱?)" />
 
-                    <Label Width="160" Content="number of notes to pickup:" />
-                    <TextBox
-                        Name="txtMoney"
-                        Width="30"
-                        MaxLength="3"
-                        Text="30" />
-                    <Button
-                        Width="180"
-                        Click="btnMoveForeward_Click"
-                        Content="Move Forward(读钱?)" />
+                        <Button Click="btnCheckDelivered_Click" Content="CheckDelivered" />
 
-                    <Button Click="btnCheckDelivered_Click" Content="CheckDelivered" />
+                        <Button Click="btnCleartransport_Click" Content="Cleartransport" />
 
-                    <Button Click="btnCleartransport_Click" Content="Cleartransport" />
+                        <ComboBox Name="cmbReadDataItem" Width="150" />
+                        <Button Click="btnReadData_Click" Content="ReadData" />
+                    </WrapPanel>
+                </StackPanel>
 
-                    <ComboBox Name="cmbReadDataItem" Width="200" />
-                    <Button Click="btnReadData_Click" Content="ReadData" />
-                </WrapPanel>
             </TabItem>
             <TabItem Header="硬币找零">
                 <StackPanel Orientation="Vertical">

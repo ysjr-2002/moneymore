@@ -19,9 +19,21 @@ namespace MoreMoney.Core
 
         public static void Out(string str)
         {
-            var document = log.Document;
-            Paragraph p1 = new Paragraph(new Run("Out:" + str.Replace('\r', ' ')));
-            document.Blocks.Add(p1);
+            if(System.Windows.Application.Current.Dispatcher.CheckAccess())
+            {
+                var document = log.Document;
+                Paragraph p1 = new Paragraph(new Run("Out:" + str.Replace('\r', ' ')));
+                document.Blocks.Add(p1);
+            }
+            else
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    var document = log.Document;
+                    Paragraph p1 = new Paragraph(new Run("Out:" + str.Replace('\r', ' ')));
+                    document.Blocks.Add(p1);
+                }));
+            }
         }
 
         public static void In(string str)
@@ -29,7 +41,7 @@ namespace MoreMoney.Core
             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 var document = log.Document;
-                if( document.Blocks.Count >100)
+                if (document.Blocks.Count > 100)
                 {
                     document.Blocks.Clear();
                 }
@@ -37,7 +49,6 @@ namespace MoreMoney.Core
                 document.Blocks.Add(p1);
                 log.ScrollToEnd();
             }));
-
         }
     }
 }
