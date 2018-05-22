@@ -49,9 +49,20 @@ namespace MoreMoney.Core
             table.Add(0x68, new Remark { Type = "F", MNEMONICNAME = "Error in Note Transport" });
         }
 
-        public static string GetTypeRemark(string type)
+        public static string GetTypeRemark(int key)
         {
-            return string.Empty;
+            if (table.ContainsKey(key))
+            {
+                var remark = table[key];
+                if( remark.Type != "W")
+                {
+
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 

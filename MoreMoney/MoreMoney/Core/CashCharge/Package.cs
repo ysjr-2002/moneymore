@@ -71,7 +71,7 @@ namespace MoreMoney.Core
         public static byte[] MoveForward(byte hoppernumber, string hopenotes)
         {
             List<byte> list = new List<byte>();
-            list.Add(cmd_open_cassette);
+            list.Add(cmd_moveforward);
             list.Add(0x30);
             list.Add(hoppernumber);
             list.AddRange(hopenotes.ToAscii());

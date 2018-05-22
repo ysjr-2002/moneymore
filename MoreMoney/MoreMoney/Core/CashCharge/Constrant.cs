@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MoreMoney.Core
@@ -75,6 +76,7 @@ namespace MoreMoney.Core
         {
             var send = Package.Read_Cassetteid();
             com.Write(send);
+            return;
             var receive = com.Receive();
             if (receive != null)
             {
@@ -101,7 +103,7 @@ namespace MoreMoney.Core
                     }
                     var f = (char)item[1];
                     var str = item.ToAscii(2, 5);
-                    Log.In(string.Format("HFGGGGG {0} {1} {2}", h, f, str));
+                    Log.In(string.Format("H->{0} F->{1} GGGGG->{2}", h, f, str));
                 }
             }
         }
@@ -114,7 +116,7 @@ namespace MoreMoney.Core
             if (receive != null)
             {
                 var s = (char)receive[0];
-               
+
                 var repeatBuffer = Util.getRepeatbuffer(receive, 1, 5);
                 Log.In(string.Format("共{0}个", repeatBuffer.Count));
                 foreach (var item in repeatBuffer)
@@ -127,7 +129,7 @@ namespace MoreMoney.Core
                     }
                     var f = (char)item[1];
                     var str = item.ToAscii(2, 3);
-                    Log.In(string.Format("HFNNN {0} {1} {2}", h, f, str));
+                    Log.In(string.Format("H->{0} F->{1} NNN->{2}", h, f, str));
                 }
             }
         }
@@ -136,7 +138,12 @@ namespace MoreMoney.Core
         {
             var send = Package.Open_Cassette();
             com.Write(send);
+            return;
             var receive = com.Receive();
+            if (receive != null)
+            {
+                Log.In(receive.ToAscii());
+            }
         }
 
         public void Work()
@@ -156,20 +163,29 @@ namespace MoreMoney.Core
         {
             var send = Package.Close_Cassette();
             com.Write(send);
+            return;
             var receive = com.Receive();
+            if (receive != null)
+            {
+                Log.In(receive.ToAscii());
+            }
         }
 
         public void ReadPROGRAM()
         {
-            var send = Package.ReadProgramID();
-            com.Write(send);
-            var receive = com.Receive();
-            if (receive != null)
+
+            Task.Factory.StartNew(() =>
             {
-                var no = Encoding.ASCII.GetString(receive, 2, 8);
-                Log.In("no->" + no);
-            }
-            Log.In("receive");
+                var send = Package.ReadProgramID();
+                com.Write(send);
+                var receive = com.Receive();
+                if (receive != null)
+                {
+                    var no = Encoding.ASCII.GetString(receive, 2, 8);
+                    Log.In("no->" + no);
+                }
+                Log.In("receive");
+            });
         }
 
         public void Counter()
@@ -204,6 +220,7 @@ namespace MoreMoney.Core
         {
             var send = Package.MoveForward(hn, money);
             com.Write(send);
+            return;
             var receive = com.Receive();
             if (receive != null)
             {

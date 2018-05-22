@@ -76,7 +76,8 @@
     <Compile Include="Core\CoinCore\CoinCharge.cs" />
     <Compile Include="Core\CashCharge\Constrant.cs" />
     <Compile Include="Core\CoinCore\CoinChargeAnswer.cs" />
-    <Compile Include="Core\CoinOut\cmd.cs" />
+    <Compile Include="Core\CoinIn\CheckSum.cs" />
+    <Compile Include="Core\CoinIn\cmd.cs" />
     <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Core\FunExt.cs" />
     <Compile Include="Core\CashCharge\DataItems.cs" />

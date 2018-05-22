@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MoreMoney.Core
@@ -21,9 +22,16 @@ namespace MoreMoney.Core
         {
             try
             {
-                port = new SerialPort(com, 9600, Parity.Odd, 8, StopBits.None);
+                port = new SerialPort(com, 9600, Parity.Odd, 8, StopBits.One);
                 port.Open();
                 msg = string.Empty;
+                Task.Factory.StartNew(() =>
+                {
+                    while (true)
+                    {
+                        Receive();
+                    }
+                });
                 return true;
             }
             catch (Exception ex)
@@ -52,9 +60,10 @@ namespace MoreMoney.Core
                 byte b = 0;
                 while ((b = (byte)port.ReadByte()) != Package.EOM)
                 {
-                    Log.In(b.ToString());
                     data.Add(b);
+                    //Log.In(data.ToArray().ToAscii());
                 }
+                Log.In("over");
                 data.Add(Package.EOM);
 
                 if (Package.Check_Receive_Lrc(data.ToArray()))
@@ -67,7 +76,7 @@ namespace MoreMoney.Core
             }
             catch (Exception ex)
             {
-                Log.In("errro->" + ex.Message);
+                Log.In("error->" + ex.Message);
                 return null;
             }
         }
@@ -76,7 +85,10 @@ namespace MoreMoney.Core
         {
             Log.Out(data.ToAscii());
             if (port != null && port.IsOpen)
+            {
                 port.Write(data, 0, data.Length);
+            }
+            Thread.Sleep(500);
         }
     }
 }
