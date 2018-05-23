@@ -61,7 +61,6 @@ namespace MoreMoney.Core
                 while ((b = (byte)port.ReadByte()) != Package.EOM)
                 {
                     data.Add(b);
-                    //Log.In(data.ToArray().ToAscii());
                 }
                 Log.In("over");
                 data.Add(Package.EOM);

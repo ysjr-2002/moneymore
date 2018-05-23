@@ -35,7 +35,6 @@ namespace MoreMoney.Core
                     //S HFNNN HFGGGGG ….. LL E
                     var str = receive.ToAscii(1, 5);
                     Log.In("HFNNN->" + str);
-
                     var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
                     foreach (var item in repeatBuffer)
                     {
@@ -76,7 +75,6 @@ namespace MoreMoney.Core
         {
             var send = Package.Read_Cassetteid();
             com.Write(send);
-            return;
             var receive = com.Receive();
             if (receive != null)
             {
