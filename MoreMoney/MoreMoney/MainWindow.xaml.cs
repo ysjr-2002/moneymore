@@ -152,15 +152,17 @@ namespace MoreMoney
 
         private void btnPool_click(object sender, RoutedEventArgs e)
         {
-            var money = txtNeed.Text.ToInt32();
-            txtNeed.Text = money.ToString();
-            txtHave.Text = "0";
-            DeviceBus.ReadPool(money);
+            //var money = txtNeed.Text.ToInt32();
+            //txtNeed.Text = money.ToString();
+            //txtHave.Text = "0";
+            //DeviceBus.ReadPool(money);
+            _coinAcceptor.StartPoll();
         }
 
         private void btnStopPool_click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.StopPool();
+            //DeviceBus.StopPool();
+            _coinAcceptor.EndPoll();
         }
 
         CoinAcceptor _coinAcceptor = null;
@@ -275,6 +277,17 @@ namespace MoreMoney
             }
             wrapPanel.IsEnabled = true;
             constrant = new Constrant(com);
+        }
+
+        private void ckbInhibit_click(object sender, RoutedEventArgs e)
+        {
+            var con = _coinAcceptor.Connection;
+            var c = new GenericCctalkDevice
+            {
+                Connection = (ConnectionRs232)con,
+                Address = 0
+            };
+            c.CmdSetMasterInhibitStatus(ckbInhibit.IsChecked.GetValueOrDefault());
         }
     }
 }

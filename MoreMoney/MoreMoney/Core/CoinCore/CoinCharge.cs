@@ -75,17 +75,11 @@ namespace MoreMoney.Core
         /// <param name="money"></param>
         public void Charge(string money)
         {
-            var numbers = money.ToCharArray();
-            List<byte> send = new List<byte>();
-            send.Add(0x02);
-            send.Add(0x53);
-            foreach (var item in numbers)
+            var count = money.ToByte();
+            for (int i = 1; i <= count; i++)
             {
-                send.Add((byte)item);
+                CoinChargeAnswer answer = Charge();
             }
-            send.Add(0x03);
-            var total = send.ToArray();
-            sp.Write(total, 0, total.Length);
         }
 
         public CoinChargeAnswer Charge(char money = '1')

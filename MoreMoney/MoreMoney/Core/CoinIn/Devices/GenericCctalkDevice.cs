@@ -20,7 +20,7 @@ namespace dk.CctalkLib.Devices
 
 		public Byte Address { get; set; }
 
-		public ICctalkConnection Connection { get; set; }
+		public ConnectionRs232 Connection { get; set; }
 
 		protected readonly Checksum _checksumHandler = new Checksum();
 
@@ -149,6 +149,10 @@ namespace dk.CctalkLib.Devices
 			return RequestForStringHelper(246);
 
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public CctalkDeviceTypes CmdRequestEquipmentCategory()
 		{
 			Trace.TraceInformation("Cmd: RequestEquipmentCategory");

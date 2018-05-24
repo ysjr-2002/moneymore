@@ -10,6 +10,9 @@ namespace dk.CctalkLib.Devices
             ErrorOrRouteCode = errorOrRouteCode;
         }
 
+        /// <summary>
+        /// 硬币类型编号
+        /// </summary>
         public Byte CoinCode;
         public Byte ErrorOrRouteCode;
 
