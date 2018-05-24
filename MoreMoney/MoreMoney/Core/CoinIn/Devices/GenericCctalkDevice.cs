@@ -186,17 +186,19 @@ namespace dk.CctalkLib.Devices
 				throw new InvalidRespondException(respond);
 
 			var data = respond.Data;
-			var events = new[]
+            var events = new[]
                              {
                                  new DeviceEvent(data[1], data[2]),
                                  new DeviceEvent(data[3], data[4]),
                                  new DeviceEvent(data[5], data[6]),
                                  new DeviceEvent(data[7], data[8]),
                                  new DeviceEvent(data[9], data[10]),
-                             }
-				;
+                             };
 
-
+            //字节1：为总投币数
+            //字节2：货币号
+            //字节3：分离器
+            //以下字节同2，3
 			var ret = new DeviceEventBuffer
 						  {
 							  Counter = respond.Data[0],

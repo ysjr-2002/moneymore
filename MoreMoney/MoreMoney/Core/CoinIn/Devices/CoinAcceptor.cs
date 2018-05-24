@@ -300,6 +300,7 @@ namespace dk.CctalkLib.Devices
                     var wasReset = buf.Counter == 0;
                     if (wasReset)
                     {
+                        //Ã»ÓÐÍ¶±Ò
                         if (!_isResetExpected && _lastEvent != 0)
                         {
                             RaiseInvokeErrorEvent(

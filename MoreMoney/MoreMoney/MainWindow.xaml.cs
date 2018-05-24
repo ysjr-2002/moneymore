@@ -1,4 +1,6 @@
 ﻿using Common;
+using dk.CctalkLib.Connections;
+using dk.CctalkLib.Devices;
 using MoreMoney.Core;
 using MoreMoney.Core.CashCore;
 using System;
@@ -161,9 +163,56 @@ namespace MoreMoney
             DeviceBus.StopPool();
         }
 
+        CoinAcceptor _coinAcceptor = null;
+        decimal _coinCounter = 0;
         private void btnCoinOpenPort_Click(object sender, RoutedEventArgs e)
         {
+            var con = new ConnectionRs232
+            {
+                PortName = cmbCoinPorts.Text,
+                RemoveEcho = true
+            };
 
+            Dictionary<byte, CoinTypeInfo> coins;
+            //if (!CoinAcceptor.TryParseConfigWord(configWord.Text, out coins))
+            //{
+            //    MessageBox.Show("Wrong config word, using defaults");
+            //    coins = CoinAcceptor.DefaultConfig;
+            //    configWord.Text = CoinAcceptor.ConfigWord(CoinAcceptor.DefaultConfig);
+            //}
+
+            coins = CoinAcceptor.DefaultConfig;
+            _coinAcceptor = new CoinAcceptor(02, con, coins, null);
+
+            _coinAcceptor.CoinAccepted += CoinAcceptorCoinAccepted;
+            _coinAcceptor.ErrorMessageAccepted += CoinAcceptorErrorMessageAccepted;
+
+            _coinAcceptor.Init();
+        }
+
+        void CoinAcceptorCoinAccepted(object sender, CoinAcceptorCoinEventArgs e)
+        {
+            if (Application.Current.Dispatcher.CheckAccess() == false)
+            {
+                Application.Current.Dispatcher.Invoke((EventHandler<CoinAcceptorCoinEventArgs>)CoinAcceptorCoinAccepted, sender, e);
+                return;
+            }
+            _coinCounter += e.CoinValue;
+            Log.In(String.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
+
+            // There is simulator of long-working event handler
+            //Thread.Sleep(1000);
+        }
+
+        void CoinAcceptorErrorMessageAccepted(object sender, CoinAcceptorErrorEventArgs e)
+        {
+            if (Application.Current.Dispatcher.CheckAccess() == false)
+            {
+                Application.Current.Dispatcher.Invoke((EventHandler<CoinAcceptorErrorEventArgs>)CoinAcceptorErrorMessageAccepted, sender, e);
+                return;
+            }
+
+            Log.In(String.Format("Coin acceptor error: {0} ({1}, {2:X2})", e.ErrorMessage, e.Error, (Byte)e.Error));
         }
 
         private void btnChargeTest_click(object sender, RoutedEventArgs e)

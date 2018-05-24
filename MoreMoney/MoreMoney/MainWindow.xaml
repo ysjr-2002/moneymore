@@ -162,7 +162,7 @@
                         <Button
                             Width="180"
                             Click="btnMoveForeward_Click"
-                            Content="Move Forward(找钱?)" />
+                            Content="Move Forward(找零)" />
 
                         <Button Click="btnCheckDelivered_Click" Content="CheckDelivered" />
 
