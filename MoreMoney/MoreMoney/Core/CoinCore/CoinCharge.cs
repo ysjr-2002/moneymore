@@ -16,7 +16,7 @@ namespace MoreMoney.Core
         bool bRun = false;
         SerialPort sp = null;
         ChargeMoneyType chargeType;
-        private const int READ_TIME_OUT = 500;
+        private const int READ_TIME_OUT = 100;
         //public event OnChargingEventHandler OnCharging;
         //public event OnHopperEmptyEventHandler OnHopperEmpty;
 
@@ -79,6 +79,18 @@ namespace MoreMoney.Core
             for (int i = 1; i <= count; i++)
             {
                 CoinChargeAnswer answer = Charge();
+                if (answer == CoinChargeAnswer.OK)
+                {
+                    Log.In("出->1");
+                }
+                if (answer == CoinChargeAnswer.HopperEmpty)
+                {
+                    Log.In("出->空");
+                }
+                if (answer == CoinChargeAnswer.TimeOut)
+                {
+                    Log.In("出->超时");
+                }
             }
         }
 
@@ -101,7 +113,8 @@ namespace MoreMoney.Core
                 answer = (CoinChargeAnswer)b;
             }
             catch
-            { }
+            {
+            }
             return answer;
         }
 
