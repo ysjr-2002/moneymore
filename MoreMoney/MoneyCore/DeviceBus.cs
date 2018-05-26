@@ -40,7 +40,13 @@ namespace MoneyCore
         static CoinCharge coin1Com;
         static CoinCharge coin5Com;
 
+        /// <summary>
+        /// 100纸币找零箱编号
+        /// </summary>
         static readonly char hopper_100 = '1';
+        /// <summary>
+        /// 50纸币找零箱编号
+        /// </summary>
         static readonly char hopper_50 = '2';
 
         //应收
@@ -334,7 +340,7 @@ namespace MoneyCore
                 var ok = false;
                 for (int i = 1; i <= count; i++)
                 {
-                    ok = constrant.MoveForward((byte)'2', "1".PadLeft(3, '0'));
+                    ok = constrant.MoveForward((byte)hopper_50, "1".PadLeft(3, '0'));
                     if (ok)
                     {
                         s_m50--;
