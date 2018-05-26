@@ -15,6 +15,26 @@ namespace MoreMoney
             return ret;
         }
 
+        public static int ToInt32(this string s)
+        {
+            int ret = 0;
+            int.TryParse(s, out ret);
+            return ret;
+        }
+
+        public static decimal ToDecimal(this string s)
+        {
+            decimal ret = 0;
+            decimal.TryParse(s, out ret);
+            return ret;
+        }
+
+        public static string ToStr(this byte[] bytes)
+        {
+            var str = string.Join(" ", bytes.Select(s => string.Format("{0:d2}", s)));
+            return str;
+        }
+
         public static byte[] ToAscii(this string str)
         {
             return Encoding.ASCII.GetBytes(str);

@@ -370,8 +370,8 @@ namespace dk.CctalkLib.Devices
                 {
                     BillTypeInfo billInfo;
                     _notes.TryGetValue(ev.CoinCode, out billInfo);
-                    var evVal = billInfo == null ? 0 : billInfo.Value;
                     var evName = billInfo == null ? null : billInfo.Name;
+                    var evVal = billInfo == null ? 0 : billInfo.Value;
                     RaiseInvokeNotesEvent(new BillValidatorBillEventArgs(evName, evVal, ev.CoinCode, ev.ErrorOrRouteCode));
                 }
             }
@@ -383,8 +383,6 @@ namespace dk.CctalkLib.Devices
                 RaiseInvokeErrorEvent(new BillValidatorErrorEventArgs(BillValidatorErrors.UnspecifiedAlarmCode,
                                                                      "Events lost:" + eventsLost));
             }
-
-
         }
 
         void RaiseInvokeErrorEvent(BillValidatorErrorEventArgs ea)

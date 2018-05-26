@@ -120,8 +120,6 @@ namespace dk.CctalkLib.Devices
                 RaiseLastEvents(evBuf);
             }
             _lastEvent = evBuf.Counter;
-
-
             IsInitialized = true;
         }
 
@@ -136,7 +134,6 @@ namespace dk.CctalkLib.Devices
                 _rawDev.Connection.Close();
                 IsInitialized = false;
             }
-
         }
 
         /// <summary>
@@ -221,7 +218,8 @@ namespace dk.CctalkLib.Devices
             {
                 if (!_rawDev.Connection.IsOpen())
                     throw new InvalidOperationException("Init first");
-                _t = new Timer(this.PollInterval.TotalMilliseconds)
+                //_t = new Timer(this.PollInterval.TotalMilliseconds)
+                _t = new Timer(100)
                 {
                     AutoReset = false,
                 };
@@ -468,10 +466,17 @@ namespace dk.CctalkLib.Devices
         public static Dictionary<byte, CoinTypeInfo> DefaultConfig = new Dictionary<byte, CoinTypeInfo>
                     {
 						//{5, new CoinTypeInfo("50kNew", 0.5M)},
-						{6, new CoinTypeInfo("1 R new", 1M)},
-                        {7, new CoinTypeInfo("2 R new", 2M)},
-                        {8, new CoinTypeInfo("5 R new", 5M)},
-                        {9, new CoinTypeInfo("10 R new", 10M)},
+                        //{6, new CoinTypeInfo("1元", 1M)},
+                        //{7, new CoinTypeInfo("2元", 2M)},
+                        //{8, new CoinTypeInfo("5元", 5M)},
+                        //{9, new CoinTypeInfo("10元", 10M)},
+
+                        {1, new CoinTypeInfo("1角", 1M)},
+                        {2, new CoinTypeInfo("5角", 1M)},
+                        {3, new CoinTypeInfo("1元", 1M)},
+                        {7, new CoinTypeInfo("2元", 2M)},
+                        {8, new CoinTypeInfo("5元", 5M)},
+                        {9, new CoinTypeInfo("10元", 10M)},
 
                         //{11, new CoinTypeInfo("50 kopec", 0.5M)},
                         //{12, new CoinTypeInfo("1 rubles", 1M)},

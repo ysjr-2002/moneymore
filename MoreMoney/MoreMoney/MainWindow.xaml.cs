@@ -1,5 +1,4 @@
-﻿using Common;
-using dk.CctalkLib.Connections;
+﻿using dk.CctalkLib.Connections;
 using dk.CctalkLib.Devices;
 using MoreMoney.Core;
 using MoreMoney.Core.CashCore;
@@ -18,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MoreMoney;
 
 namespace MoreMoney
 {
@@ -47,7 +47,7 @@ namespace MoreMoney
 
         private void InitPorts()
         {
-            var ports = Utility.SerialPorts();
+            var ports = SerialPort.GetPortNames();
             cmbCashNotePorts.ItemsSource = ports;
             cmbCoinPorts.ItemsSource = ports;
             cmbCashChargePorts.ItemsSource = ports;
@@ -65,7 +65,12 @@ namespace MoreMoney
 
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.Init();
+
+        }
+
+        private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.Init("COM1", "COM2", "COM6", "COM12", "COM5", "COM6");
             DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -78,15 +83,15 @@ namespace MoreMoney
                 }));
             };
 
+            DeviceBus.OnChargeOver += (x, y) =>
+            {
+                Log.In("找零结束");
+            };
+
             DeviceBus.OnReadCardNo += (s, no) =>
             {
                 Log.In(no);
             };
-        }
-
-        private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
-        {
-            DeviceBus.Init();
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -156,6 +161,10 @@ namespace MoreMoney
             //txtNeed.Text = money.ToString();
             //txtHave.Text = "0";
             //DeviceBus.ReadPool(money);
+        }
+
+        private void btnReadBuffer_click(object sender, RoutedEventArgs e)
+        {
             _coinAcceptor.StartPoll();
         }
 
@@ -202,8 +211,6 @@ namespace MoreMoney
             _coinCounter += e.CoinValue;
             Log.In(String.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
 
-            // There is simulator of long-working event handler
-            //Thread.Sleep(1000);
         }
 
         void CoinAcceptorErrorMessageAccepted(object sender, CoinAcceptorErrorEventArgs e)
@@ -275,6 +282,7 @@ namespace MoreMoney
                 Log.In(msg);
                 return;
             }
+            StatusCode.Init();
             wrapPanel.IsEnabled = true;
             constrant = new Constrant(com);
         }
@@ -288,6 +296,23 @@ namespace MoreMoney
                 Address = 0
             };
             c.CmdSetMasterInhibitStatus(ckbInhibit.IsChecked.GetValueOrDefault());
+        }
+
+        private void btnAllTest_click(object sender, RoutedEventArgs e)
+        {
+            txtHave.Text = "0";
+            txtCharge.Text = "0";
+            DeviceBus.StartReceiveMoney(txtNeed.Text.ToDecimal());
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.SetReceive(txtyishou.Text.ToDecimal());
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.StopReceiveMoney();
         }
     }
 }

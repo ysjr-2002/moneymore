@@ -22,16 +22,10 @@ namespace MoreMoney.Core
         {
             try
             {
-                port = new SerialPort(com, 9600, Parity.Odd, 8, StopBits.One);
+                port = new SerialPort(com, 9600, Parity.Even, 7, StopBits.One);
+                port.Handshake = Handshake.None;
                 port.Open();
                 msg = string.Empty;
-                Task.Factory.StartNew(() =>
-                {
-                    while (true)
-                    {
-                        Receive();
-                    }
-                });
                 return true;
             }
             catch (Exception ex)
@@ -58,13 +52,12 @@ namespace MoreMoney.Core
             {
                 List<byte> data = new List<byte>();
                 byte b = 0;
+                port.DiscardInBuffer();
                 while ((b = (byte)port.ReadByte()) != Package.EOM)
                 {
                     data.Add(b);
                 }
-                Log.In("over");
                 data.Add(Package.EOM);
-
                 if (Package.Check_Receive_Lrc(data.ToArray()))
                     return data.ToArray();
                 else
@@ -87,7 +80,7 @@ namespace MoreMoney.Core
             {
                 port.Write(data, 0, data.Length);
             }
-            Thread.Sleep(500);
+            Thread.Sleep(0);
         }
     }
 }

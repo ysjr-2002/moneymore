@@ -95,10 +95,6 @@ namespace MoreMoney.Core
                 {
                     //HFGGGGG
                     var h = (char)item[0];
-                    if (h == '0')
-                    {
-                        Log.In("拒绝保险库");
-                    }
                     var f = (char)item[1];
                     var str = item.ToAscii(2, 5);
                     Log.In(string.Format("H->{0} F->{1} GGGGG->{2}", h, f, str));
@@ -136,7 +132,6 @@ namespace MoreMoney.Core
         {
             var send = Package.Open_Cassette();
             com.Write(send);
-            return;
             var receive = com.Receive();
             if (receive != null)
             {
@@ -161,7 +156,6 @@ namespace MoreMoney.Core
         {
             var send = Package.Close_Cassette();
             com.Write(send);
-            return;
             var receive = com.Receive();
             if (receive != null)
             {
@@ -214,11 +208,10 @@ namespace MoreMoney.Core
             var receive = com.Receive();
         }
 
-        public void MoveForward(byte hn, string money)
+        public bool MoveForward(byte hn, string money)
         {
             var send = Package.MoveForward(hn, money);
             com.Write(send);
-            return;
             var receive = com.Receive();
             if (receive != null)
             {
@@ -235,12 +228,22 @@ namespace MoreMoney.Core
                         var number = item.ToArray().ToAscii(2, 3);
                         Log.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
                     }
+                    return true;
                 }
                 else
                 {
+                    //没有钱后返回 0x36 Fail to feed
                     //the command X’36’ Check Delivered Notes
-                    CheckDelivered();
+                    //CheckDelivered();
+                    Log.In(receive.ToAscii());
+                    var temp = StatusCode.GetTypeRemark(receive[0]);
+                    Log.In(temp);
+                    return false;
                 }
+            }
+            else
+            {
+                return false;
             }
         }
     }

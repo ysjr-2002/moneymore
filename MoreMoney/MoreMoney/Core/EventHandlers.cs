@@ -15,7 +15,7 @@ namespace MoreMoney.Core
     /// <param name="sender"></param>
     /// <param name="money">应收</param>
     /// <param name="total">实收</param>
-    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, int money, int total);
+    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, decimal money, decimal total);
 
     public delegate void OnChargeEventHandler(object sender, List<ChargeMoneyType> items);
 

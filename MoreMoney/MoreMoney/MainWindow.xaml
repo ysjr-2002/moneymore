@@ -7,7 +7,7 @@
         Name="window"
         Title="Run_Test"
         Width="800"
-        Height="600"
+        Height="500"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Window.Resources>
@@ -19,7 +19,7 @@
 
         <Style x:Key="money" TargetType="TextBox">
             <Setter Property="Height" Value="40" />
-            <Setter Property="Width" Value="60" />
+            <Setter Property="Width" Value="50" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="White" />
@@ -67,16 +67,30 @@
             <Label Width="60" Content="应收:" />
             <TextBox Name="txtNeed"
                      Style="{StaticResource money}"
-                     Text="15" />
+                     Text="5" />
 
             <Label Width="60" Content="实收:" />
             <TextBox Name="txtHave" Style="{StaticResource money}" />
 
             <Label Width="60" Content="找零:" />
             <TextBox Name="txtCharge" Style="{StaticResource money}" />
+
+            <Button Name="btnBus"
+                    Width="80"
+                    Click="btnAllTest_click"
+                    Content="收钱" />
         </StackPanel>
 
         <TabControl Grid.Row="1" Height="200">
+            <TabItem Header="总线测试">
+                <StackPanel Orientation="Horizontal">
+
+                    <Label Width="60" Content="已收:" />
+                    <TextBox Name="txtyishou" Style="{StaticResource money}" />
+                    <Button Click="Button_Click" Content="设置已收" />
+                    <Button Click="btnStop_Click" Content="停止" />
+                </StackPanel>
+            </TabItem>
             <TabItem Header="纸币接收">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
@@ -110,10 +124,12 @@
                     </StackPanel>
                     <WrapPanel>
                         <CheckBox Name="ckbInhibit"
+                                  VerticalAlignment="Center"
                                   VerticalContentAlignment="Center"
                                   Click="ckbInhibit_click"
                                   Content="inhibit status" />
                         <Button Click="btnPool_click" Content="Pool" />
+                        <Button Click="btnReadBuffer_click" Content="Read Buffer" />
                         <Button Click="btnStopPool_click" Content="Stop" />
                     </WrapPanel>
                 </StackPanel>

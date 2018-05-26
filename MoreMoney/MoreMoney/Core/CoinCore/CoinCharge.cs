@@ -17,8 +17,6 @@ namespace MoreMoney.Core
         SerialPort sp = null;
         ChargeMoneyType chargeType;
         private const int READ_TIME_OUT = 100;
-        //public event OnChargingEventHandler OnCharging;
-        //public event OnHopperEmptyEventHandler OnHopperEmpty;
 
         public CoinCharge(string port, ChargeMoneyType chargeType)
         {
