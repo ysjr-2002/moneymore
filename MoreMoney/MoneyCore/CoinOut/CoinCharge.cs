@@ -39,6 +39,25 @@ namespace MoneyCore
         }
 
         /// <summary>
+        /// 一次指令出多个币
+        /// </summary>
+        /// <param name="money">5</param>
+        public void ChargeMore(string money)
+        {
+            var numbers = money.ToCharArray();
+            List<byte> send = new List<byte>();
+            send.Add(0x02);
+            send.Add(0x53);
+            foreach (var item in numbers)
+            {
+                send.Add((byte)item);
+            }
+            send.Add(0x03);
+            var total = send.ToArray();
+            sp.Write(total, 0, total.Length);
+        }
+
+        /// <summary>
         /// 发送找零指令
         /// </summary>
         /// <param name="money"></param>

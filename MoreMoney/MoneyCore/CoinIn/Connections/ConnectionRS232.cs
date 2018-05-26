@@ -230,9 +230,9 @@ namespace dk.CctalkLib.Connections
                                 throw new InvalidRespondFormatException(copy, "Checksumm check fail");
                             }
                             respond = GenericCctalkDevice.ParseRespond(_respondBuf, 0, respondBufPos);
-                            //var temp = new byte[respondBufPos];
-                            //Array.Copy(_respondBuf, 0, temp, 0, temp.Length);
-                            //Log.In(temp.ToStr());
+                            var temp = new byte[respondBufPos];
+                            Array.Copy(_respondBuf, 0, temp, 0, temp.Length);
+                            DllLog.In(temp.ToStr());
                             Array.Clear(_respondBuf, 0, _respondBuf.Length);
                             break;
                         }

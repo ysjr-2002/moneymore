@@ -70,6 +70,7 @@ namespace MoneyCore
 
         public static byte[] MoveForward(byte hoppernumber, string hopenotes)
         {
+            //C T HDDD HDDD .... LL E
             List<byte> list = new List<byte>();
             list.Add(cmd_moveforward);
             list.Add(0x30);

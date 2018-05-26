@@ -177,20 +177,21 @@ namespace MoreMoney
 
         private void btnPool_click(object sender, RoutedEventArgs e)
         {
-            //var money = txtNeed.Text.ToInt32();
-            //txtNeed.Text = money.ToString();
-            //txtHave.Text = "0";
-            //DeviceBus.ReadPool(money);
+            _coinAcceptor.StartPoll();
+        }
+
+        private void btnCoinReset_click(object sender, RoutedEventArgs e)
+        {
+            _coinAcceptor._rawDev.CmdReset();
         }
 
         private void btnReadBuffer_click(object sender, RoutedEventArgs e)
         {
-            _coinAcceptor.StartPoll();
+            _coinAcceptor._rawDev.CmdReadEventBuffer();
         }
 
         private void btnStopPool_click(object sender, RoutedEventArgs e)
         {
-            //DeviceBus.StopPool();
             _coinAcceptor.EndPoll();
         }
 

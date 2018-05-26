@@ -130,8 +130,9 @@
                                   VerticalContentAlignment="Center"
                                   Click="ckbInhibit_click"
                                   Content="inhibit status" />
-                        <Button Click="btnPool_click" Content="Pool" />
+                        <Button Click="btnCoinReset_click" Content="Reset" />
                         <Button Click="btnReadBuffer_click" Content="Read Buffer" />
+                        <Button Click="btnPool_click" Content="Pool" />
                         <Button Click="btnStopPool_click" Content="Stop" />
                     </WrapPanel>
                 </StackPanel>

@@ -15,10 +15,10 @@ namespace dk.CctalkLib.Devices
     /// </summary>
     public class CoinAcceptor : IDisposable
     {
-        readonly GenericCctalkDevice _rawDev = new GenericCctalkDevice();
+        public readonly GenericCctalkDevice _rawDev = new GenericCctalkDevice();
 
         Timer _t;
-        Byte _lastEvent;
+        Byte _lastCounter;
 
         /// <summary>
         /// Fires when coin was accepted. Only when polling is on.
@@ -119,7 +119,7 @@ namespace dk.CctalkLib.Devices
             {
                 RaiseLastEvents(evBuf);
             }
-            _lastEvent = evBuf.Counter;
+            _lastCounter = evBuf.Counter;
             IsInitialized = true;
         }
 
@@ -186,8 +186,6 @@ namespace dk.CctalkLib.Devices
 
         }
 
-
-
         /// <summary>
         /// *CURRENTLY UNUSED: interval hardcoded*
         /// Poll interval. By default value accepted from device while Init procedure. Can be changed, but next Init will reset value.
@@ -204,8 +202,6 @@ namespace dk.CctalkLib.Devices
             }
         }
 
-
-
         /// <summary>
         ///  Starts poll events from device
         /// </summary>
@@ -218,8 +214,7 @@ namespace dk.CctalkLib.Devices
             {
                 if (!_rawDev.Connection.IsOpen())
                     throw new InvalidOperationException("Init first");
-                //_t = new Timer(this.PollInterval.TotalMilliseconds)
-                _t = new Timer(100)
+                _t = new Timer(this.PollInterval.TotalMilliseconds)
                 {
                     AutoReset = false,
                 };
@@ -299,7 +294,7 @@ namespace dk.CctalkLib.Devices
                     if (wasReset)
                     {
                         //没有投币
-                        if (!_isResetExpected && _lastEvent != 0)
+                        if (!_isResetExpected && _lastCounter != 0)
                         {
                             RaiseInvokeErrorEvent(
                                 new CoinAcceptorErrorEventArgs(
@@ -312,7 +307,7 @@ namespace dk.CctalkLib.Devices
 
                     if (_isClearEventBufferRequested)
                     {
-                        _lastEvent = buf.Counter;
+                        _lastCounter = buf.Counter;
                     }
 
                     _isResetExpected = false;
@@ -329,8 +324,8 @@ namespace dk.CctalkLib.Devices
 
         private void RaiseLastEvents(DeviceEventBuffer buf)
         {
-            var newEventsCount = GetNewEventsCountHelper(_lastEvent, buf.Counter);
-            _lastEvent = buf.Counter;
+            var newEventsCount = GetNewEventsCountHelper(_lastCounter, buf.Counter);
+            _lastCounter = buf.Counter;
             RaiseEventsByBufferHelper(buf, newEventsCount);
         }
 
@@ -364,8 +359,8 @@ namespace dk.CctalkLib.Devices
                 {
                     CoinTypeInfo coinInfo;
                     _coins.TryGetValue(ev.CoinCode, out coinInfo);
-                    var evVal = coinInfo == null ? 0 : coinInfo.Value;
                     var evName = coinInfo == null ? null : coinInfo.Name;
+                    var evVal = coinInfo == null ? 0 : coinInfo.Value;
                     RaiseInvokeCoinEvent(new CoinAcceptorCoinEventArgs(evName, evVal, ev.CoinCode, ev.ErrorOrRouteCode));
                 }
             }
@@ -471,8 +466,8 @@ namespace dk.CctalkLib.Devices
                         //{8, new CoinTypeInfo("5元", 5M)},
                         //{9, new CoinTypeInfo("10元", 10M)},
 
-                        {1, new CoinTypeInfo("1角", 1M)},
-                        {2, new CoinTypeInfo("5角", 1M)},
+                        {1, new CoinTypeInfo("1角", 0.1M)},
+                        {2, new CoinTypeInfo("5角", 0.5M)},
                         {3, new CoinTypeInfo("1元", 1M)},
                         {7, new CoinTypeInfo("2元", 2M)},
                         {8, new CoinTypeInfo("5元", 5M)},
