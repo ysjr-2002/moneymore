@@ -1,7 +1,4 @@
-﻿using dk.CctalkLib.Connections;
-using dk.CctalkLib.Devices;
-using MoreMoney.Core;
-using MoreMoney.Core.CashCore;
+﻿using MoreMoney.Core;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -18,6 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MoreMoney;
+using dk.CctalkLib.Devices;
+using MoneyCore;
+using MoneyCore.Cash;
+using dk.CctalkLib.Connections;
 
 namespace MoreMoney
 {
@@ -32,6 +33,8 @@ namespace MoreMoney
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             Log.Set(log);
+            DllLog.SetLogIn(Log.In);
+            DllLog.SetLogOut(Log.Out);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

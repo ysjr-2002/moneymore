@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{745D84BA-4917-4EB5-A3C9-3524866ED864}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MoneyCore</RootNamespace>
+    <AssemblyName>MoneyCore</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CCNET">
+      <HintPath>..\MoreMoney\bin\Debug\CCNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ascii.cs" />
+    <Compile Include="CashOut\Constrant.cs" />
+    <Compile Include="CashOut\DataItems.cs" />
+    <Compile Include="CashOut\Package.cs" />
+    <Compile Include="CashOut\StatusCode.cs" />
+    <Compile Include="CashIn\CashReceiver.cs" />
+    <Compile Include="CashIn\Charge.cs" />
+    <Compile Include="CashIn\Enums.cs" />
+    <Compile Include="CoinOut\CoinCharge.cs" />
+    <Compile Include="CoinOut\CoinChargeAnswer.cs" />
+    <Compile Include="CoinIn\Checksumms\Checksum.cs" />
+    <Compile Include="CoinIn\Checksumms\CRCChecksum.cs" />
+    <Compile Include="CoinIn\Checksumms\Helpers\CRC.cs" />
+    <Compile Include="CoinIn\Checksumms\Helpers\CRC16.cs" />
+    <Compile Include="CoinIn\Checksumms\Helpers\CRC16CCITT.cs" />
+    <Compile Include="CoinIn\Checksumms\Helpers\CRC32.cs" />
+    <Compile Include="CoinIn\Checksumms\Helpers\ICRC.cs" />
+    <Compile Include="CoinIn\Checksumms\ICctlkChecksum.cs" />
+    <Compile Include="CoinIn\cmd.cs" />
+    <Compile Include="CoinIn\Connections\ConnectionRS232.cs" />
+    <Compile Include="CoinIn\Connections\ICctalkConnection.cs" />
+    <Compile Include="CoinIn\Devices\BillTypeInfo.cs" />
+    <Compile Include="CoinIn\Devices\BillValidator.cs" />
+    <Compile Include="CoinIn\Devices\BillValidatorBillEventArgs.cs" />
+    <Compile Include="CoinIn\Devices\BillValidatorCctalkDevice.cs" />
+    <Compile Include="CoinIn\Devices\BillValidatorErrorEventArgs.cs" />
+    <Compile Include="CoinIn\Devices\BillValidatorErrors.cs" />
+    <Compile Include="CoinIn\Devices\CctalkDeviceStatus.cs" />
+    <Compile Include="CoinIn\Devices\CctalkDeviceTypes.cs" />
+    <Compile Include="CoinIn\Devices\CoinAcceptor.cs" />
+    <Compile Include="CoinIn\Devices\CoinAcceptorCoinEventArgs.cs" />
+    <Compile Include="CoinIn\Devices\CoinAcceptorErrorEventArgs.cs" />
+    <Compile Include="CoinIn\Devices\CoinAcceptorErrors.cs" />
+    <Compile Include="CoinIn\Devices\CoinTypeInfo.cs" />
+    <Compile Include="CoinIn\Devices\DeviceEvent.cs" />
+    <Compile Include="CoinIn\Devices\DeviceEventBuffer.cs" />
+    <Compile Include="CoinIn\Devices\GenericCctalkDevice.cs" />
+    <Compile Include="CoinIn\Devices\InvalidRespondException.cs" />
+    <Compile Include="CoinIn\Devices\InvalidRespondFormatException.cs" />
+    <Compile Include="CoinIn\Messages\CcTalkMessage.cs" />
+    <Compile Include="Com\SerialCom.cs" />
+    <Compile Include="Com\SerialComIC.cs" />
+    <Compile Include="DeviceBus.cs" />
+    <Compile Include="EventHandlers.cs" />
+    <Compile Include="FunExt.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

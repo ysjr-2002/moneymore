@@ -69,54 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\Ascii.cs" />
-    <Compile Include="Core\CashCore\Charge.cs" />
-    <Compile Include="Core\CashCore\Enums.cs" />
-    <Compile Include="Core\CashCore\CashReceiver.cs" />
-    <Compile Include="Core\CoinCore\CoinCharge.cs" />
-    <Compile Include="Core\CashCharge\Constrant.cs" />
-    <Compile Include="Core\CoinCore\CoinChargeAnswer.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Checksum.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\CRCChecksum.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Helpers\CRC.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Helpers\CRC16.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Helpers\CRC16CCITT.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Helpers\CRC32.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\Helpers\ICRC.cs" />
-    <Compile Include="Core\CoinIn\Checksumms\ICctlkChecksum.cs" />
-    <Compile Include="Core\CoinIn\cmd.cs" />
-    <Compile Include="Core\CoinIn\Connections\ConnectionRS232.cs" />
-    <Compile Include="Core\CoinIn\Connections\ICctalkConnection.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillTypeInfo.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillValidator.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillValidatorBillEventArgs.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillValidatorCctalkDevice.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillValidatorErrorEventArgs.cs" />
-    <Compile Include="Core\CoinIn\Devices\BillValidatorErrors.cs" />
-    <Compile Include="Core\CoinIn\Devices\CctalkDeviceStatus.cs" />
-    <Compile Include="Core\CoinIn\Devices\CctalkDeviceTypes.cs" />
-    <Compile Include="Core\CoinIn\Devices\CoinAcceptor.cs" />
-    <Compile Include="Core\CoinIn\Devices\CoinAcceptorCoinEventArgs.cs" />
-    <Compile Include="Core\CoinIn\Devices\CoinAcceptorErrorEventArgs.cs" />
-    <Compile Include="Core\CoinIn\Devices\CoinAcceptorErrors.cs" />
-    <Compile Include="Core\CoinIn\Devices\CoinTypeInfo.cs" />
-    <Compile Include="Core\CoinIn\Devices\DeviceEvent.cs" />
-    <Compile Include="Core\CoinIn\Devices\DeviceEventBuffer.cs" />
-    <Compile Include="Core\CoinIn\Devices\GenericCctalkDevice.cs" />
-    <Compile Include="Core\CoinIn\Devices\InvalidRespondException.cs" />
-    <Compile Include="Core\CoinIn\Devices\InvalidRespondFormatException.cs" />
-    <Compile Include="Core\CoinIn\Messages\CcTalkMessage.cs" />
-    <Compile Include="Core\EventHandlers.cs" />
-    <Compile Include="Core\FunExt.cs" />
-    <Compile Include="Core\CashCharge\DataItems.cs" />
-    <Compile Include="Core\Log.cs" />
-    <Compile Include="Core\DeviceBus.cs" />
-    <Compile Include="Core\CashCharge\Package.cs" />
-    <Compile Include="Core\Print.cs" />
-    <Compile Include="Core\Com\SerialCom.cs" />
-    <Compile Include="Core\Com\SerialComIC.cs" />
-    <Compile Include="Core\CashCharge\StatusCode.cs" />
-    <Compile Include="Core\Util.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -169,7 +122,12 @@
     <Resource Include="document\接收.txt" />
     <Resource Include="document\需求要点.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MoneyCore\MoneyCore.csproj">
+      <Project>{745D84BA-4917-4EB5-A3C9-3524866ED864}</Project>
+      <Name>MoneyCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
