@@ -26,9 +26,11 @@ namespace MoneyCore
         {
             try
             {
+                msg = string.Empty;
+                if (bRun)
+                    return true;
                 port.Open();
                 bRun = true;
-                msg = string.Empty;
                 thread = new Thread(Run);
                 thread.Start();
             }

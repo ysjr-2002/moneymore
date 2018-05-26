@@ -73,7 +73,7 @@ namespace MoreMoney
 
         private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.Init("COM1", "COM2", "COM6", "COM12", "COM5", "COM6");
+            DeviceBus.Init("COM6", "COM2", "COM6", "COM12", "COM5", "COM6");
             DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -86,9 +86,26 @@ namespace MoreMoney
                 }));
             };
 
-            DeviceBus.OnChargeOver += (x, y) =>
+            DeviceBus.OnChargeOver += (x, y, unChargeMoney) =>
             {
-                Log.In("找零结束");
+                if (unChargeMoney == 0)
+                {
+                    var m100 = y[ChargeMoneyType.M100];
+                    Log.In("100找零->" + m100);
+
+                    var m50 = y[ChargeMoneyType.M50];
+                    Log.In("50找零->" + m50);
+
+                    var m5 = y[ChargeMoneyType.M5];
+                    Log.In("5找零->" + m5);
+
+                    var m1 = y[ChargeMoneyType.M1];
+                    Log.In("1找零->" + m1);
+                }
+                else
+                {
+                    Log.In("未找零金额->" + unChargeMoney);
+                }
             };
 
             DeviceBus.OnReadCardNo += (s, no) =>
@@ -229,7 +246,7 @@ namespace MoreMoney
 
         private void btnChargeTest_click(object sender, RoutedEventArgs e)
         {
-            var all = txtNeed.Text.ToInt32();
+            var all = txtNeed.Text.Toint();
             int m1, m5, m50, m100;
             Charge.GetCount(all, out m1, out m5, out m50, out m100);
             Log.In("1元->" + m1);
@@ -305,17 +322,28 @@ namespace MoreMoney
         {
             txtHave.Text = "0";
             txtCharge.Text = "0";
-            DeviceBus.StartReceiveMoney(txtNeed.Text.ToDecimal());
+            DeviceBus.StartReceiveMoney(txtNeed.Text.Todecimal());
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnReceiveMoney_Click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.SetReceive(txtyishou.Text.ToDecimal());
+            DeviceBus.SetReceive(txtyishou.Text.Todecimal());
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
             DeviceBus.StopReceiveMoney();
+        }
+
+        private void btnStartCharge_Click(object sender, RoutedEventArgs e)
+        {
+            var charge = txtyishou.Text.Todecimal() - txtNeed.Text.Todecimal();
+            DeviceBus.StartCharge(charge);
+        }
+
+        private void btnStartReadCard_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.StartReadCard();
         }
     }
 }

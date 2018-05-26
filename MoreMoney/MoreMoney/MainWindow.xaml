@@ -87,8 +87,10 @@
 
                     <Label Width="60" Content="已收:" />
                     <TextBox Name="txtyishou" Style="{StaticResource money}" />
-                    <Button Click="Button_Click" Content="设置已收" />
+                    <Button Click="btnReceiveMoney_Click" Content="设置已收" />
+                    <Button Click="btnStartCharge_Click" Content="开始找零" />
                     <Button Click="btnStop_Click" Content="停止" />
+                    <Button Click="btnStartReadCard_Click" Content="读卡" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="纸币接收">

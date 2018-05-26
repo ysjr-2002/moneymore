@@ -8,21 +8,21 @@ namespace MoneyCore
 {
     public static class Ext
     {
-        public static byte ToByte(this string s)
+        public static byte Tobyte(this string s)
         {
             byte ret = 0;
             byte.TryParse(s, out ret);
             return ret;
         }
 
-        public static int ToInt32(this string s)
+        public static int Toint(this string s)
         {
             int ret = 0;
             int.TryParse(s, out ret);
             return ret;
         }
 
-        public static decimal ToDecimal(this string s)
+        public static decimal Todecimal(this string s)
         {
             decimal ret = 0;
             decimal.TryParse(s, out ret);

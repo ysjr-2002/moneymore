@@ -44,7 +44,7 @@ namespace MoneyCore
         /// <param name="money"></param>
         public void Charge(string money)
         {
-            var count = money.ToByte();
+            var count = money.Tobyte();
             for (int i = 1; i <= count; i++)
             {
                 CoinChargeAnswer answer = Charge();

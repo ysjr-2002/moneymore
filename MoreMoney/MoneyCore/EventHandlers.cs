@@ -13,11 +13,11 @@ namespace MoneyCore
     /// 投钱
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="money">应收</param>
-    /// <param name="total">实收</param>
-    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, decimal money, decimal total);
+    /// <param name="needMoney">应收</param>
+    /// <param name="recevieMoney">实收</param>
+    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, decimal needMoney, decimal recevieMoney);
 
-    public delegate void OnChargeEventHandler(object sender, List<ChargeMoneyType> items);
+    public delegate void OnChargeEventHandler(object sender, Dictionary<ChargeMoneyType, int> items, decimal unChargeMoney);
 
     public delegate void OnChargingEventHandler(object sender, ChargeMoneyType item);
 

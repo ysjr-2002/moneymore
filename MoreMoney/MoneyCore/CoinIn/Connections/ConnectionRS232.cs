@@ -148,12 +148,16 @@ namespace dk.CctalkLib.Connections
             lock (_callSyncRoot)
             {
                 //_port.DataReceived += SerialPortDataReceived;
-                _port.Open();
-                _port.DiscardInBuffer();
-                _port.DiscardOutBuffer();
-                IsOpen();
+                try
+                {
+                    _port.Open();
+                    _port.DiscardInBuffer();
+                    _port.DiscardOutBuffer();
+                    IsOpen();
 
-                Trace.TraceInformation("Opened");
+                    Trace.TraceInformation("Opened");
+                }
+                catch { }
             }
         }
 

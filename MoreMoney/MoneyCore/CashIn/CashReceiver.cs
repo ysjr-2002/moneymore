@@ -152,6 +152,7 @@ namespace MoneyCore.Cash
         public void Close()
         {
             stop = true;
+            objCCNET.Dispose();
         }
     }
 }
