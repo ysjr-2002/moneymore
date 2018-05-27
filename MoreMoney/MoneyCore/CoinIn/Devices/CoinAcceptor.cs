@@ -214,7 +214,8 @@ namespace dk.CctalkLib.Devices
             {
                 if (!_rawDev.Connection.IsOpen())
                     throw new InvalidOperationException("Init first");
-                _t = new Timer(this.PollInterval.TotalMilliseconds)
+                //_t = new Timer(this.PollInterval.TotalMilliseconds)
+                _t = new Timer(200)
                 {
                     AutoReset = false,
                 };
@@ -466,7 +467,7 @@ namespace dk.CctalkLib.Devices
                         //{8, new CoinTypeInfo("5元", 5M)},
                         //{9, new CoinTypeInfo("10元", 10M)},
 
-                        {1, new CoinTypeInfo("1角", 0.1M)},
+                        {6, new CoinTypeInfo("1角", 0.1M)},
                         {2, new CoinTypeInfo("5角", 0.5M)},
                         {3, new CoinTypeInfo("1元", 1M)},
                         {7, new CoinTypeInfo("2元", 2M)},

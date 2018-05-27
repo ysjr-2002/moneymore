@@ -182,6 +182,7 @@ namespace MoreMoney
 
         private void btnCoinReset_click(object sender, RoutedEventArgs e)
         {
+            _coinCounter = 0;
             _coinAcceptor._rawDev.CmdReset();
         }
 
