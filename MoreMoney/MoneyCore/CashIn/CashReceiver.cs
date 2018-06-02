@@ -44,7 +44,6 @@ namespace MoneyCore.Cash
             stop = false;
             thread = new Thread(Run);
             thread.Start();
-
             return true;
         }
 

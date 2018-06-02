@@ -63,62 +63,69 @@ namespace MoneyCore
 
             var msg = "";
             var open = false;
-
-            //读卡器初始化
-            cardCom = new SerialComIC(cardcom);
-            cardCom.OnReadCardNo += (s, c) =>
+            IsOpenAndRead = false;
+            try
             {
-                if (OnReadCardNo != null)
+                //读卡器初始化
+                cardCom = new SerialComIC(cardcom);
+                cardCom.OnReadCardNo += (s, c) =>
                 {
-                    OnReadCardNo(s, c);
+                    if (OnReadCardNo != null)
+                    {
+                        OnReadCardNo(s, c);
+                    }
+                };
+
+                //纸币入
+                cashInCom = new CashReceiver(cashIncom);
+                open = cashInCom.Open(out msg);
+                if (!open)
+                {
+                    return msg;
                 }
-            };
+                cashInCom.OnAcceptMoney += cashInCom_OnAcceptMoney;
 
-            ////纸币入
-            //cashInCom = new CashReceiver(cashIncom);
-            //open = cashInCom.Open(out msg);
-            //if (!open)
-            //{
-            //    return "";
-            //}
-            //cashInCom.OnAcceptMoney += cashInCom_OnAcceptMoney;
+                //硬币入
+                var con = new ConnectionRs232
+                {
+                    PortName = coinIncom,
+                    RemoveEcho = true
+                };
+                Dictionary<byte, CoinTypeInfo> coins;
+                coins = CoinAcceptor.DefaultConfig;
+                coinAcceptor3 = new CoinAcceptor(02, con, coins, null);
+                coinAcceptor3.CoinAccepted += CoinAcceptorCoinAccepted;
+                coinAcceptor3.ErrorMessageAccepted += CoinAcceptorErrorMessageAccepted;
+                coinAcceptor3.Init();
 
-            ////硬币入
-            //var con = new ConnectionRs232
-            //{
-            //    PortName = coinIncom,
-            //    RemoveEcho = true
-            //};
-            //Dictionary<byte, CoinTypeInfo> coins;
-            //coins = CoinAcceptor.DefaultConfig;
-            //coinAcceptor3 = new CoinAcceptor(02, con, coins, null);
-            //coinAcceptor3.CoinAccepted += CoinAcceptorCoinAccepted;
-            //coinAcceptor3.ErrorMessageAccepted += CoinAcceptorErrorMessageAccepted;
-            //coinAcceptor3.Init();
+                //纸币出
+                cashOutCom = new SerialCom(cashOutcom);
+                if (cashOutCom.Open(out msg) == false)
+                {
+                    return msg;
+                }
+                StatusCode.Init();
+                constrant = new Constrant(cashOutCom);
 
-            ////纸币出
-            //cashOutCom = new SerialCom(cashOutcom);
-            //if (cashOutCom.Open(out msg) == false)
-            //{
-            //    return msg;
-            //}
-            //StatusCode.Init();
-            //constrant = new Constrant(cashOutCom);
+                //硬币找零
+                coin1Com = new CoinCharge(coin1Outcom, ChargeMoneyType.M1);
+                coin5Com = new CoinCharge(coin5Outcom, ChargeMoneyType.M5);
 
-            ////硬币找零
-            //coin1Com = new CoinCharge(coin1Outcom, ChargeMoneyType.M1);
-            //coin5Com = new CoinCharge("coin5Outcom", ChargeMoneyType.M5);
-
-            //if (coin1Com.Open(out msg))
-            //{
-            //    return "1元找零串口打开失败";
-            //}
-            //if (coin5Com.Open(out msg))
-            //{
-            //    return "5元找零串口打开失败";
-            //}
-            bInit = true;
-            return string.Empty;
+                if (coin1Com.Open(out msg))
+                {
+                    return "1元找零串口打开失败";
+                }
+                if (coin5Com.Open(out msg))
+                {
+                    return "5元找零串口打开失败";
+                }
+                bInit = true;
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+            return msg;
         }
 
         /// <summary>
@@ -129,6 +136,7 @@ namespace MoneyCore
             cardCom?.Close();
             cashInCom?.Close();
             coinAcceptor3?.Dispose();
+            constrant.CloseCassette();
             cashOutCom?.Close();
             coin1Com?.Close();
             coin5Com?.Close();
@@ -237,6 +245,7 @@ namespace MoneyCore
         }
 
         static List<ChargeMoneyType> chargeItems = new List<ChargeMoneyType>();
+        static bool IsOpenAndRead = false;
         /// <summary>
         /// 开始找零
         /// </summary>
@@ -244,6 +253,13 @@ namespace MoneyCore
         public static void StartCharge(decimal charge)
         {
             chargeItems.Clear();
+
+            if (IsOpenAndRead == false)
+            {
+                constrant.OpenCassette();
+                constrant.ReadId();
+                IsOpenAndRead = true;
+            }
 
             int m1, m5, m50, m100;
             Charge.GetCount(charge, out m1, out m5, out m50, out m100);

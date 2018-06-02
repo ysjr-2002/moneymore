@@ -15,7 +15,7 @@ namespace MoneyCore
     {
         SerialPort sp = null;
         ChargeMoneyType chargeType;
-        private const int READ_TIME_OUT = 100;
+        const int READ_TIME_OUT = 5 * 1000;
 
         public CoinCharge(string port, ChargeMoneyType chargeType)
         {
@@ -93,15 +93,18 @@ namespace MoneyCore
             sp.Write(total, 0, total.Length);
 
             CoinChargeAnswer answer = CoinChargeAnswer.TimeOut;
-            sp.ReadTimeout = READ_TIME_OUT;
+            DllLog.In("start charge");
             try
             {
                 sp.DiscardInBuffer();
+                sp.ReadTimeout = READ_TIME_OUT;
                 var b = (byte)sp.ReadByte();
+                DllLog.In(b.ToHex());
                 answer = (CoinChargeAnswer)b;
             }
-            catch
+            catch (Exception ex)
             {
+                DllLog.In(ex.Message);
             }
             return answer;
         }

@@ -7,7 +7,7 @@
         Name="window"
         Title="Run_Test"
         Width="800"
-        Height="500"
+        Height="600"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Window.Resources>
@@ -107,7 +107,6 @@
                     <WrapPanel>
                         <Button Click="btnPool_click" Content="Pool" />
                         <Button Click="btnStopPool_click" Content="Stop" />
-
                         <Button Click="btnChargeTest_click" Content="Charge" />
                     </WrapPanel>
                 </StackPanel>
@@ -132,8 +131,8 @@
                                   Content="inhibit status" />
                         <Button Click="btnCoinReset_click" Content="Reset" />
                         <Button Click="btnReadBuffer_click" Content="Read Buffer" />
-                        <Button Click="btnPool_click" Content="Pool" />
-                        <Button Click="btnStopPool_click" Content="Stop" />
+                        <Button Click="btnCoinPool_click" Content="Pool" />
+                        <Button Click="btnCoinStopPool_click" Content="Stop" />
                     </WrapPanel>
                 </StackPanel>
             </TabItem>
@@ -145,6 +144,7 @@
                                   Width="100"
                                   Height="24" />
                         <Button Click="btnCashChargOpenPort_Click" Content="Open" />
+                        <Button Click="btnCashChargClosePort_Click" Content="close" />
                     </StackPanel>
                     <WrapPanel Name="wrapPanel"
                                Width="{Binding ActualWidth,
@@ -152,8 +152,8 @@
                                IsEnabled="False"
                                Orientation="Horizontal">
                         <Button Click="btnReset_Click" Content="Reset" />
-                        <Button Click="btnReadId_Click" Content="Read CassetteId" />
                         <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
+                        <Button Click="btnReadId_Click" Content="Read CassetteId" />
                         <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
                         <Button Click="btnReadProgram_Click" Content="ReadProgram" />
                         <Button Click="btnReadCounter_Click" Content="ReadCounter" />
@@ -189,7 +189,7 @@
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="M1 charge Ports：" />
-                        <ComboBox Name="cmbM1Ports" />
+                        <ComboBox Name="cmbM1Ports" Width="80" />
                         <Button Click="btnM1Open_click" Content="Open" />
 
                         <Label Content="个数：" />
@@ -201,7 +201,7 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="M5 charge Ports：" />
-                        <ComboBox Name="cmbM5Ports" />
+                        <ComboBox Name="cmbM5Ports" Width="80" />
                         <Button Click="btnM5Open_click" Content="Open" />
 
                         <Label Content="个数：" />

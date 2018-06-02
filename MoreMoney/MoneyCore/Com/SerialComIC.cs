@@ -74,6 +74,7 @@ namespace MoneyCore
                         break;
                 }
                 var temp = bytes.ToArray().ToAscii();
+                temp = temp.PadLeft(16, '0');
                 return temp;
             }
             catch (Exception ex)

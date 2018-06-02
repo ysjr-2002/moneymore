@@ -66,14 +66,30 @@ namespace MoreMoney
             cmbM5Ports.SelectedIndex = 1;
         }
 
+        CashReceiver receiver = null;
         private void btnOpenPort_Click(object sender, RoutedEventArgs e)
         {
-
+            var msg = "";
+            receiver = new CashReceiver(cmbCashNotePorts.Text);
+            var open = receiver.Open(out msg);
+            if (!open)
+            {
+                MessageBox.Show(msg);
+                return;
+            }
         }
 
         private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.Init("COM6", "COM2", "COM6", "COM12", "COM5", "COM6");
+            var msg = DeviceBus.Init("COM1", "COM2", "COM3", "COM4", "COM5", "COM6");
+            if (string.IsNullOrEmpty(msg))
+            {
+                Log.In(msg);
+            }
+            else
+            {
+                Log.In("初始化成功");
+            }
             DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -177,7 +193,7 @@ namespace MoreMoney
 
         private void btnPool_click(object sender, RoutedEventArgs e)
         {
-            _coinAcceptor.StartPoll();
+            receiver.Pool();
         }
 
         private void btnCoinReset_click(object sender, RoutedEventArgs e)
@@ -193,7 +209,7 @@ namespace MoreMoney
 
         private void btnStopPool_click(object sender, RoutedEventArgs e)
         {
-            _coinAcceptor.EndPoll();
+            receiver.Stop();
         }
 
         CoinAcceptor _coinAcceptor = null;
@@ -346,6 +362,23 @@ namespace MoreMoney
         private void btnStartReadCard_Click(object sender, RoutedEventArgs e)
         {
             DeviceBus.StartReadCard();
+        }
+
+        private void btnCoinPool_click(object sender, RoutedEventArgs e)
+        {
+            _coinAcceptor?.StartPoll();
+            Log.Out("start pool");
+        }
+
+        private void btnCoinStopPool_click(object sender, RoutedEventArgs e)
+        {
+            _coinAcceptor?.EndPoll();
+            Log.Out("end pool");
+        }
+
+        private void btnCashChargClosePort_Click(object sender, RoutedEventArgs e)
+        {
+            com?.Close();
         }
     }
 }
