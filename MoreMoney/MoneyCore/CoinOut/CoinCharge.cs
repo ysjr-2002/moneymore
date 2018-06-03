@@ -97,7 +97,7 @@ namespace MoneyCore
             try
             {
                 sp.DiscardInBuffer();
-                sp.ReadTimeout = READ_TIME_OUT;
+                //sp.ReadTimeout = READ_TIME_OUT;
                 var b = (byte)sp.ReadByte();
                 DllLog.In(b.ToHex());
                 answer = (CoinChargeAnswer)b;
