@@ -89,9 +89,13 @@ namespace MoreMoney
             else
             {
                 Log.In("初始化成功");
+                btnBus.IsEnabled = true;
+                btnStopReceive.IsEnabled = true;
             }
             DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
+                //m 应收
+                //t 实收
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     txtHave.Text = total.ToString();
@@ -379,6 +383,11 @@ namespace MoreMoney
         private void btnCashChargClosePort_Click(object sender, RoutedEventArgs e)
         {
             com?.Close();
+        }
+
+        private void btnStopReadCard_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.StopReadCard();
         }
     }
 }
