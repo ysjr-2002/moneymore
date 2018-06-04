@@ -32,9 +32,15 @@ namespace MoreMoney
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            this.Closing += MainWindow_Closing;
             Log.Set(log);
             DllLog.SetLogIn(Log.In);
             DllLog.SetLogOut(Log.Out);
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DeviceBus.UnInit();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

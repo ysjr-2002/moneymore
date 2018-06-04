@@ -70,8 +70,10 @@ namespace MoneyCore
                 cardCom = new SerialComIC(cardcom);
                 cardCom.OnReadCardNo += (s, c) =>
                 {
+                    DllLog.In("回调2");
                     if (OnReadCardNo != null)
                     {
+                        DllLog.In("回调3");
                         OnReadCardNo(s, c);
                     }
                 };
@@ -165,6 +167,7 @@ namespace MoneyCore
                 DllLog.In(msg);
                 return false;
             }
+            DllLog.In("开始读卡");
             return true;
         }
 
@@ -173,6 +176,7 @@ namespace MoneyCore
         /// </summary>
         public static void StopReadCard()
         {
+            DllLog.In("停止读卡");
             cardCom?.Close();
         }
 
