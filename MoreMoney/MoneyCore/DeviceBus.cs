@@ -197,6 +197,7 @@ namespace MoneyCore
                 //硬币接收
                 coinAcceptor3.StartPoll();
             }
+            DllLog.Out("开始收钱");
         }
 
         /// <summary>
@@ -206,6 +207,7 @@ namespace MoneyCore
         {
             cashInCom?.Stop();
             coinAcceptor3?.EndPoll();
+            DllLog.Out("停止收钱");
         }
 
         /// <summary>

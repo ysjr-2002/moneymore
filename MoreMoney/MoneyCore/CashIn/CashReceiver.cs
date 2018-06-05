@@ -50,15 +50,14 @@ namespace MoneyCore.Cash
         private void Run()
         {
             var back = objCCNET.RunCommand(CCNETCommand.RESET);
-            DllLog.In("reset->" + back.Message);
+            DllLog.In("Reset->" + back.Message);
             back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
-            DllLog.In("security->" + back.Message);
-
+            DllLog.In("Security->" + back.Message);
             //币类
             //0d 1,5,10
             //
             back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[6] { 0, 0, 0xff, 0, 0, 0 });
-            DllLog.In("enable bill types->" + back.Message);
+            DllLog.In("Enable bill types->" + back.Message);
             while (!stop)
             {
                 back = objCCNET.RunCommand(CCNETCommand.Poll);
