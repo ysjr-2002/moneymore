@@ -54,7 +54,6 @@ namespace MoneyCore
                 }
                 if (OnReadCardNo != null)
                 {
-                    DllLog.In("回调1");
                     OnReadCardNo(this, cardNo);
                 }
             }
@@ -75,8 +74,12 @@ namespace MoneyCore
                         break;
                 }
                 var cardno = bytes.ToArray().ToAscii();
-                cardno = cardno.PadLeft(16, '0');
-                DllLog.In("读取到卡号->" + cardno);
+                DllLog.In("原始卡号->" + cardno);
+                var temp1 = cardno.Toint();
+                var hex = temp1.ToHex();
+                DllLog.In("16进制卡号->" + hex);
+                hex = hex.Substring(2);
+                cardno = hex.PadLeft(16, '0');
                 return cardno;
             }
             catch (Exception ex)

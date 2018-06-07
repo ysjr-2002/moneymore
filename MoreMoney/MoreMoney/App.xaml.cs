@@ -16,6 +16,9 @@ namespace MoreMoney
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            var n = 439041101;
+            var hex = n.ToString("X2");
+
             MainWindow x = new MainWindow();
             x.Show();
             base.OnStartup(e);

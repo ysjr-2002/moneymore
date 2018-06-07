@@ -27,6 +27,11 @@ namespace MoneyCore
             return "0x" + b.ToString("X2");
         }
 
+        public static string ToHex(this int val)
+        {
+            return val.ToString("X2");
+        }
+
         public static decimal Todecimal(this string s)
         {
             decimal ret = 0;

@@ -12,7 +12,7 @@ namespace MoneyCore.Cash
     {
         private string port = "";
         private Iccnet objCCNET = null;
-        private bool stop = false;
+        private bool stop = true;
         private Thread thread = null;
         private const int poo_sleep_time = 100;
 
@@ -39,8 +39,11 @@ namespace MoneyCore.Cash
 
         public bool Pool()
         {
-            if (!stop == false)
+            if (stop == false)
+            {
+                DllLog.Out("Pooling...");
                 return false;
+            }
             stop = false;
             thread = new Thread(Run);
             thread.Start();
@@ -68,7 +71,7 @@ namespace MoneyCore.Cash
                     break;
                 }
                 BVStatus bvs = (BVStatus)item[3];
-                DllLog.In("data len->" + item.Length);
+                //DllLog.In("data len->" + item.Length);
                 switch (bvs)
                 {
                     case BVStatus.Idling:
@@ -144,7 +147,7 @@ namespace MoneyCore.Cash
         public void Stop()
         {
             stop = true;
-            Reset();
+            //Reset();
         }
 
         public void Close()

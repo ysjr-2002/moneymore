@@ -15,12 +15,13 @@ namespace MoneyCore
     {
         SerialPort sp = null;
         ChargeMoneyType chargeType;
-        const int READ_TIME_OUT = 5 * 1000;
-
-        public CoinCharge(string port, ChargeMoneyType chargeType)
+        int READ_TIME_OUT = 500;
+        bool enabletimeout = false;
+        public CoinCharge(string port, ChargeMoneyType chargeType, bool enabletimeout)
         {
             this.sp = new SerialPort(port, 9600, Parity.None, 8, StopBits.One);
             this.chargeType = chargeType;
+            this.enabletimeout = enabletimeout;
         }
 
         public bool Open(out string msg)
@@ -90,21 +91,22 @@ namespace MoneyCore
             send.Add((byte)money);
             send.Add(0x03);
             var total = send.ToArray();
-            sp.Write(total, 0, total.Length);
-
             CoinChargeAnswer answer = CoinChargeAnswer.TimeOut;
-            DllLog.In("start charge");
             try
             {
+                sp.Write(total, 0, total.Length);
                 sp.DiscardInBuffer();
-                //sp.ReadTimeout = READ_TIME_OUT;
+                if (enabletimeout)
+                {
+                    sp.ReadTimeout = READ_TIME_OUT;
+                }
                 var b = (byte)sp.ReadByte();
-                DllLog.In(b.ToHex());
                 answer = (CoinChargeAnswer)b;
+                DllLog.Out("charge->" + answer);
             }
             catch (Exception ex)
             {
-                DllLog.In(ex.Message);
+                DllLog.Out(ex.Message);
             }
             return answer;
         }

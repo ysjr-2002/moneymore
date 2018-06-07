@@ -88,7 +88,7 @@ namespace MoreMoney
         private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
         {
             var msg = DeviceBus.Init("COM1", "COM2", "COM3", "COM4", "COM5", "COM6");
-            if (string.IsNullOrEmpty(msg))
+            if (string.IsNullOrEmpty(msg) == false)
             {
                 Log.In(msg);
             }
@@ -287,7 +287,7 @@ namespace MoreMoney
         CoinCharge c1;
         private void btnM1Open_click(object sender, RoutedEventArgs e)
         {
-            c1 = new CoinCharge(cmbM1Ports.Text, ChargeMoneyType.M1);
+            c1 = new CoinCharge(cmbM1Ports.Text, ChargeMoneyType.M1, false);
             var msg = "";
             var open = c1.Open(out msg);
             if (!open)
@@ -305,7 +305,7 @@ namespace MoreMoney
         CoinCharge c5;
         private void btnM5Open_click(object sender, RoutedEventArgs e)
         {
-            c5 = new CoinCharge(cmbM5Ports.Text, ChargeMoneyType.M5);
+            c5 = new CoinCharge(cmbM5Ports.Text, ChargeMoneyType.M5, true);
             var msg = "";
             var open = c5.Open(out msg);
             if (!open)
@@ -348,9 +348,16 @@ namespace MoreMoney
 
         private void btnAllTest_click(object sender, RoutedEventArgs e)
         {
-            txtHave.Text = "0";
-            txtCharge.Text = "0";
-            DeviceBus.StartReceiveMoney(txtNeed.Text.Todecimal());
+            try
+            {
+                txtHave.Text = "0";
+                txtCharge.Text = "0";
+                DeviceBus.StartReceiveMoney(txtNeed.Text.Todecimal());
+            }
+            catch (Exception ex)
+            {
+                Log.Out("异常1->" + ex.Message);
+            }
         }
 
         private void btnReceiveMoney_Click(object sender, RoutedEventArgs e)
@@ -365,7 +372,8 @@ namespace MoreMoney
 
         private void btnStartCharge_Click(object sender, RoutedEventArgs e)
         {
-            var charge = txtyishou.Text.Todecimal() - txtNeed.Text.Todecimal();
+            //var charge = txtyishou.Text.Todecimal() - txtNeed.Text.Todecimal();
+            var charge = txtyishou.Text.Todecimal();
             DeviceBus.StartCharge(charge);
         }
 
@@ -394,6 +402,11 @@ namespace MoreMoney
         private void btnStopReadCard_Click(object sender, RoutedEventArgs e)
         {
             DeviceBus.StopReadCard();
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            log.Document.Blocks.Clear();
         }
     }
 }
