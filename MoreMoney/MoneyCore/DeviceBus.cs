@@ -2,7 +2,6 @@
 using dk.CctalkLib.Devices;
 using MoneyCore.Cash;
 using MoneyCore.CoinCore;
-using MoreMoney.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,13 +47,21 @@ namespace MoneyCore
         /// 50纸币找零箱编号
         /// </summary>
         static readonly char hopper_50 = '2';
-
         //应收
         static decimal expectMoney = 0;
         //实收
         static decimal acceptMoney = 0;
         static int s_m1, s_m5, s_m50, s_m100;
+
         static bool bInit = false;
+
+        //是否打开钱箱和读取
+        static bool IsOpenCassetteAndRead = false;
+        //找零向
+        static List<ChargeMoneyType> chargeItems = new List<ChargeMoneyType>();
+
+        static readonly string COIN1_COM_OPEN_ERROR = "1元找零串口打开失败";
+        static readonly string COIN5_COM_OPEN_ERROR = "5元找零串口打开失败";
 
         public static string Init(string cardcom, string cashIncom, string coinIncom, string cashOutcom, string coin1Outcom, string coin5Outcom)
         {
@@ -63,7 +70,7 @@ namespace MoneyCore
 
             var msg = "";
             var open = false;
-            IsOpenAndRead = false;
+            IsOpenCassetteAndRead = false;
             try
             {
                 //读卡器初始化
@@ -113,11 +120,11 @@ namespace MoneyCore
 
                 if (coin1Com.Open(out msg) == false)
                 {
-                    return "1元找零串口打开失败";
+                    return COIN1_COM_OPEN_ERROR;
                 }
                 if (coin5Com.Open(out msg) == false)
                 {
-                    return "5元找零串口打开失败";
+                    return COIN5_COM_OPEN_ERROR;
                 }
                 bInit = true;
             }
@@ -140,6 +147,7 @@ namespace MoneyCore
             cashOutCom?.Close();
             coin1Com?.Close();
             coin5Com?.Close();
+            Log.Out("UnInit");
         }
 
         static void CoinAcceptorErrorMessageAccepted(object sender, CoinAcceptorErrorEventArgs e)
@@ -162,10 +170,10 @@ namespace MoneyCore
             var open = cardCom?.Open(out msg);
             if (!open.GetValueOrDefault())
             {
-                DllLog.In(msg);
+                Log.In(msg);
                 return false;
             }
-            DllLog.In("开始读卡");
+            Log.In("开始读卡");
             return true;
         }
 
@@ -174,8 +182,8 @@ namespace MoneyCore
         /// </summary>
         public static void StopReadCard()
         {
-            DllLog.In("停止读卡");
             cardCom?.Close();
+            Log.In("停止读卡");
         }
 
         /// <summary>
@@ -188,8 +196,7 @@ namespace MoneyCore
             DeviceBus.expectMoney = expectMoney;
             if (cashInCom != null && cashInCom.Pool())
             {
-                //纸币接收
-                DllLog.Out("纸币接收OK");
+                Log.Out("纸币接收OK");
             }
             else
             {
@@ -197,15 +204,14 @@ namespace MoneyCore
             }
             if (coinAcceptor3 != null)
             {
-                //硬币接收
                 coinAcceptor3.StartPoll();
-                DllLog.Out("硬币接收OK");
+                Log.Out("硬币接收OK");
             }
             else
             {
                 return false;
             }
-            DllLog.Out("开始收钱");
+            Log.Out("开始收钱");
             return true;
         }
 
@@ -216,7 +222,7 @@ namespace MoneyCore
         {
             cashInCom?.Stop();
             coinAcceptor3?.EndPoll();
-            DllLog.Out("停止收钱");
+            Log.Out("停止收钱");
         }
 
         /// <summary>
@@ -229,9 +235,17 @@ namespace MoneyCore
             FireReceiveMoneyEvent();
         }
 
+        //纸币入
+        static void cashInCom_OnAcceptMoney(object sender, int money)
+        {
+            acceptMoney += money;
+            FireReceiveMoneyEvent();
+        }
+
+        //硬币入
         static void CoinAcceptorCoinAccepted(object sender, CoinAcceptorCoinEventArgs e)
         {
-            DllLog.In(string.Format("name->{0} code->{1}", e.CoinName, e.CoinCode));
+            Log.In(string.Format("name->{0} code->{1}", e.CoinName, e.CoinCode));
             if (e.CoinCode == 2)
             {
                 //5角
@@ -245,12 +259,6 @@ namespace MoneyCore
             FireReceiveMoneyEvent();
         }
 
-        private static void cashInCom_OnAcceptMoney(object sender, int money)
-        {
-            acceptMoney += money;
-            FireReceiveMoneyEvent();
-        }
-
         private static void FireReceiveMoneyEvent()
         {
             if (OnAcceptMoneyWithAll != null)
@@ -259,8 +267,6 @@ namespace MoneyCore
             }
         }
 
-        static List<ChargeMoneyType> chargeItems = new List<ChargeMoneyType>();
-        static bool IsOpenAndRead = false;
         /// <summary>
         /// 开始找零
         /// </summary>
@@ -278,11 +284,12 @@ namespace MoneyCore
 
             if (m100 > 0 || m50 > 0)
             {
-                if (IsOpenAndRead == false)
+                if (IsOpenCassetteAndRead == false)
                 {
+                    //纸币第一次找零，必须打开钱箱
                     constrant?.OpenCassette();
                     constrant?.ReadId();
-                    IsOpenAndRead = true;
+                    IsOpenCassetteAndRead = true;
                 }
             }
 
@@ -302,20 +309,20 @@ namespace MoneyCore
             if (OnChargeOver != null)
             {
                 //触发找零结束事件
-                Dictionary<ChargeMoneyType, int> dicts = new Dictionary<MoneyCore.ChargeMoneyType, int>();
+                Dictionary<ChargeMoneyType, int> chargeGroup = new Dictionary<MoneyCore.ChargeMoneyType, int>();
                 var count100 = chargeItems.Count(s => s == ChargeMoneyType.M100);
-                dicts.Add(ChargeMoneyType.M100, count100);
+                chargeGroup.Add(ChargeMoneyType.M100, count100);
 
                 var count50 = chargeItems.Count(s => s == ChargeMoneyType.M50);
-                dicts.Add(ChargeMoneyType.M50, count50);
+                chargeGroup.Add(ChargeMoneyType.M50, count50);
 
                 var count5 = chargeItems.Count(s => s == ChargeMoneyType.M5);
-                dicts.Add(ChargeMoneyType.M5, count5);
+                chargeGroup.Add(ChargeMoneyType.M5, count5);
 
                 var count1 = chargeItems.Count(s => s == ChargeMoneyType.M1);
-                dicts.Add(ChargeMoneyType.M1, count1);
+                chargeGroup.Add(ChargeMoneyType.M1, count1);
 
-                OnChargeOver(null, dicts, unChargeMoney);
+                OnChargeOver(null, chargeGroup, unChargeMoney);
             }
         }
 
@@ -329,6 +336,7 @@ namespace MoneyCore
             if (count > 0)
             {
                 var ok = false;
+                Log.Out("100找零张数->" + count);
                 for (int i = 1; i <= count; i++)
                 {
                     ok = constrant.MoveForward((byte)hopper_100, "1".PadLeft(3, '0'));
@@ -351,7 +359,7 @@ namespace MoneyCore
                         break;
                     }
                 }
-                DllLog.In("100找零结束");
+                Log.In("100找零结束");
             }
             if (s_m100 > 0)
             {
@@ -371,6 +379,7 @@ namespace MoneyCore
         {
             if (count > 0)
             {
+                Log.Out("50找零张数->" + count);
                 var ok = false;
                 for (int i = 1; i <= count; i++)
                 {
@@ -393,7 +402,7 @@ namespace MoneyCore
                         break;
                     }
                 }
-                DllLog.In("50找零结束");
+                Log.In("50找零结束");
             }
             if (s_m50 > 0)
             {
@@ -413,7 +422,7 @@ namespace MoneyCore
         {
             if (count > 0)
             {
-                DllLog.In("5元找零->" + count);
+                Log.In("5元找零个数->" + count);
                 for (var i = 1; i <= count; i++)
                 {
                     CoinChargeAnswer answer = coin5Com.Charge();
@@ -449,7 +458,7 @@ namespace MoneyCore
         {
             if (count > 0)
             {
-                DllLog.In("1元找零->" + count);
+                Log.In("1元找零个数->" + count);
                 for (int i = 1; i <= count; i++)
                 {
                     CoinChargeAnswer answer = coin1Com.Charge();

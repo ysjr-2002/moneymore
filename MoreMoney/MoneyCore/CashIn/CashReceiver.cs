@@ -41,7 +41,7 @@ namespace MoneyCore.Cash
         {
             if (stop == false)
             {
-                DllLog.Out("Pooling...");
+                Log.Out("Pooling...");
                 return false;
             }
             stop = false;
@@ -53,14 +53,14 @@ namespace MoneyCore.Cash
         private void Run()
         {
             var back = objCCNET.RunCommand(CCNETCommand.RESET);
-            DllLog.In("Reset->" + back.Message);
+            Log.In("Reset->" + back.Message);
             back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
-            DllLog.In("Security->" + back.Message);
+            Log.In("Security->" + back.Message);
             //币类
             //0d 1,5,10
             //
             back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[6] { 0, 0, 0xff, 0, 0, 0 });
-            DllLog.In("Enable bill types->" + back.Message);
+            Log.In("Enable bill types->" + back.Message);
             while (!stop)
             {
                 back = objCCNET.RunCommand(CCNETCommand.Poll);
@@ -76,18 +76,18 @@ namespace MoneyCore.Cash
                 {
                     case BVStatus.Idling:
                         {
-                            DllLog.In("Idling");
+                            Log.In("Idling");
                         }
                         break;
                     case BVStatus.EscrowPosition:
                         {
-                            DllLog.In("EscrowPosition");
+                            Log.In("EscrowPosition");
                         }
                         break;
                     case BVStatus.BillStacked:
                         {//接收纸币完成
                             BillType bt = (BillType)item[4];
-                            DllLog.In("接收完成纸币:" + bt);
+                            Log.In("接收完成纸币:" + bt);
                             //if (MoneyReceived != null)
                             //{
                             int money = 0;
@@ -100,7 +100,7 @@ namespace MoneyCore.Cash
                                 case BillType.RMB50: money = 50; break;
                                 case BillType.RMB100: money = 100; break;
                             }
-                            DllLog.In("money->" + money);
+                            Log.In("money->" + money);
                             //TimeSpan ts = DateTime.Now - LastRecDT;
                             //if (ts.TotalSeconds > 1)
                             //    MoneyReceived(money, bt);
@@ -119,18 +119,18 @@ namespace MoneyCore.Cash
                     case BVStatus.BillReturned:
                         {
                             BillType bt = (BillType)item[4];
-                            DllLog.In("退出纸币:" + bt);
+                            Log.In("退出纸币:" + bt);
                         }
                         break;
                     case BVStatus.rejecting:
                         {
                             RejectingCode rcode = (RejectingCode)item[4];
-                            DllLog.In("拒收纸币:" + rcode);
+                            Log.In("拒收纸币:" + rcode);
                         }
                         break;
                     case BVStatus.UnitDisabled:
                         {
-                            DllLog.In("验币器禁止");
+                            Log.In("验币器禁止");
                         }
                         break;
                 }
@@ -141,7 +141,7 @@ namespace MoneyCore.Cash
         private void Reset()
         {
             var back = objCCNET.RunCommand(CCNETCommand.RESET);
-            DllLog.In("reset->" + back.Message);
+            Log.In("reset->" + back.Message);
         }
 
         public void Stop()

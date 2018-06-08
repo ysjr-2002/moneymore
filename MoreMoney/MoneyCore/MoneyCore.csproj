@@ -60,7 +60,6 @@
     <Compile Include="CoinIn\Checksumms\Helpers\CRC32.cs" />
     <Compile Include="CoinIn\Checksumms\Helpers\ICRC.cs" />
     <Compile Include="CoinIn\Checksumms\ICctlkChecksum.cs" />
-    <Compile Include="CoinIn\cmd.cs" />
     <Compile Include="CoinIn\Connections\ConnectionRS232.cs" />
     <Compile Include="CoinIn\Connections\ICctalkConnection.cs" />
     <Compile Include="CoinIn\Devices\BillTypeInfo.cs" />

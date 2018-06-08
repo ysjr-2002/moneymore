@@ -62,20 +62,20 @@ namespace MoneyCore
                     return data.ToArray();
                 else
                 {
-                    DllLog.In("校验码错误!");
+                    Log.In("校验码错误!");
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                DllLog.In("error->" + ex.Message);
+                Log.In("error->" + ex.Message);
                 return null;
             }
         }
 
         public void Write(byte[] data)
         {
-            DllLog.Out(data.ToAscii());
+            Log.Out(data.ToAscii());
             if (port != null && port.IsOpen)
             {
                 port.Write(data, 0, data.Length);

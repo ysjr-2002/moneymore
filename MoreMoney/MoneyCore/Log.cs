@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MoneyCore
 {
-    public class DllLog
+    public class Log
     {
         static Action<string> login;
         static Action<string> logout;

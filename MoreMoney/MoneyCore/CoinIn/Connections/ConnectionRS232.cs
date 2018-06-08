@@ -6,8 +6,6 @@ using System.IO.Ports;
 using dk.CctalkLib.Checksumms;
 using dk.CctalkLib.Devices;
 using dk.CctalkLib.Messages;
-using MoreMoney.Core;
-using MoreMoney;
 using MoneyCore;
 
 namespace dk.CctalkLib.Connections
@@ -242,7 +240,7 @@ namespace dk.CctalkLib.Connections
                     {
                         if (_port.ReadTimeout == RespondStartTimeout)
                         {
-                            DllLog.In("Device not respondng");
+                            Log.In("Device not respondng");
                             //throw new TimeoutException("Device not respondng", ex);
                             return null;
                         }

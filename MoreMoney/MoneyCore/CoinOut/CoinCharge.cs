@@ -13,13 +13,14 @@ namespace MoneyCore
     /// </summary>
     public class CoinCharge
     {
-        SerialPort sp = null;
+        SerialPort serial = null;
         ChargeMoneyType chargeType;
         int READ_TIME_OUT = 500;
         bool enabletimeout = false;
+
         public CoinCharge(string port, ChargeMoneyType chargeType, bool enabletimeout)
         {
-            this.sp = new SerialPort(port, 9600, Parity.None, 8, StopBits.One);
+            this.serial = new SerialPort(port, 9600, Parity.None, 8, StopBits.One);
             this.chargeType = chargeType;
             this.enabletimeout = enabletimeout;
         }
@@ -28,7 +29,7 @@ namespace MoneyCore
         {
             try
             {
-                sp.Open();
+                serial.Open();
                 msg = "";
                 return true;
             }
@@ -55,7 +56,7 @@ namespace MoneyCore
             }
             send.Add(0x03);
             var total = send.ToArray();
-            sp.Write(total, 0, total.Length);
+            serial.Write(total, 0, total.Length);
         }
 
         /// <summary>
@@ -70,52 +71,52 @@ namespace MoneyCore
                 CoinChargeAnswer answer = Charge();
                 if (answer == CoinChargeAnswer.OK)
                 {
-                    DllLog.In("出->1");
+                    Log.In("出->1");
                 }
                 if (answer == CoinChargeAnswer.HopperEmpty)
                 {
-                    DllLog.In("出->空");
+                    Log.In("出->空");
                 }
                 if (answer == CoinChargeAnswer.TimeOut)
                 {
-                    DllLog.In("出->超时");
+                    Log.In("出->超时");
                 }
             }
         }
 
         public CoinChargeAnswer Charge(char money = '1')
         {
-            List<byte> send = new List<byte>();
-            send.Add(0x02);
-            send.Add(0x53);
-            send.Add((byte)money);
-            send.Add(0x03);
-            var total = send.ToArray();
+            List<byte> data = new List<byte>();
+            data.Add(0x02);
+            data.Add(0x53);
+            data.Add((byte)money);
+            data.Add(0x03);
+            var total = data.ToArray();
             CoinChargeAnswer answer = CoinChargeAnswer.TimeOut;
             try
             {
-                sp.Write(total, 0, total.Length);
-                sp.DiscardInBuffer();
+                serial.Write(total, 0, total.Length);
+                serial.DiscardInBuffer();
                 if (enabletimeout)
                 {
-                    sp.ReadTimeout = READ_TIME_OUT;
+                    serial.ReadTimeout = READ_TIME_OUT;
                 }
-                var b = (byte)sp.ReadByte();
+                var b = (byte)serial.ReadByte();
                 answer = (CoinChargeAnswer)b;
-                DllLog.Out("charge->" + answer);
+                Log.Out("charge->" + answer);
             }
             catch (Exception ex)
             {
-                DllLog.Out(ex.Message);
+                Log.Out(ex.Message);
             }
             return answer;
         }
 
         public void Close()
         {
-            if (sp != null && sp.IsOpen)
+            if (serial != null && serial.IsOpen)
             {
-                sp.Close();
+                serial.Close();
             }
         }
     }

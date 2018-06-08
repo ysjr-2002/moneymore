@@ -33,9 +33,9 @@ namespace MoreMoney
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
-            Log.Set(log);
-            DllLog.SetLogIn(Log.In);
-            DllLog.SetLogOut(Log.Out);
+            Core.Log.Set(log);
+            MoneyCore.Log.SetLogIn(Core.Log.In);
+            MoneyCore.Log.SetLogOut(Core.Log.Out);
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -90,11 +90,11 @@ namespace MoreMoney
             var msg = DeviceBus.Init("COM1", "COM2", "COM3", "COM4", "COM5", "COM6");
             if (string.IsNullOrEmpty(msg) == false)
             {
-                Log.In(msg);
+                Core.Log.In(msg);
             }
             else
             {
-                Log.In("初始化成功");
+                Core.Log.In("初始化成功");
                 btnBus.IsEnabled = true;
                 btnStopReceive.IsEnabled = true;
             }
@@ -117,26 +117,26 @@ namespace MoreMoney
                 if (unChargeMoney == 0)
                 {
                     var m100 = y[ChargeMoneyType.M100];
-                    Log.In("100找零->" + m100);
+                    Core.Log.In("100找零->" + m100);
 
                     var m50 = y[ChargeMoneyType.M50];
-                    Log.In("50找零->" + m50);
+                    Core.Log.In("50找零->" + m50);
 
                     var m5 = y[ChargeMoneyType.M5];
-                    Log.In("5找零->" + m5);
+                    Core.Log.In("5找零->" + m5);
 
                     var m1 = y[ChargeMoneyType.M1];
-                    Log.In("1找零->" + m1);
+                    Core.Log.In("1找零->" + m1);
                 }
                 else
                 {
-                    Log.In("未找零金额->" + unChargeMoney);
+                    Core.Log.In("未找零金额->" + unChargeMoney);
                 }
             };
 
             DeviceBus.OnReadCardNo += (s, no) =>
             {
-                Log.In(no);
+                Core.Log.In(no);
             };
         }
 
@@ -257,7 +257,7 @@ namespace MoreMoney
                 return;
             }
             _coinCounter += e.CoinValue;
-            Log.In(String.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
+            Core.Log.In(string.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
 
         }
 
@@ -269,7 +269,7 @@ namespace MoreMoney
                 return;
             }
 
-            Log.In(String.Format("Coin acceptor error: {0} ({1}, {2:X2})", e.ErrorMessage, e.Error, (Byte)e.Error));
+            Core.Log.In(string.Format("Coin acceptor error: {0} ({1}, {2:X2})", e.ErrorMessage, e.Error, (Byte)e.Error));
         }
 
         private void btnChargeTest_click(object sender, RoutedEventArgs e)
@@ -277,11 +277,11 @@ namespace MoreMoney
             var all = txtNeed.Text.Toint();
             int m1, m5, m50, m100;
             Charge.GetCount(all, out m1, out m5, out m50, out m100);
-            Log.In("1元->" + m1);
-            Log.In("5元->" + m5);
-            Log.In("50元->" + m50);
-            Log.In("100元->" + m100);
-            Log.In("all->" + (m1 + (m5 * 5) + (m50 * 50) + (m100 * 100)));
+            Core.Log.In("1元->" + m1);
+            Core.Log.In("5元->" + m5);
+            Core.Log.In("50元->" + m50);
+            Core.Log.In("100元->" + m100);
+            Core.Log.In("all->" + (m1 + (m5 * 5) + (m50 * 50) + (m100 * 100)));
         }
 
         CoinCharge c1;
@@ -292,7 +292,7 @@ namespace MoreMoney
             var open = c1.Open(out msg);
             if (!open)
             {
-                Log.In(msg);
+                Core.Log.In(msg);
                 return;
             }
         }
@@ -310,7 +310,7 @@ namespace MoreMoney
             var open = c5.Open(out msg);
             if (!open)
             {
-                Log.In(msg);
+                Core.Log.In(msg);
                 return;
             }
         }
@@ -327,7 +327,7 @@ namespace MoreMoney
             com = new SerialCom(cmbCashChargePorts.Text);
             if (com.Open(out msg) == false)
             {
-                Log.In(msg);
+                Core.Log.In(msg);
                 return;
             }
             StatusCode.Init();
@@ -356,7 +356,7 @@ namespace MoreMoney
             }
             catch (Exception ex)
             {
-                Log.Out("异常1->" + ex.Message);
+                Core.Log.Out("异常1->" + ex.Message);
             }
         }
 
@@ -385,13 +385,13 @@ namespace MoreMoney
         private void btnCoinPool_click(object sender, RoutedEventArgs e)
         {
             _coinAcceptor?.StartPoll();
-            Log.Out("start pool");
+            Core.Log.Out("start pool");
         }
 
         private void btnCoinStopPool_click(object sender, RoutedEventArgs e)
         {
             _coinAcceptor?.EndPoll();
-            Log.Out("end pool");
+            Core.Log.Out("end pool");
         }
 
         private void btnCashChargClosePort_Click(object sender, RoutedEventArgs e)

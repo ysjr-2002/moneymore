@@ -34,12 +34,12 @@ namespace MoneyCore
                     //0 00000 1000001 2000002 00
                     //S HFNNN HFGGGGG ….. LL E
                     var str = receive.ToAscii(1, 5);
-                    DllLog.In("HFNNN->" + str);
+                    Log.In("HFNNN->" + str);
                     var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
                     foreach (var item in repeatBuffer)
                     {
                         str = item.ToArray().ToAscii();
-                        DllLog.In("HFGGGGG->" + str);
+                        Log.In("HFGGGGG->" + str);
                     }
                 }
             }
@@ -60,12 +60,12 @@ namespace MoneyCore
                 {
                     //S HFNNN HFGGGGG ….. LL E
                     var str = receive.ToAscii(1, 5);
-                    DllLog.In("HFNNN->" + str);
+                    Log.In("HFNNN->" + str);
                     var repeatBuffer = Util.getRepeatbuffer(receive, 6, 7);
                     foreach (var item in repeatBuffer)
                     {
                         str = item.ToArray().ToAscii();
-                        DllLog.In("HFGGGGG->" + str);
+                        Log.In("HFGGGGG->" + str);
                     }
                 }
             }
@@ -81,7 +81,7 @@ namespace MoneyCore
                 var s = (char)receive[0];
                 if (s == '7' || s == '8' || s == 'N')
                 {
-                    DllLog.In("is error");
+                    Log.In("is error");
                     return;
                 }
                 //0
@@ -90,14 +90,14 @@ namespace MoneyCore
                 //2000002
                 //06
                 var repeatBuffer = Util.getRepeatbuffer(receive, 1, 7);
-                DllLog.In(string.Format("共{0}个", repeatBuffer.Count));
+                Log.In(string.Format("共{0}个", repeatBuffer.Count));
                 foreach (var item in repeatBuffer)
                 {
                     //HFGGGGG
                     var h = (char)item[0];
                     var f = (char)item[1];
                     var str = item.ToAscii(2, 5);
-                    DllLog.In(string.Format("H->{0} F->{1} GGGGG->{2}", h, f, str));
+                    Log.In(string.Format("H->{0} F->{1} GGGGG->{2}", h, f, str));
                 }
             }
         }
@@ -112,18 +112,18 @@ namespace MoneyCore
                 var s = (char)receive[0];
 
                 var repeatBuffer = Util.getRepeatbuffer(receive, 1, 5);
-                DllLog.In(string.Format("共{0}个", repeatBuffer.Count));
+                Log.In(string.Format("共{0}个", repeatBuffer.Count));
                 foreach (var item in repeatBuffer)
                 {
                     //HFNNN
                     var h = (char)item[0];
                     if (h == '0')
                     {
-                        DllLog.In("拒绝保险库");
+                        Log.In("拒绝保险库");
                     }
                     var f = (char)item[1];
                     var str = item.ToAscii(2, 3);
-                    DllLog.In(string.Format("H->{0} F->{1} NNN->{2}", h, f, str));
+                    Log.In(string.Format("H->{0} F->{1} NNN->{2}", h, f, str));
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace MoneyCore
             var receive = com.Receive();
             if (receive != null)
             {
-                DllLog.In(receive.ToAscii());
+                Log.In(receive.ToAscii());
             }
         }
 
@@ -159,7 +159,7 @@ namespace MoneyCore
             var receive = com.Receive();
             if (receive != null)
             {
-                DllLog.In(receive.ToAscii());
+                Log.In(receive.ToAscii());
             }
         }
 
@@ -174,9 +174,9 @@ namespace MoneyCore
                 if (receive != null)
                 {
                     var no = Encoding.ASCII.GetString(receive, 2, 8);
-                    DllLog.In("no->" + no);
+                    Log.In("no->" + no);
                 }
-                DllLog.In("receive");
+                Log.In("receive");
             });
         }
 
@@ -215,9 +215,9 @@ namespace MoneyCore
             var receive = com.Receive();
             if (receive != null)
             {
-                var s = (char)receive[0];
-                DllLog.In("status code->" + s);
-                if (s == '0')
+                var scode = (char)receive[0];
+                Log.In("status code->" + scode);
+                if (scode == '0')
                 {
                     var repeatbuffer = Util.getRepeatbuffer(receive, 1, 5);
                     foreach (var item in repeatbuffer)
@@ -226,7 +226,7 @@ namespace MoneyCore
                         var h = (char)item[0];
                         var f = (char)item[1];
                         var number = item.ToArray().ToAscii(2, 3);
-                        DllLog.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
+                        Log.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
                     }
                     return true;
                 }
@@ -235,9 +235,9 @@ namespace MoneyCore
                     //没有钱后返回 0x36 Fail to feed
                     //the command X’36’ Check Delivered Notes
                     //CheckDelivered();
-                    DllLog.In(receive.ToAscii());
+                    Log.In(receive.ToAscii());
                     var temp = StatusCode.GetTypeRemark(receive[0]);
-                    DllLog.In(temp);
+                    Log.In(temp);
                     return false;
                 }
             }

@@ -73,14 +73,14 @@ namespace MoneyCore
                     if (b == etx_end1)
                         break;
                 }
-                var cardno = bytes.ToArray().ToAscii();
-                DllLog.In("原始卡号->" + cardno);
-                var temp1 = cardno.Toint();
-                var hex = temp1.ToHex();
-                DllLog.In("16进制卡号->" + hex);
-                hex = hex.Substring(2);
-                cardno = hex.PadLeft(16, '0');
-                return cardno;
+                var cardStr = bytes.ToArray().ToAscii();
+                Log.In("原始卡号->" + cardStr);
+                var cardInt = cardStr.Toint();
+                var cardHex = cardInt.ToHex();
+                Log.In("16进制卡号->" + cardHex);
+                cardHex = cardHex.Substring(2);
+                cardStr = cardHex.PadLeft(16, '0');
+                return cardStr;
             }
             catch (Exception ex)
             {
