@@ -52,8 +52,10 @@ namespace MoneyCore.Cash
 
         private void Run()
         {
+            //重置
             var back = objCCNET.RunCommand(CCNETCommand.RESET);
             Log.In("Reset->" + back.Message);
+            //安全
             back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
             Log.In("Security->" + back.Message);
             //币类
@@ -71,12 +73,11 @@ namespace MoneyCore.Cash
                     break;
                 }
                 BVStatus bvs = (BVStatus)item[3];
-                //DllLog.In("data len->" + item.Length);
                 switch (bvs)
                 {
                     case BVStatus.Idling:
                         {
-                            Log.In("Idling");
+                            //Log.In("Idling");
                         }
                         break;
                     case BVStatus.EscrowPosition:
@@ -90,15 +91,16 @@ namespace MoneyCore.Cash
                             Log.In("接收完成纸币:" + bt);
                             //if (MoneyReceived != null)
                             //{
+                            Log.In("data->" + item.ToStr());
                             int money = 0;
                             switch (bt)
                             {
-                                case BillType.RMB1: money = 1; break;
-                                case BillType.RMB5: money = 5; break;
-                                case BillType.RMB10: money = 10; break;
-                                case BillType.RMB20: money = 20; break;
-                                case BillType.RMB50: money = 50; break;
-                                case BillType.RMB100: money = 100; break;
+                                case BillType.RMB1: money = 20; break;
+                                case BillType.RMB5: money = 50; break;
+                                case BillType.RMB10: money = 100; break;
+                                case BillType.RMB20: money = 200; break;
+                                //case BillType.RMB50: money = 50; break;
+                                //case BillType.RMB100: money = 100; break;
                             }
                             Log.In("money->" + money);
                             //TimeSpan ts = DateTime.Now - LastRecDT;

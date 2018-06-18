@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyCore
 {
-    public class Log
+    public static class Log
     {
         static Action<string> login;
         static Action<string> logout;
@@ -23,11 +24,13 @@ namespace MoneyCore
         public static void Out(string str)
         {
             logout?.Invoke(str);
+            Debug.WriteLine("hz:" + str);
         }
 
         public static void In(string str)
         {
             login?.Invoke(str);
+            Debug.WriteLine("hz:" + str);
         }
     }
 }

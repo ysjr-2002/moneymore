@@ -217,8 +217,10 @@ namespace MoneyCore
             {
                 var scode = (char)receive[0];
                 Log.In("status code->" + scode);
-                if (scode == '0')
+                if (scode == '0' || scode == '1')
                 {
+                    //0 SUCCESSFUL COMMAND
+                    //1 LOW LEVEL
                     var repeatbuffer = Util.getRepeatbuffer(receive, 1, 5);
                     foreach (var item in repeatbuffer)
                     {
@@ -229,6 +231,11 @@ namespace MoneyCore
                         Log.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
                     }
                     return true;
+                }
+                if (scode == '2')
+                {
+                    //钱箱空
+                    return false;
                 }
                 else
                 {
@@ -243,6 +250,7 @@ namespace MoneyCore
             }
             else
             {
+                Log.In("未读取到数据");
                 return false;
             }
         }

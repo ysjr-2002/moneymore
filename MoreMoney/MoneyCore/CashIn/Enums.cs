@@ -68,9 +68,27 @@ namespace MoneyCore.Cash
     /// </summary>
     public enum BillType
     {
-        RMB1 = 0,
+        //RMB1 = 0,
+        //RMB5 = 2,
+        //RMB10 = 3,
+        //RMB20 = 4,
+        //RMB50 = 5,
+        //RMB100 = 6,
+        /// <summary>
+        /// 20
+        /// </summary>
+        RMB1 = 1,
+        /// <summary>
+        /// 50
+        /// </summary>
         RMB5 = 2,
+        /// <summary>
+        /// 100
+        /// </summary>
         RMB10 = 3,
+        /// <summary>
+        /// 200
+        /// </summary>
         RMB20 = 4,
         RMB50 = 5,
         RMB100 = 6,

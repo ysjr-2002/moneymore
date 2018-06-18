@@ -5,6 +5,7 @@ using System.Text;
 using System.Timers;
 using dk.CctalkLib.Connections;
 using System.Linq;
+using MoneyCore;
 
 namespace dk.CctalkLib.Devices
 {
@@ -98,29 +99,37 @@ namespace dk.CctalkLib.Devices
         /// </summary>
         public void Init(Boolean ignoreLastEvents = true)
         {
-            _rawDev.Connection.Open();
-
-            DeviceCategory = _rawDev.CmdRequestEquipmentCategory();
-            if (DeviceCategory != CctalkDeviceTypes.CoinAcceptor)
-                throw new InvalidOperationException("Connected device is not a coin acceptor. " + DeviceCategory);
-
-            //_rawDev.CmdReset();
-            _rawDev.CmdSetMasterInhibitStatus(IsInhibiting);
-            _rawDev.CmdModifyInhibitStatus(Enumerable.Repeat(true, 16).ToArray());
-
-            SerialNumber = _rawDev.CmdGetSerial();
-            PollInterval = _rawDev.CmdRequestPollingPriority();
-            Manufacturer = _rawDev.CmdRequestManufacturerId();
-            ProductCode = _rawDev.CmdRequestProductCode();
-
-            var evBuf = _rawDev.CmdReadEventBuffer();
-
-            if (!ignoreLastEvents)
+            try
             {
-                RaiseLastEvents(evBuf);
+
+                _rawDev.Connection.Open();
+
+                DeviceCategory = _rawDev.CmdRequestEquipmentCategory();
+                if (DeviceCategory != CctalkDeviceTypes.CoinAcceptor)
+                    Log.Out("Connected device is not a coin acceptor. " + DeviceCategory);
+
+                //_rawDev.CmdReset();
+                _rawDev.CmdSetMasterInhibitStatus(IsInhibiting);
+                _rawDev.CmdModifyInhibitStatus(Enumerable.Repeat(true, 16).ToArray());
+
+                SerialNumber = _rawDev.CmdGetSerial();
+                PollInterval = _rawDev.CmdRequestPollingPriority();
+                Manufacturer = _rawDev.CmdRequestManufacturerId();
+                ProductCode = _rawDev.CmdRequestProductCode();
+
+                var evBuf = _rawDev.CmdReadEventBuffer();
+
+                if (!ignoreLastEvents)
+                {
+                    RaiseLastEvents(evBuf);
+                }
+                _lastCounter = evBuf.Counter;
+                IsInitialized = true;
             }
-            _lastCounter = evBuf.Counter;
-            IsInitialized = true;
+            catch (Exception ex)
+            {
+                Log.Out("硬币设备初始化失败");
+            }
         }
 
         /// <summary>
@@ -207,6 +216,11 @@ namespace dk.CctalkLib.Devices
         /// </summary>
         public void StartPoll()
         {
+            if (IsInitialized == false)
+            {
+                return;
+            }
+
             if (_t != null)
                 throw new InvalidOperationException("Stop polling first");
 

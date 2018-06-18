@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CCNET, Version=1.0.0.41, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -121,6 +124,7 @@
   <ItemGroup>
     <Content Include="dll\Common.dll" />
     <Content Include="dll\Iaspec.Net.Common.dll" />
+    <Resource Include="icon.ico" />
     <Resource Include="document\接收.txt" />
     <Resource Include="document\需求要点.txt" />
   </ItemGroup>

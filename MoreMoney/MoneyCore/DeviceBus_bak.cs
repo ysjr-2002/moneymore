@@ -19,7 +19,7 @@ namespace MoneyCore
     /// 一个五元硬币找零机
     /// 一个纸币找零机
     /// </summary>
-    public static class DeviceBus
+    public static class DeviceBus_bak
     {
         /// <summary>
         /// 读取到卡号
@@ -196,7 +196,7 @@ namespace MoneyCore
         public static bool StartReceiveMoney(decimal expectMoney)
         {
             acceptMoney = 0;
-            DeviceBus.expectMoney = expectMoney;
+            DeviceBus_bak.expectMoney = expectMoney;
             if (cashInCom != null && cashInCom.Pool())
             {
                 Log.Out("纸币接收OK");
@@ -296,60 +296,24 @@ namespace MoneyCore
                 }
             }
 
-            Charge100(m100);
-            if (s_m100 > 0)
-            {
-                FireChargeOver(s_m100 * 100 + s_m50 * 50 + s_m5 * 5 + s_m1);
-                return;
-            }
-            else if (s_m100 == 0 && s_m50 == 0 && s_m5 == 0 && s_m1 == 0)
-            {
-                FireChargeOver(0);
-                return;
-            }
+            var remaing50 = Charge100(m100);
+            m50 += remaing50;
+            s_m50 = m50;
 
-            Charge50(m50);
-            if (s_m50 > 0)
-            {
-                FireChargeOver(s_m100 * 100 + s_m50 * 50 + s_m5 * 5 + s_m1);
-                return;
-            }
-            else if (s_m50 == 0 && s_m5 == 0 && s_m1 == 0)
-            {
-                FireChargeOver(0);
-                return;
-            }
+            var remaing5 = Charge50(m50);
+            m5 += remaing5;
+            s_m5 = m5;
 
-            Charge5(m5);
-            if (s_m5 > 0)
-            {
-                FireChargeOver(s_m100 * 100 + s_m50 * 50 + s_m5 * 5 + s_m1);
-                return;
-            }
-            else if (s_m5 == 0 && s_m1 == 0)
-            {
-                FireChargeOver(0);
-                return;
-            }
 
-            Charge1(m1);
-            if (s_m1 > 0)
-            {
-                FireChargeOver(s_m100 * 100 + s_m50 * 50 + s_m5 * 5 + s_m1);
-                return;
-            }
-            else if (s_m1 == 0)
-            {
-                FireChargeOver(0);
-            }
-        }
+            var remaing1 = Charge5(m5);
+            m1 += remaing1;
+            s_m1 = m1;
 
-        private static void FireChargeOver(int unChargeMoney)
-        {
+            var unChargeMoney = Charge1(m1);
             if (OnChargeOver != null)
             {
                 //触发找零结束事件
-                Dictionary<ChargeMoneyType, int> chargeGroup = new Dictionary<ChargeMoneyType, int>();
+                Dictionary<ChargeMoneyType, int> chargeGroup = new Dictionary<MoneyCore.ChargeMoneyType, int>();
                 var count100 = chargeItems.Count(s => s == ChargeMoneyType.M100);
                 chargeGroup.Add(ChargeMoneyType.M100, count100);
 
@@ -371,7 +335,7 @@ namespace MoneyCore
         /// </summary>
         /// <param name="count"></param>
         /// <returns>50的张数</returns>
-        public static void Charge100(int count)
+        public static int Charge100(int count)
         {
             if (count > 0)
             {
@@ -401,6 +365,13 @@ namespace MoneyCore
                 }
                 Log.In("100找零结束");
             }
+            if (s_m100 > 0)
+            {
+                //100是50的2倍
+                var temp = s_m100 * 2;
+                return temp;
+            }
+            return 0;
         }
 
         /// <summary>
@@ -408,7 +379,7 @@ namespace MoneyCore
         /// </summary>
         /// <param name="count"></param>
         /// <returns>5元的张数</returns>
-        public static void Charge50(int count)
+        public static int Charge50(int count)
         {
             if (count > 0)
             {
@@ -437,6 +408,13 @@ namespace MoneyCore
                 }
                 Log.In("50找零结束");
             }
+            if (s_m50 > 0)
+            {
+                //50是5的10倍
+                var temp = s_m50 * 10;
+                return temp;
+            }
+            return 0;
         }
 
         /// <summary>
@@ -444,7 +422,7 @@ namespace MoneyCore
         /// </summary>
         /// <param name="count"></param>
         /// <returns>1元的张数</returns>
-        public static void Charge5(int count)
+        public static int Charge5(int count)
         {
             if (count > 0)
             {
@@ -470,11 +448,17 @@ namespace MoneyCore
                         break;
                     }
                 }
-                Log.In("5找零结束");
             }
+            if (s_m5 > 0)
+            {
+                //5元钱不够，使用1元进行补
+                var temp = s_m5 * 5;
+                return temp;
+            }
+            return 0;
         }
 
-        private static void Charge1(int count)
+        private static int Charge1(int count)
         {
             if (count > 0)
             {
@@ -500,13 +484,13 @@ namespace MoneyCore
                         break;
                     }
                 }
-                Log.In("1找零结束");
             }
+            return s_m1;
         }
 
         public static void CashReset()
         {
-            constrant?.Reset();
+            constrant.Reset();
             Log.Out("找零钱箱Reset");
         }
     }

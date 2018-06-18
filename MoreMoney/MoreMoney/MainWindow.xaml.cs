@@ -95,9 +95,11 @@ namespace MoreMoney
             else
             {
                 Core.Log.In("初始化成功");
-                btnBus.IsEnabled = true;
-                btnStopReceive.IsEnabled = true;
+                //btnBus.IsEnabled = true;
+                //btnStopReceive.IsEnabled = true;
             }
+            btnBus.IsEnabled = true;
+            btnStopReceive.IsEnabled = true;
             DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
             {
                 //m 应收
@@ -362,7 +364,7 @@ namespace MoreMoney
 
         private void btnReceiveMoney_Click(object sender, RoutedEventArgs e)
         {
-            DeviceBus.SetReceive(txtyishou.Text.Todecimal());
+            //DeviceBus.SetReceive(txtyishou.Text.Todecimal());
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
@@ -372,8 +374,8 @@ namespace MoreMoney
 
         private void btnStartCharge_Click(object sender, RoutedEventArgs e)
         {
-            //var charge = txtyishou.Text.Todecimal() - txtNeed.Text.Todecimal();
-            var charge = txtyishou.Text.Todecimal();
+            //var charge = txtyishou.Text.Todecimal();
+            var charge = cmbcharge.Text.Todecimal();
             DeviceBus.StartCharge(charge);
         }
 
@@ -407,6 +409,11 @@ namespace MoreMoney
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             log.Document.Blocks.Clear();
+        }
+
+        private void btnCashReset_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceBus.CashReset();
         }
     }
 }

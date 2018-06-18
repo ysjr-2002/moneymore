@@ -84,6 +84,7 @@
     <Compile Include="Com\SerialCom.cs" />
     <Compile Include="Com\SerialComIC.cs" />
     <Compile Include="DeviceBus.cs" />
+    <Compile Include="DeviceBus_bak.cs" />
     <Compile Include="EventHandlers.cs" />
     <Compile Include="FunExt.cs" />
     <Compile Include="Log.cs" />

@@ -75,10 +75,21 @@ namespace MoneyCore
                 }
                 var cardStr = bytes.ToArray().ToAscii();
                 Log.In("原始卡号->" + cardStr);
-                var cardInt = cardStr.Toint();
-                var cardHex = cardInt.ToHex();
+                var cardInt = Convert.ToUInt32(cardStr);
+                var cardHex = cardInt.ToString("X2");
                 Log.In("16进制卡号->" + cardHex);
-                cardHex = cardHex.Substring(2);
+
+                if (cardHex.Length >= 8)
+                {
+                    //var a1 = cardHex.Substring(0, 2);
+                    //var a2 = cardHex.Substring(2, 2);
+                    //var a3 = cardHex.Substring(4, 2);
+                    //var a4 = cardHex.Substring(6, 2);
+                    //高低反转
+                    //cardHex = a3 + a2 + a1;
+                    //如果长度大于8，取后6位
+                    cardHex = cardHex.Substring(2);
+                }
                 cardStr = cardHex.PadLeft(16, '0');
                 return cardStr;
             }
