@@ -44,6 +44,30 @@ namespace MoneyCore.Cash
                 Log.Out("Pooling...");
                 return false;
             }
+
+            //重置
+            var back = objCCNET.RunCommand(CCNETCommand.RESET);
+            Log.In("Reset->" + back.Message + " " + back.ReceivedData.ToStr());
+            if (back.Message != "ACK")
+            {
+                return false;
+            }
+            //安全
+            back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
+            Log.In("Security->" + back.Message + " " + back.ReceivedData.ToStr());
+            if (back.Message != "ACK")
+            {
+                return false;
+            }
+            //币类
+            //0d 1,5,10
+            back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[6] { 0, 0, 0xff, 0, 0, 0 });
+            Log.In("Enable bill types->" + back.Message + " " + back.ReceivedData.ToStr());
+            if (back.Message != "ACK")
+            {
+                return false;
+            }
+
             stop = false;
             thread = new Thread(Run);
             thread.Start();
@@ -52,17 +76,7 @@ namespace MoneyCore.Cash
 
         private void Run()
         {
-            //重置
-            var back = objCCNET.RunCommand(CCNETCommand.RESET);
-            Log.In("Reset->" + back.Message);
-            //安全
-            back = objCCNET.RunCommand(CCNETCommand.SET_SECURITY, new byte[3]);
-            Log.In("Security->" + back.Message);
-            //币类
-            //0d 1,5,10
-            //
-            back = objCCNET.RunCommand(CCNETCommand.ENABLE_BILL_TYPES, new byte[6] { 0, 0, 0xff, 0, 0, 0 });
-            Log.In("Enable bill types->" + back.Message);
+            Answer back = null;
             while (!stop)
             {
                 back = objCCNET.RunCommand(CCNETCommand.Poll);
@@ -77,21 +91,22 @@ namespace MoneyCore.Cash
                 {
                     case BVStatus.Idling:
                         {
-                            //Log.In("Idling");
+                            Log.In("Idling->" + back.Message);
                         }
                         break;
                     case BVStatus.EscrowPosition:
                         {
-                            Log.In("EscrowPosition");
+                            Log.In("EscrowPosition->" + back.Message);
                         }
                         break;
                     case BVStatus.BillStacked:
-                        {//接收纸币完成
+                        {
+                            //接收纸币完成
                             BillType bt = (BillType)item[4];
                             Log.In("接收完成纸币:" + bt);
                             //if (MoneyReceived != null)
                             //{
-                            Log.In("data->" + item.ToStr());
+                            Log.In("data->" + item.ToStr() + "->" + back.Message);
                             int money = 0;
                             switch (bt)
                             {
@@ -99,8 +114,8 @@ namespace MoneyCore.Cash
                                 case BillType.RMB5: money = 50; break;
                                 case BillType.RMB10: money = 100; break;
                                 case BillType.RMB20: money = 200; break;
-                                //case BillType.RMB50: money = 50; break;
-                                //case BillType.RMB100: money = 100; break;
+                                    //case BillType.RMB50: money = 50; break;
+                                    //case BillType.RMB100: money = 100; break;
                             }
                             Log.In("money->" + money);
                             //TimeSpan ts = DateTime.Now - LastRecDT;
@@ -121,18 +136,18 @@ namespace MoneyCore.Cash
                     case BVStatus.BillReturned:
                         {
                             BillType bt = (BillType)item[4];
-                            Log.In("退出纸币:" + bt);
+                            Log.In("退出纸币->" + back.Message);
                         }
                         break;
                     case BVStatus.rejecting:
                         {
                             RejectingCode rcode = (RejectingCode)item[4];
-                            Log.In("拒收纸币:" + rcode);
+                            Log.In("拒收纸币:" + rcode + "->" + back.Message);
                         }
                         break;
                     case BVStatus.UnitDisabled:
                         {
-                            Log.In("验币器禁止");
+                            Log.In("验币器禁止" + "->" + back.Message);
                         }
                         break;
                 }

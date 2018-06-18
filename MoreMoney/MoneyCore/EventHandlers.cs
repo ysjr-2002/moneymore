@@ -13,9 +13,9 @@ namespace MoneyCore
     /// 投钱
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="needMoney">应收</param>
+    /// <param name="currentMoney">本次金额</param>
     /// <param name="recevieMoney">实收</param>
-    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, decimal needMoney, decimal recevieMoney);
+    public delegate void OnAcceptMoneyWithAllEventHandler(object sender, decimal currentMoney, decimal recevieMoney);
 
     public delegate void OnChargeEventHandler(object sender, Dictionary<ChargeMoneyType, int> items, decimal unChargeMoney);
 

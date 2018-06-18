@@ -7,7 +7,7 @@
         Name="window"
         Title="Run_Test"
         Width="800"
-        Height="600"
+        Height="700"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Window.Resources>
@@ -71,11 +71,15 @@
                      Style="{StaticResource money}"
                      Text="5" />
 
-            <Label Width="60" Content="实收:" />
-            <TextBox Name="txtHave" Style="{StaticResource money}" />
+            <Label Width="60" Content="本次金额:" />
+            <TextBox Name="txtCurrentMoney"
+                     Style="{StaticResource money}"
+                     Text="0" />
 
-            <Label Width="60" Content="找零:" />
-            <TextBox Name="txtCharge" Style="{StaticResource money}" />
+            <Label Width="60" Content="总金额:" />
+            <TextBox Name="txtTotalMoney"
+                     Style="{StaticResource money}"
+                     Text="0" />
 
             <Button Name="btnBus"
                     Width="80"
@@ -190,8 +194,8 @@
                                IsEnabled="False"
                                Orientation="Horizontal">
                         <Button Click="btnReset_Click" Content="Reset" />
-                        <Button Click="btnOpenCassette_Click" Content="OpenCassette" />
-                        <Button Click="btnReadId_Click" Content="Read CassetteId" />
+                        <Button Click="btnOpenCassette_Click" Content="打开钱箱" />
+                        <Button Click="btnReadId_Click" Content="读取ID" />
                         <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
                         <Button Click="btnReadProgram_Click" Content="ReadProgram" />
                         <Button Click="btnReadCounter_Click" Content="ReadCounter" />
@@ -200,8 +204,6 @@
                         <ComboBox Name="cmbHn" SelectedIndex="0">
                             <ComboBoxItem Content="1" />
                             <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
                         </ComboBox>
 
                         <Label Width="170" Content="number of notes to pickup:" />

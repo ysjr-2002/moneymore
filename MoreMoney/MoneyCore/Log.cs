@@ -27,8 +27,13 @@ namespace MoneyCore
             Debug.WriteLine("hz:" + str);
         }
 
+        static string pre = "";
         public static void In(string str)
         {
+            if (pre == str)
+                return;
+
+            pre = str;
             login?.Invoke(str);
             Debug.WriteLine("hz:" + str);
         }

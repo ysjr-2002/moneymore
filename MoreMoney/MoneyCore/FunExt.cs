@@ -41,6 +41,9 @@ namespace MoneyCore
 
         public static string ToStr(this byte[] bytes)
         {
+            if (bytes == null)
+                return "empty";
+
             var str = string.Join(" ", bytes.Select(s => string.Format("{0:d2}", s)));
             return str;
         }

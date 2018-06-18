@@ -1,0 +1,114 @@
+﻿<Window x:Class="PrintTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PrintTest"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Print Test"
+        Width="525"
+        Height="350"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="30" />
+        </Style>
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="打印一">
+            <StackPanel Orientation="Vertical">
+                <Button Width="100"
+                        Height="30"
+                        Click="Button_Click"
+                        Content="print qr" />
+
+                <Button Width="100"
+                        Height="30"
+                        Click="Button_Click1"
+                        Content="print dc" />
+
+                <Canvas Name="printArea"
+                        Width="160"
+                        Height="260"
+                        Margin="10"
+                        HorizontalAlignment="Left"
+                        Background="AliceBlue">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                        <Label HorizontalContentAlignment="Center"
+                               Content="Welcome"
+                               FontWeight="Bold" />
+                        <Image Name="imgqr"
+                               Width="100"
+                               Height="100"
+                               Margin="10"
+                               HorizontalAlignment="Center"
+                               Source="qr.png" />
+
+                        <Image Width="100"
+                               Height="100"
+                               Margin="10"
+                               HorizontalAlignment="Center"
+                               Source="qr.png" />
+
+                        <Label HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Content="时间:2018-06-13 12:23:23" />
+                    </StackPanel>
+                </Canvas>
+            </StackPanel>
+        </TabItem>
+
+        <TabItem Header="打印二">
+
+            <StackPanel Orientation="Vertical">
+                <Button Click="Button_Click_1" Content="print grid" />
+                <Grid Name="printGridArea"
+                      Width="200"
+                      Height="200"
+                      HorizontalAlignment="Left"
+                      Background="Blue"
+                      RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <RotateTransform Angle="0" />
+                    </Grid.RenderTransform>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0"
+                           Grid.Column="1"
+                           Content="时间:" />
+                    <Label Grid.Row="0"
+                           Grid.Column="2"
+                           Content="2018-02-01 12:12:12" />
+
+                    <Label Grid.Row="1"
+                           Grid.Column="1"
+                           Content="时间:" />
+                    <Label Grid.Row="1"
+                           Grid.Column="2"
+                           Content="2018-02-01 12:12:12" />
+
+                    <Label Grid.Row="2"
+                           Grid.Column="1"
+                           Content="时间:" />
+                    <Label Grid.Row="2"
+                           Grid.Column="2"
+                           Content="2018-02-01 12:12:12" />
+                </Grid>
+            </StackPanel>
+
+        </TabItem>
+    </TabControl>
+
+</Window>

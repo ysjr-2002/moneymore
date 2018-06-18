@@ -64,12 +64,18 @@ namespace MoreMoney
             cmbM1Ports.ItemsSource = ports;
             cmbM5Ports.ItemsSource = ports;
 
-            cmbCashNotePorts.SelectedIndex = 1;
-            cmbICPorts.SelectedIndex = 1;
-            cmbCashChargePorts.SelectedIndex = 1;
-            cmbCoinPorts.SelectedIndex = 1;
-            cmbM1Ports.SelectedIndex = 1;
-            cmbM5Ports.SelectedIndex = 1;
+            if (ports.Length >= 1)
+                cmbICPorts.SelectedIndex = 0;
+            if (ports.Length >= 2)
+                cmbCashNotePorts.SelectedIndex = 1;
+            if (ports.Length >= 3)
+                cmbCoinPorts.SelectedIndex = 2;
+            if (ports.Length >= 4)
+                cmbCashChargePorts.SelectedIndex = 3;
+            if (ports.Length >= 4)
+                cmbM1Ports.SelectedIndex = 4;
+            if (ports.Length >= 5)
+                cmbM5Ports.SelectedIndex = 5;
         }
 
         CashReceiver receiver = null;
@@ -100,17 +106,14 @@ namespace MoreMoney
             }
             btnBus.IsEnabled = true;
             btnStopReceive.IsEnabled = true;
-            DeviceBus.OnAcceptMoneyWithAll += (s, m, total) =>
+            DeviceBus.OnAcceptMoneyWithAll += (s, currentMoney, total) =>
             {
                 //m 应收
                 //t 实收
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    txtHave.Text = total.ToString();
-                    if (total > m)
-                    {
-                        txtCharge.Text = (total - m).ToString();
-                    }
+                    txtCurrentMoney.Text = currentMoney.ToString();
+                    txtTotalMoney.Text = total.ToString();
                 }));
             };
 
@@ -307,7 +310,7 @@ namespace MoreMoney
         CoinCharge c5;
         private void btnM5Open_click(object sender, RoutedEventArgs e)
         {
-            c5 = new CoinCharge(cmbM5Ports.Text, ChargeMoneyType.M5, true);
+            c5 = new CoinCharge(cmbM5Ports.Text, ChargeMoneyType.M5, false);
             var msg = "";
             var open = c5.Open(out msg);
             if (!open)
@@ -352,8 +355,8 @@ namespace MoreMoney
         {
             try
             {
-                txtHave.Text = "0";
-                txtCharge.Text = "0";
+                txtCurrentMoney.Text = "0";
+                txtTotalMoney.Text = "0";
                 DeviceBus.StartReceiveMoney(txtNeed.Text.Todecimal());
             }
             catch (Exception ex)

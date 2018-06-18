@@ -212,6 +212,7 @@ namespace MoneyCore
             }
             else
             {
+                cashInCom.Stop();
                 return false;
             }
             Log.Out("开始收钱");
@@ -235,38 +236,41 @@ namespace MoneyCore
         public static void SetReceive(decimal d)
         {
             acceptMoney = d;
-            FireReceiveMoneyEvent();
+            FireReceiveMoneyEvent(0);
         }
 
         //纸币入
         static void cashInCom_OnAcceptMoney(object sender, int money)
         {
             acceptMoney += money;
-            FireReceiveMoneyEvent();
+            FireReceiveMoneyEvent(money);
         }
 
         //硬币入
         static void CoinAcceptorCoinAccepted(object sender, CoinAcceptorCoinEventArgs e)
         {
+            var currentMoney = 0;
             Log.In(string.Format("name->{0} code->{1}", e.CoinName, e.CoinCode));
             if (e.CoinCode == 2)
             {
                 //5角
                 acceptMoney += 0.5M;
+                acceptMoney = 0.5M;
             }
             if (e.CoinCode == 3)
             {
                 //1元
                 acceptMoney += 1M;
+                currentMoney = 1;
             }
-            FireReceiveMoneyEvent();
+            FireReceiveMoneyEvent(currentMoney);
         }
 
-        private static void FireReceiveMoneyEvent()
+        private static void FireReceiveMoneyEvent(decimal currentMoney)
         {
             if (OnAcceptMoneyWithAll != null)
             {
-                OnAcceptMoneyWithAll(null, expectMoney, acceptMoney);
+                OnAcceptMoneyWithAll(null, currentMoney, acceptMoney);
             }
         }
 
@@ -375,6 +379,11 @@ namespace MoneyCore
         {
             if (count > 0)
             {
+                if (constrant == null)
+                {
+                    Log.Out("100纸币找零未初始化");
+                    return;
+                }
                 var ok = false;
                 Log.Out("100找零张数->" + count);
                 for (int i = 1; i <= count; i++)
@@ -412,6 +421,12 @@ namespace MoneyCore
         {
             if (count > 0)
             {
+                if (constrant == null)
+                {
+                    Log.Out("50纸币找零未初始化");
+                    return;
+                }
+
                 Log.Out("50找零张数->" + count);
                 var ok = false;
                 for (int i = 1; i <= count; i++)
@@ -446,6 +461,11 @@ namespace MoneyCore
         /// <returns>1元的张数</returns>
         public static void Charge5(int count)
         {
+            if (coin5Com == null)
+            {
+                Log.Out("5元找零未初始化");
+                return;
+            }
             if (count > 0)
             {
                 Log.In("5元找零个数->" + count);
@@ -476,6 +496,11 @@ namespace MoneyCore
 
         private static void Charge1(int count)
         {
+            if (coin1Com == null)
+            {
+                Log.Out("1元找零未初始化");
+                return;
+            }
             if (count > 0)
             {
                 Log.In("1元找零个数->" + count);
