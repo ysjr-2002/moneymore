@@ -89,7 +89,7 @@ namespace MoneyCore
                 open = cashInCom.Open(out msg);
                 if (!open)
                 {
-                    sb.Append(msg);
+                    sb.AppendLine(msg);
                 }
                 cashInCom.OnAcceptMoney += cashInCom_OnAcceptMoney;
 
@@ -110,7 +110,7 @@ namespace MoneyCore
                 cashOutCom = new SerialCom(cashOutcom);
                 if (cashOutCom.Open(out msg) == false)
                 {
-                    sb.Append(msg);
+                    sb.AppendLine(msg);
                 }
                 StatusCode.Init();
                 constrant = new Constrant(cashOutCom);
@@ -121,14 +121,13 @@ namespace MoneyCore
 
                 if (coin1Com.Open(out msg) == false)
                 {
-                    sb.Append(COIN1_COM_OPEN_ERROR);
+                    sb.AppendLine(COIN1_COM_OPEN_ERROR);
                 }
-                Log.Out("1 yuan OK");
                 if (coin5Com.Open(out msg) == false)
                 {
-                    sb.Append(COIN5_COM_OPEN_ERROR);
+                    sb.AppendLine(COIN5_COM_OPEN_ERROR);
                 }
-                Log.Out("5 yuan OK");
+                msg = sb.ToString();
                 bInit = true;
             }
             catch (Exception ex)

@@ -1,15 +1,16 @@
-﻿<Window x:Class="MoreMoney.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:MoreMoney"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Name="window"
-        Title="Run_Test"
-        Width="800"
-        Height="700"
-        WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d">
+﻿<Window
+    x:Class="MoreMoney.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MoreMoney"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="window"
+    Title="Run_Test"
+    Width="800"
+    Height="700"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Width" Value="300" />
@@ -53,68 +54,111 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
-                    Margin="5"
-                    Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="0"
+            Margin="5"
+            Orientation="Horizontal">
             <Label Content="Card-&gt;Select port:" Visibility="Collapsed" />
-            <ComboBox Name="cmbICPorts"
-                      Width="100"
-                      Height="24"
-                      Visibility="Collapsed" />
+            <ComboBox
+                Name="cmbICPorts"
+                Width="100"
+                Height="24"
+                Visibility="Collapsed" />
 
-            <Button Name="btnICOpenPort"
-                    Click="btnICOpenPort_Click"
-                    Content="Init" />
+            <Button
+                Name="btnICOpenPort"
+                Click="btnICOpenPort_Click"
+                Content="初始化" />
 
             <Label Width="60" Content="应收:" />
-            <TextBox Name="txtNeed"
-                     Style="{StaticResource money}"
-                     Text="5" />
+            <TextBox
+                Name="txtNeed"
+                Style="{StaticResource money}"
+                Text="5" />
 
             <Label Width="60" Content="本次金额:" />
-            <TextBox Name="txtCurrentMoney"
-                     Style="{StaticResource money}"
-                     Text="0" />
+            <TextBox
+                Name="txtCurrentMoney"
+                Style="{StaticResource money}"
+                Text="0" />
 
             <Label Width="60" Content="总金额:" />
-            <TextBox Name="txtTotalMoney"
-                     Style="{StaticResource money}"
-                     Text="0" />
+            <TextBox
+                Name="txtTotalMoney"
+                Style="{StaticResource money}"
+                Text="0" />
 
-            <Button Name="btnBus"
-                    Width="80"
-                    Click="btnAllTest_click"
-                    Content="开始收钱"
-                    IsEnabled="False" />
+            <Button
+                Name="btnBus"
+                Click="btnAllTest_click"
+                Content="开始收钱"
+                IsEnabled="False" />
 
-            <Button Name="btnStopReceive"
-                    Click="btnStop_Click"
-                    Content="停止收钱"
-                    IsEnabled="False" />
+            <Button
+                Name="btnStopReceive"
+                Click="btnStop_Click"
+                Content="停止收钱"
+                IsEnabled="False" />
 
             <Button Click="btnClear_Click" Content="清空打印" />
         </StackPanel>
 
-        <TabControl Grid.Row="1" Height="240">
-            <TabItem Header="总线测试">
+        <TabControl Grid.Row="1" Height="180">
+            <TabItem
+                Width="100"
+                Height="35"
+                Header="总线测试">
                 <StackPanel Orientation="Horizontal">
 
                     <Label Width="60" Content="找零:" />
-                    <TextBox Name="txtyishou"
-                             Style="{StaticResource money}"
-                             Visibility="Collapsed" />
-                    <ComboBox Name="cmbcharge"
-                              Width="100"
-                              Height="40"
-                              BorderThickness="0"
-                              FontSize="20"
-                              IsEditable="True"
-                              Text="6"
-                              TextBlock.TextAlignment="Center">
+                    <TextBox
+                        Name="txtyishou"
+                        Style="{StaticResource money}"
+                        Visibility="Collapsed" />
+                    <ComboBox
+                        Name="cmbcharge"
+                        Width="100"
+                        Height="40"
+                        FontSize="20"
+                        IsEditable="True"
+                        Text="6"
+                        TextBlock.TextAlignment="Center">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="Background" Value="#000000" />
-                                <Setter Property="Foreground" Value="#ffffff" />
+                                <Setter Property="Foreground" Value="#000000" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                            <Border
+                                                x:Name="Bd"
+                                                Height="32"
+                                                Padding="1,0,0,0"
+                                                Background="White"
+                                                SnapsToDevicePixels="true">
+                                                <ContentPresenter
+                                                    Margin="9,0,5,0"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                    VerticalAlignment="Center"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsHighlighted" Value="true">
+                                                    <Setter TargetName="Bd" Property="Background" Value="{StaticResource ComboBoxItem.MouseOver.Background}" />
+                                                    <!--<Setter Property="Foreground" Value="{StaticResource ComboBoxItem.IsPressed.Background}" />-->
+                                                </Trigger>
+                                                <!--<Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ComboBoxItem.IsPressed.Background}" />
+                            </Trigger>-->
+                                                <Trigger Property="IsEnabled" Value="false">
+                                                    <Setter Property="Foreground" Value="Blue" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
                         </ComboBox.ItemContainerStyle>
                         <ComboBox.Items>
@@ -124,9 +168,10 @@
                             <ComboBoxItem Content="100" />
                         </ComboBox.Items>
                     </ComboBox>
-                    <Button Click="btnReceiveMoney_Click"
-                            Content="设置已收"
-                            Visibility="Collapsed" />
+                    <Button
+                        Click="btnReceiveMoney_Click"
+                        Content="设置已收"
+                        Visibility="Collapsed" />
                     <Button Click="btnStartCharge_Click" Content="开始找零" />
 
                     <Button Click="btnStartReadCard_Click" Content="开始读卡" />
@@ -135,42 +180,56 @@
                     <Button Click="btnCashReset_Click" Content="纸币找零Reset" />
                 </StackPanel>
             </TabItem>
-            <TabItem Header="纸币接收">
+            <TabItem
+                Width="100"
+                Height="35"
+                Header="纸币接收">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Select port:" />
-                        <ComboBox Name="cmbCashNotePorts"
-                                  Width="100"
-                                  Height="24" />
-                        <Button Name="btnOpenPort"
-                                Click="btnOpenPort_Click"
-                                Content="Open" />
+                        <Label Content="Select Port:" />
+                        <ComboBox
+                            Name="cmbCashNotePorts"
+                            Width="100"
+                            Height="24" />
+                        <Button
+                            Name="btnOpenPort"
+                            Click="btnOpenPort_Click"
+                            Content="Open" />
                     </StackPanel>
                     <WrapPanel>
                         <Button Click="btnPool_click" Content="Pool" />
                         <Button Click="btnStopPool_click" Content="Stop" />
-                        <Button Click="btnChargeTest_click" Content="Charge" />
+                        <Button
+                            Click="btnChargeTest_click"
+                            Content="Charge"
+                            Visibility="Collapsed" />
                     </WrapPanel>
                 </StackPanel>
 
             </TabItem>
-            <TabItem Header="硬币接收">
+            <TabItem
+                Width="100"
+                Height="35"
+                Header="硬币接收">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Select port:" />
-                        <ComboBox Name="cmbCoinPorts"
-                                  Width="100"
-                                  Height="24" />
-                        <Button Name="btnCoinOpenPort"
-                                Click="btnCoinOpenPort_Click"
-                                Content="Open" />
+                        <Label Content="Select Port:" />
+                        <ComboBox
+                            Name="cmbCoinPorts"
+                            Width="100"
+                            Height="24" />
+                        <Button
+                            Name="btnCoinOpenPort"
+                            Click="btnCoinOpenPort_Click"
+                            Content="Open" />
                     </StackPanel>
-                    <WrapPanel>
-                        <CheckBox Name="ckbInhibit"
-                                  VerticalAlignment="Center"
-                                  VerticalContentAlignment="Center"
-                                  Click="ckbInhibit_click"
-                                  Content="inhibit status" />
+                    <WrapPanel Name="wpCoinIn" IsEnabled="False">
+                        <CheckBox
+                            Name="ckbInhibit"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Click="ckbInhibit_click"
+                            Content="inhibit status" />
                         <Button Click="btnCoinReset_click" Content="Reset" />
                         <Button Click="btnReadBuffer_click" Content="Read Buffer" />
                         <Button Click="btnCoinPool_click" Content="Pool" />
@@ -178,54 +237,90 @@
                     </WrapPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="纸币找零">
+            <TabItem
+                Width="100"
+                Height="35"
+                Header="纸币找零">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Select port:" />
-                        <ComboBox Name="cmbCashChargePorts"
-                                  Width="100"
-                                  Height="24" />
+                        <ComboBox
+                            Name="cmbCashChargePorts"
+                            Width="100"
+                            Height="24" />
                         <Button Click="btnCashChargOpenPort_Click" Content="Open" />
                         <Button Click="btnCashChargClosePort_Click" Content="close" />
                     </StackPanel>
-                    <WrapPanel Name="wrapPanel"
-                               Width="{Binding ActualWidth,
-                                               ElementName=window}"
-                               IsEnabled="False"
-                               Orientation="Horizontal">
+                    <WrapPanel
+                        Name="wrapPanel"
+                        Width="{Binding ActualWidth, ElementName=window}"
+                        IsEnabled="False"
+                        Orientation="Horizontal">
                         <Button Click="btnReset_Click" Content="Reset" />
                         <Button Click="btnOpenCassette_Click" Content="打开钱箱" />
                         <Button Click="btnReadId_Click" Content="读取ID" />
-                        <Button Click="btnCloseCassette_Click" Content="CloseCassette" />
-                        <Button Click="btnReadProgram_Click" Content="ReadProgram" />
-                        <Button Click="btnReadCounter_Click" Content="ReadCounter" />
-                        <Button Click="btnSelfTest_Click" Content="SelfTest" />
+                        <Button Click="btnCloseCassette_Click" Content="关闭钱箱" />
+                        <Button
+                            Click="btnReadProgram_Click"
+                            Content="ReadProgram"
+                            Visibility="Collapsed" />
+                        <Button
+                            Click="btnReadCounter_Click"
+                            Content="ReadCounter"
+                            Visibility="Collapsed" />
+                        <Button
+                            Click="btnSelfTest_Click"
+                            Content="SelfTest"
+                            Visibility="Collapsed" />
+
+                        <Button
+                            Click="btnCheckDelivered_Click"
+                            Content="CheckDelivered"
+                            Visibility="Collapsed" />
+
+                        <Button
+                            Click="btnCleartransport_Click"
+                            Content="Cleartransport"
+                            Visibility="Collapsed" />
+
+                        <ComboBox
+                            Name="cmbReadDataItem"
+                            Width="150"
+                            Visibility="Collapsed" />
+                        <Button
+                            Click="btnReadData_Click"
+                            Content="ReadData"
+                            Visibility="Collapsed" />
+                    </WrapPanel>
+
+                    <WrapPanel Name="wp1" IsEnabled="False">
                         <Label Content="Hopper number:" />
-                        <ComboBox Name="cmbHn" SelectedIndex="0">
+                        <ComboBox
+                            Name="cmbHn"
+                            Width="60"
+                            SelectedIndex="0">
                             <ComboBoxItem Content="1" />
                             <ComboBoxItem Content="2" />
                         </ComboBox>
 
-                        <Label Width="170" Content="number of notes to pickup:" />
-                        <TextBox Name="txtMoney"
-                                 Width="30"
-                                 MaxLength="3"
-                                 Text="1" />
-                        <Button Width="180"
-                                Click="btnMoveForeward_Click"
-                                Content="Move Forward(找零)" />
-
-                        <Button Click="btnCheckDelivered_Click" Content="CheckDelivered" />
-
-                        <Button Click="btnCleartransport_Click" Content="Cleartransport" />
-
-                        <ComboBox Name="cmbReadDataItem" Width="150" />
-                        <Button Click="btnReadData_Click" Content="ReadData" />
+                        <Label Width="60" Content="张数:" />
+                        <TextBox
+                            Name="txtMoney"
+                            Width="30"
+                            MaxLength="3"
+                            Text="1" />
+                        <Button
+                            Width="180"
+                            Click="btnMoveForeward_Click"
+                            Content="Move Forward(找零)" />
                     </WrapPanel>
                 </StackPanel>
 
             </TabItem>
-            <TabItem Header="硬币找零">
+            <TabItem
+                Width="100"
+                Height="35"
+                Header="硬币找零">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="M1 charge Ports：" />
@@ -233,10 +328,15 @@
                         <Button Click="btnM1Open_click" Content="Open" />
 
                         <Label Content="个数：" />
-                        <TextBox Name="txtM1Count"
-                                 Width="60"
-                                 Text="1" />
-                        <Button Click="btnM1ChargeStart_click" Content="Start" />
+                        <TextBox
+                            Name="txtM1Count"
+                            Width="60"
+                            Text="1" />
+                        <Button
+                            Name="btnM1Charge"
+                            Click="btnM1ChargeStart_click"
+                            Content="Start"
+                            IsEnabled="False" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
@@ -245,21 +345,26 @@
                         <Button Click="btnM5Open_click" Content="Open" />
 
                         <Label Content="个数：" />
-                        <TextBox Name="txtM5Count"
-                                 Width="60"
-                                 Text="1" />
-                        <Button Click="btnM5ChargeStart_click" Content="Start" />
+                        <TextBox
+                            Name="txtM5Count"
+                            Width="60"
+                            Text="1" />
+                        <Button
+                            Name="btnM5Charge"
+                            Click="btnM5ChargeStart_click"
+                            Content="Start"
+                            IsEnabled="False" />
                     </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>
 
-
-        <RichTextBox Name="log"
-                     Grid.Row="2"
-                     Margin="5,0"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <RichTextBox
+            Name="log"
+            Grid.Row="2"
+            Margin="5,0"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
             <RichTextBox.Resources>
                 <Style TargetType="RichTextBox">
                     <Setter Property="FontSize" Value="14" />

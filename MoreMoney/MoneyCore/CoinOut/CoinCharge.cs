@@ -20,9 +20,16 @@ namespace MoneyCore
 
         public CoinCharge(string port, ChargeMoneyType chargeType, bool enabletimeout)
         {
-            this.serial = new SerialPort(port, 9600, Parity.None, 8, StopBits.One);
-            this.chargeType = chargeType;
-            this.enabletimeout = enabletimeout;
+            try
+            {
+                this.serial = new SerialPort(port, 9600, Parity.None, 8, StopBits.One);
+                this.chargeType = chargeType;
+                this.enabletimeout = enabletimeout;
+            }
+            catch (Exception ex)
+            {
+                Log.Out("打开找零设备异常->" + ex.Message);
+            }
         }
 
         public bool Open(out string msg)

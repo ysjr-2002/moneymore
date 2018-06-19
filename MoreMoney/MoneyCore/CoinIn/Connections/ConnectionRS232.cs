@@ -79,7 +79,6 @@ namespace dk.CctalkLib.Connections
             set { _removeEcho = value; }
         }
 
-
         public ConnectionRs232()
         {
             SetDefaultPortConfig();

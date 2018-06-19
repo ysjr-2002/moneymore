@@ -117,20 +117,20 @@ namespace MoreMoney
                 }));
             };
 
-            DeviceBus.OnChargeOver += (x, y, unChargeMoney) =>
+            DeviceBus.OnChargeOver += (x, agg, unChargeMoney) =>
             {
                 if (unChargeMoney == 0)
                 {
-                    var m100 = y[ChargeMoneyType.M100];
+                    var m100 = agg[ChargeMoneyType.M100];
                     Core.Log.In("100找零->" + m100);
 
-                    var m50 = y[ChargeMoneyType.M50];
+                    var m50 = agg[ChargeMoneyType.M50];
                     Core.Log.In("50找零->" + m50);
 
-                    var m5 = y[ChargeMoneyType.M5];
+                    var m5 = agg[ChargeMoneyType.M5];
                     Core.Log.In("5找零->" + m5);
 
-                    var m1 = y[ChargeMoneyType.M1];
+                    var m1 = agg[ChargeMoneyType.M1];
                     Core.Log.In("1找零->" + m1);
                 }
                 else
@@ -231,6 +231,12 @@ namespace MoreMoney
         decimal _coinCounter = 0;
         private void btnCoinOpenPort_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(cmbCoinPorts.Text))
+            {
+                Core.Log.Out("请选择串口");
+                return;
+            }
+
             var con = new ConnectionRs232
             {
                 PortName = cmbCoinPorts.Text,
@@ -252,6 +258,11 @@ namespace MoreMoney
             _coinAcceptor.ErrorMessageAccepted += CoinAcceptorErrorMessageAccepted;
 
             _coinAcceptor.Init();
+
+            if (_coinAcceptor.IsInitialized)
+            {
+                wpCoinIn.IsEnabled = true;
+            }
         }
 
         void CoinAcceptorCoinAccepted(object sender, CoinAcceptorCoinEventArgs e)
@@ -300,6 +311,7 @@ namespace MoreMoney
                 Core.Log.In(msg);
                 return;
             }
+            btnM1Charge.IsEnabled = true;
         }
 
         private void btnM1ChargeStart_click(object sender, RoutedEventArgs e)
@@ -318,6 +330,7 @@ namespace MoreMoney
                 Core.Log.In(msg);
                 return;
             }
+            btnM5Charge.IsEnabled = true;
         }
 
         private void btnM5ChargeStart_click(object sender, RoutedEventArgs e)
@@ -337,6 +350,7 @@ namespace MoreMoney
             }
             StatusCode.Init();
             wrapPanel.IsEnabled = true;
+            wp1.IsEnabled = true;
             constrant = new Constrant(com);
         }
 
