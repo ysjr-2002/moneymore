@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 namespace MoneyCore
 {
     /// <summary>
-    /// 一个读卡器
-    /// 一个纸币接收机 
-    /// 一个硬币接收机
-    /// 一个一元硬币找零机
-    /// 一个五元硬币找零机
-    /// 一个纸币找零机
+    /// com1 一个读卡器
+    /// com2 一个纸币接收机 
+    /// com3 一个硬币接收机
+    /// com4 一个纸币找零机
+    /// com5 一个一元硬币找零机
+    /// com6 一个五元硬币找零机
     /// </summary>
     public static class DeviceBus
     {
@@ -252,11 +252,23 @@ namespace MoneyCore
             Log.In(string.Format("name->{0} code->{1}", e.CoinName, e.CoinCode));
             if (e.CoinCode == 2)
             {
-                //5角
-                acceptMoney += 0.5M;
-                acceptMoney = 0.5M;
+                //10元
+                acceptMoney += 10M;
+                currentMoney = 10;
             }
             if (e.CoinCode == 3)
+            {
+                //5元
+                acceptMoney += 5M;
+                currentMoney = 5;
+            }
+            if (e.CoinCode == 4)
+            {
+                //2元
+                acceptMoney += 2M;
+                currentMoney = 2;
+            }
+            if (e.CoinCode == 5)
             {
                 //1元
                 acceptMoney += 1M;

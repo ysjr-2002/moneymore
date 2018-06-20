@@ -273,8 +273,7 @@ namespace MoreMoney
                 return;
             }
             _coinCounter += e.CoinValue;
-            Core.Log.In(string.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
-
+            //Core.Log.In(string.Format("Coin accepted: {0} ({1:X2}), path {3}. Now accepted: {2:C}", e.CoinName, e.CoinCode, _coinCounter, e.RoutePath));
         }
 
         void CoinAcceptorErrorMessageAccepted(object sender, CoinAcceptorErrorEventArgs e)

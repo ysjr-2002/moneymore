@@ -368,7 +368,6 @@ namespace dk.CctalkLib.Devices
                     var errCode = (CoinAcceptorErrors)ev.ErrorOrRouteCode;
                     _errors.TryGetValue(ev.ErrorOrRouteCode, out errMsg);
                     RaiseInvokeErrorEvent(new CoinAcceptorErrorEventArgs(errCode, errMsg));
-
                 }
                 else
                 {
@@ -376,6 +375,7 @@ namespace dk.CctalkLib.Devices
                     _coins.TryGetValue(ev.CoinCode, out coinInfo);
                     var evName = coinInfo == null ? null : coinInfo.Name;
                     var evVal = coinInfo == null ? 0 : coinInfo.Value;
+                    Log.In(string.Format("code->{0} name->{1} value->{2}", ev.CoinCode, evName, evVal));
                     RaiseInvokeCoinEvent(new CoinAcceptorCoinEventArgs(evName, evVal, ev.CoinCode, ev.ErrorOrRouteCode));
                 }
             }
@@ -387,17 +387,13 @@ namespace dk.CctalkLib.Devices
                 RaiseInvokeErrorEvent(new CoinAcceptorErrorEventArgs(CoinAcceptorErrors.UnspecifiedAlarmCode,
                                                                      "Events lost:" + eventsLost));
             }
-
-
         }
 
         void RaiseInvokeErrorEvent(CoinAcceptorErrorEventArgs ea)
         {
             if (CoinAccepted != null)
                 ErrorMessageAccepted(this, ea);
-
         }
-
 
         void RaiseInvokeCoinEvent(CoinAcceptorCoinEventArgs ea)
         {
@@ -474,26 +470,19 @@ namespace dk.CctalkLib.Devices
         /// OK it is not default for everybody, but for my acceptor 
         /// </summary>
         public static Dictionary<byte, CoinTypeInfo> DefaultConfig = new Dictionary<byte, CoinTypeInfo>
-                    {
-						//{5, new CoinTypeInfo("50kNew", 0.5M)},
-                        //{6, new CoinTypeInfo("1元", 1M)},
-                        //{7, new CoinTypeInfo("2元", 2M)},
-                        //{8, new CoinTypeInfo("5元", 5M)},
-                        //{9, new CoinTypeInfo("10元", 10M)},
+        {
+            //人民币
+            //{6, new CoinTypeInfo("1角", 0.1M)},
+            //{2, new CoinTypeInfo("5角", 0.5M)},
+            //{3, new CoinTypeInfo("1元", 1M)},
+            //{7, new CoinTypeInfo("2元", 2M)},
+            //{8, new CoinTypeInfo("5元", 5M)},
+            //{9, new CoinTypeInfo("10元", 10M)},
 
-                        {6, new CoinTypeInfo("1角", 0.1M)},
-                        {2, new CoinTypeInfo("5角", 0.5M)},
-                        {3, new CoinTypeInfo("1元", 1M)},
-                        {7, new CoinTypeInfo("2元", 2M)},
-                        {8, new CoinTypeInfo("5元", 5M)},
-                        {9, new CoinTypeInfo("10元", 10M)},
-
-                        //{11, new CoinTypeInfo("50 kopec", 0.5M)},
-                        //{12, new CoinTypeInfo("1 rubles", 1M)},
-                        //{13, new CoinTypeInfo("2 rubles", 2M)},
-                        //{14, new CoinTypeInfo("5 rubles", 5M)},
-                        //{15, new CoinTypeInfo("10 ruble", 10M)},
-                    };
-
+            {2, new CoinTypeInfo("10元", 10M)},
+            {3, new CoinTypeInfo("5元", 5M)},
+            {4, new CoinTypeInfo("2元", 2M)},
+            {5, new CoinTypeInfo("1元", 1M)},
+        };
     }
 }

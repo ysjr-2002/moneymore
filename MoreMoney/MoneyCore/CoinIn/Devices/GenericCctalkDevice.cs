@@ -8,6 +8,7 @@ using dk.CctalkLib.Connections;
 using dk.CctalkLib.Messages;
 using System.Collections;
 using System.Diagnostics;
+using MoneyCore;
 
 namespace dk.CctalkLib.Devices
 {
@@ -208,6 +209,7 @@ namespace dk.CctalkLib.Devices
                 Counter = respond.Data[0],
                 Events = events,
             };
+            Log.In("counter->" + respond.Data[0]);
 
             return ret;
         }

@@ -16,6 +16,9 @@ namespace dk.CctalkLib.Devices
         public Byte CoinCode;
         public Byte ErrorOrRouteCode;
 
+        /// <summary>
+        /// CoinCode为0
+        /// </summary>
         public Boolean IsError
         {
             get
