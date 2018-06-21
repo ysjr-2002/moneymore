@@ -89,6 +89,7 @@ namespace MoreMoney
                 MessageBox.Show(msg);
                 return;
             }
+            wpCashIn.IsEnabled = true;
         }
 
         private void btnICOpenPort_Click(object sender, RoutedEventArgs e)
@@ -425,11 +426,6 @@ namespace MoreMoney
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             log.Document.Blocks.Clear();
-        }
-
-        private void btnCashReset_Click(object sender, RoutedEventArgs e)
-        {
-            DeviceBus.CashReset();
         }
     }
 }

@@ -45,6 +45,19 @@ namespace MoneyCore.Cash
                 return false;
             }
 
+            if (TryInit() == false)
+            {
+                return false;
+            }
+
+            stop = false;
+            thread = new Thread(Run);
+            thread.Start();
+            return true;
+        }
+
+        private bool TryInit()
+        {
             //重置
             var back = objCCNET.RunCommand(CCNETCommand.RESET);
             Log.In("Reset->" + back.Message + " " + back.ReceivedData.ToStr());
@@ -68,9 +81,19 @@ namespace MoneyCore.Cash
                 return false;
             }
 
-            stop = false;
-            thread = new Thread(Run);
-            thread.Start();
+            //Thread.Sleep(3000);
+            //back = objCCNET.RunCommand(CCNETCommand.Poll);
+            //var item = back.ReceivedData;
+            //if (item == null)
+            //{
+            //    return false;
+            //}
+            //BVStatus bvs = (BVStatus)item[3];
+            //if (bvs != BVStatus.Idling)
+            //{
+            //    //最终状态非空闲
+            //    return false;
+            //}
             return true;
         }
 
@@ -106,7 +129,7 @@ namespace MoneyCore.Cash
                             Log.In("接收完成纸币:" + bt);
                             //if (MoneyReceived != null)
                             //{
-                            Log.In("data->" + item.ToStr() + "->" + back.Message);
+                            Log.In("data->" + back.Message + " " + item.ToStr());
                             int money = 0;
                             switch (bt)
                             {
@@ -114,10 +137,7 @@ namespace MoneyCore.Cash
                                 case BillType.RMB5: money = 50; break;
                                 case BillType.RMB10: money = 100; break;
                                 case BillType.RMB20: money = 200; break;
-                                    //case BillType.RMB50: money = 50; break;
-                                    //case BillType.RMB100: money = 100; break;
                             }
-                            Log.In("money->" + money);
                             //TimeSpan ts = DateTime.Now - LastRecDT;
                             //if (ts.TotalSeconds > 1)
                             //    MoneyReceived(money, bt);

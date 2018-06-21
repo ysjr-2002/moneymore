@@ -182,8 +182,6 @@ namespace dk.CctalkLib.Devices
 
         public DeviceEventBuffer CmdReadEventBuffer()
         {
-            Trace.TraceInformation("Cmd: ReadEventBuffer");
-
             var msg = CreateMessage(229);
             var respond = Connection.Send(msg, _checksumHandler);
 
@@ -209,8 +207,7 @@ namespace dk.CctalkLib.Devices
                 Counter = respond.Data[0],
                 Events = events,
             };
-            Log.In("counter->" + respond.Data[0]);
-
+            Log.In("counter->" + respond.Data[0] + " " + respond.Data.ToStr());
             return ret;
         }
 

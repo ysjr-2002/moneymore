@@ -159,7 +159,7 @@ namespace MoneyCore
             //    Application.Current.Dispatcher.Invoke((EventHandler<CoinAcceptorErrorEventArgs>)CoinAcceptorErrorMessageAccepted, sender, e);
             //    return;
             //}
-            //Log.In(String.Format("Coin acceptor error: {0} ({1}, {2:X2})", e.ErrorMessage, e.Error, (Byte)e.Error));
+            Log.In(String.Format("Coin acceptor error: {0} ({1}, {2:X2})", e.ErrorMessage, e.Error, (Byte)e.Error));
         }
 
         /// <summary>
@@ -538,12 +538,6 @@ namespace MoneyCore
                 }
                 Log.In("1找零结束");
             }
-        }
-
-        public static void CashReset()
-        {
-            constrant?.Reset();
-            Log.Out("找零钱箱Reset");
         }
     }
 }

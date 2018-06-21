@@ -165,7 +165,6 @@ namespace MoneyCore
 
         public void ReadPROGRAM()
         {
-
             Task.Factory.StartNew(() =>
             {
                 var send = Package.ReadProgramID();
@@ -216,11 +215,12 @@ namespace MoneyCore
             if (receive != null)
             {
                 var scode = (char)receive[0];
-                Log.In("status code->" + scode);
-                if (scode == '0' || scode == '1')
+                Log.In("back data->" + receive.ToAscii());
+                if (scode == '0' || scode == '1' || scode == '4')
                 {
                     //0 SUCCESSFUL COMMAND
                     //1 LOW LEVEL
+                    var sb = new StringBuilder();
                     var repeatbuffer = Util.getRepeatbuffer(receive, 1, 5);
                     foreach (var item in repeatbuffer)
                     {
@@ -228,8 +228,9 @@ namespace MoneyCore
                         var h = (char)item[0];
                         var f = (char)item[1];
                         var number = item.ToArray().ToAscii(2, 3);
-                        Log.In(string.Format("HFNNN-> {0} {1} {2}", h, f, number));
+                        sb.Append(string.Format("HFNNN-> {0} {1} {2} ", h, f, number));
                     }
+                    Log.In(sb.ToString());
                     return true;
                 }
                 if (scode == '2')
@@ -237,12 +238,16 @@ namespace MoneyCore
                     //钱箱空
                     return false;
                 }
+                if (scode == '9')
+                {
+                    Reset();
+                    return false;
+                }
                 else
                 {
                     //没有钱后返回 0x36 Fail to feed
                     //the command X’36’ Check Delivered Notes
                     //CheckDelivered();
-                    Log.In(receive.ToAscii());
                     var temp = StatusCode.GetTypeRemark(receive[0]);
                     Log.In(temp);
                     return false;
