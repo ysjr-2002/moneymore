@@ -18,22 +18,14 @@
     <TabControl>
         <TabItem Header="打印一">
             <StackPanel Orientation="Vertical">
-                <Button Width="100"
-                        Height="30"
-                        Click="Button_Click"
-                        Content="print qr" />
-
-                <Button Width="100"
-                        Height="30"
-                        Click="Button_Click1"
-                        Content="print dc" />
-
                 <Canvas Name="printArea"
-                        Width="160"
-                        Height="260"
-                        Margin="10"
-                        HorizontalAlignment="Left"
-                        Background="AliceBlue">
+                        Width="180"
+                        Height="180"
+                        Margin="20,0,0,0"
+                        HorizontalAlignment="Left">
+                    <Canvas.LayoutTransform>
+                        <RotateTransform Angle="180" />
+                    </Canvas.LayoutTransform>
                     <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
                         <Label HorizontalContentAlignment="Center"
                                Content="Welcome"
@@ -45,17 +37,25 @@
                                HorizontalAlignment="Center"
                                Source="qr.png" />
 
-                        <Image Width="100"
-                               Height="100"
-                               Margin="10"
-                               HorizontalAlignment="Center"
-                               Source="qr.png" />
-
                         <Label HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Content="时间:2018-06-13 12:23:23" />
                     </StackPanel>
                 </Canvas>
+                <Button Width="100"
+                        Height="30"
+                        Click="Button_Click"
+                        Content="print qr" />
+
+                <Button Width="100"
+                        Height="30"
+                        Click="btnPrintDC_click"
+                        Content="print dc" />
+
+                <Button Width="100"
+                        Height="30"
+                        Click="Button_Click2"
+                        Content="print zebra" />
             </StackPanel>
         </TabItem>
 
@@ -67,7 +67,6 @@
                       Width="200"
                       Height="200"
                       HorizontalAlignment="Left"
-                      Background="Blue"
                       RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <RotateTransform Angle="0" />

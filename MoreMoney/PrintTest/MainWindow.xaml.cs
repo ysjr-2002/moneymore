@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,41 +37,28 @@ namespace PrintTest
             }
         }
 
-        static FormattedText getFt(string content)
+        static FormattedText getFt(string content, int fontsize = 18)
         {
-            FormattedText ft = new FormattedText(content, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("宋体"), 14, Brushes.Black);
+            FormattedText ft = new FormattedText(content, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("宋体"), fontsize, Brushes.Black);
             return ft;
         }
 
-        private void Button_Click1(object sender, RoutedEventArgs e)
+        private void btnPrintDC_click(object sender, RoutedEventArgs e)
         {
             PrintDialog pd = new PrintDialog();
+            DrawingVisual dv = new DrawingVisual();
+            DrawingContext dc = dv.RenderOpen();
 
-            if (pd.ShowDialog().GetValueOrDefault())
-            {
+            var ft1 = getFt("欢迎光大安石中心");
+            dc.DrawText(ft1, new Point(80, 10));
 
-                DrawingVisual dv = new DrawingVisual();
-                DrawingContext dc = dv.RenderOpen();
+            dc.DrawImage(imgqr.Source, new Rect { X = 100, Y = 40, Width = 100, Height = 100 });
 
-                var ft1 = getFt("welcome to park");
-                dc.DrawText(ft1, new Point(10, 0));
+            var ft3 = getFt("打印时间:2018-06-24 13:28:35", 14);
+            dc.DrawText(ft3, new Point(60, 150));
 
-                var ft2 = getFt("datetime");
-                dc.DrawText(ft2, new Point(10, 30));
-
-                var ft3 = getFt("leave time");
-                dc.DrawText(ft3, new Point(10, 60));
-
-                var ft4 = getFt("停车时长:2小时10分");
-                dc.DrawText(ft4, new Point(10, 90));
-
-                //
-                dc.DrawImage(imgqr.Source, new Rect { X = 10, Y = 120, Width = 100, Height = 100 });
-
-                dc.Close();
-
-                pd.PrintVisual(dv, "Print Test");
-            }
+            dc.Close();
+            pd.PrintVisual(dv, "Print Test");
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -79,6 +68,35 @@ namespace PrintTest
             if (pd.ShowDialog().GetValueOrDefault())
             {
                 pd.PrintVisual(printGridArea, "Print test");
+            }
+        }
+
+        private void Button_Click2(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TcpClient tcp = new TcpClient();
+                tcp.Connect(new IPEndPoint(IPAddress.Parse("192.168.254.254"), 9100));
+
+                NetworkStream nws = tcp.GetStream();
+                StringBuilder sb = new StringBuilder();
+                sb.Append("^XA");
+                sb.Append("^FO300,20");
+                sb.Append("^BQ,2,10");
+                sb.Append("^FDQA,0123456789ABCDEFGHKJKFDJKFDJFKDJFDKF^FS");
+                sb.Append("^XZ");
+
+                var str = sb.ToString();
+                var data = Encoding.UTF8.GetBytes(str);
+                nws.Write(data, 0, data.Length);
+
+                nws.Close();
+                tcp.Close();
+                tcp = null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("连接失败->" + ex.Message);
             }
         }
     }
