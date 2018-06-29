@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,10 @@ namespace PrintTest
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// http://www.chongshang.com.cn/manual/ZPL_font.shtml
+        /// 字体设置
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -75,10 +80,7 @@ namespace PrintTest
         {
             try
             {
-                TcpClient tcp = new TcpClient();
-                tcp.Connect(new IPEndPoint(IPAddress.Parse("192.168.254.254"), 9100));
-
-                NetworkStream nws = tcp.GetStream();
+                String str = "";
                 StringBuilder sb = new StringBuilder();
                 sb.Append("^XA");
                 sb.Append("^FO300,20");
@@ -86,18 +88,57 @@ namespace PrintTest
                 sb.Append("^FDQA,0123456789ABCDEFGHKJKFDJKFDJFKDJFDKF^FS");
                 sb.Append("^XZ");
 
-                var str = sb.ToString();
-                var data = Encoding.UTF8.GetBytes(str);
-                nws.Write(data, 0, data.Length);
+                //StringBuilder sb = new StringBuilder();
+                //sb.Append("^XA");
+                //sb.Append("^A2N,50,50,B: CYRI_UB.FNT");
+                //sb.Append("^FO100,100");
+                //sb.Append("^FDZebra Printer Fonts^ FS");
+                //sb.Append("^A2N,40,40");
+                //sb.Append("^F0100,150");
+                //sb.Append("^FDThis uses B:CYRI_UB.FNT ^ FS");
+                //sb.Append("^XZ");
 
-                nws.Close();
-                tcp.Close();
-                tcp = null;
+                str = sb.ToString();
+                SendByTcp(str);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("连接失败->" + ex.Message);
             }
+        }
+
+        private void SendByTcp(string content)
+        {
+            TcpClient tcp = new TcpClient();
+            tcp.Connect(new IPEndPoint(IPAddress.Parse("192.168.0.5"), 9100));
+            NetworkStream nws = tcp.GetStream();
+            var data = Encoding.UTF8.GetBytes(content);
+            nws.Write(data, 0, data.Length);
+            nws.Close();
+            tcp.Close();
+            tcp = null;
+        }
+
+        private void SendByUdp(string content)
+        {
+            var data = Encoding.UTF8.GetBytes(content);
+
+            UdpClient udp = new UdpClient();
+            udp.Send(data, data.Length, new IPEndPoint(IPAddress.Parse("192.168.0.5"), 9100));
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+            UcPrint print = new PrintTest.UcPrint();
+
+            PrintTicket pt = new PrintTicket();
+            pt.CopyCount = 2;
+            PrintDialog pd = new PrintDialog();
+            //pt = pd.PrintTicket;
+            //pt.CopyCount = 2;
+            pd.PrintTicket = pt;
+            pd.PrintVisual(print, "est");
         }
     }
 }
