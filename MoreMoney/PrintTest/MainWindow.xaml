@@ -1,28 +1,40 @@
-﻿<Window x:Class="PrintTest.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:PrintTest"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="Print Test"
-        Width="525"
-        Height="500"
-        WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d">
+﻿<Window
+    x:Class="PrintTest.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PrintTest"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Print Test"
+    Width="525"
+    Height="500"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="30" />
         </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
     </Window.Resources>
     <TabControl>
         <TabItem Header="打印一">
             <StackPanel Orientation="Vertical">
-                <StackPanel Name="printArea"
-                            Width="auto"
-                            Height="auto"
-                            HorizontalAlignment="Left">
-                    <Grid>
+                <Grid
+                    Name="printArea"
+                    Width="300"
+                    Height="260"
+                    HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="auto" />
@@ -30,64 +42,127 @@
 
                         <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
                                 <RowDefinition />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="60" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="30" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Label Grid.Row="2"
-                                   HorizontalContentAlignment="Center"
-                                   Content="欢迎光临光大安石" />
-                            <Label Grid.Row="3"
-                                   HorizontalContentAlignment="Center"
-                                   Content="2018-06-13 12:23:23" />
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="32"
+                                    Text="来宾" />
+                                <TextBlock
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="24"
+                                    Text="VISITOR" />
+                            </StackPanel>
+
+                            <Path
+                                Grid.Row="2"
+                                Data="M10,0 L200,0"
+                                Stroke="Black"
+                                StrokeThickness="3" />
+
+                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Bottom"
+                                    FontSize="18"
+                                    Text="2018年07月11日" />
+                            </StackPanel>
+
                         </Grid>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
                                 <RowDefinition />
+                                <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-
-                            <Image Name="imgqr"
-                                   Grid.Row="2"
-                                   Width="150"
-                                   Height="150"
-                                   Source="qr.png" />
+                            <Image
+                                Name="imgqr"
+                                Grid.Row="1"
+                                Width="100"
+                                Height="100"
+                                Source="qr.png" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Bottom"
+                                FontSize="14"
+                                Text="仅限当日使用" />
                         </Grid>
                     </Grid>
-                </StackPanel>
-                <Button Width="100"
-                        Height="30"
-                        Click="Button_Click"
-                        Content="print qr" />
 
-                <Button Width="100"
-                        Height="30"
-                        Click="btnPrintDC_click"
-                        Content="print dc" />
+                    <Grid
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Background="Black">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
-                <Button Width="100"
-                        Height="30"
-                        Click="Button_Click2"
-                        Content="print zebra" />
+                        <Image
+                            Grid.Column="0"
+                            Height="24"
+                            Margin="5,0"
+                            Source="take.png" />
+                        <Image
+                            Grid.Column="1"
+                            Height="24"
+                            Source="smoke.png" />
+                        <TextBlock
+                            Grid.Column="4"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Text="光 大 安 石" />
+                    </Grid>
+
+                </Grid>
+
+                <Button
+                    Width="100"
+                    Height="30"
+                    Click="Button_Click"
+                    Content="print qr" />
+
+                <Button
+                    Width="100"
+                    Height="30"
+                    Click="btnPrintDC_click"
+                    Content="print dc" />
+
+                <Button
+                    Width="100"
+                    Height="30"
+                    Click="Button_Click2"
+                    Content="print zebra" />
             </StackPanel>
         </TabItem>
 
         <TabItem Header="打印二">
 
             <StackPanel Orientation="Vertical">
-                <Button Margin="0,0,0,100"
-                        Click="Button_Click_1"
-                        Content="print grid" />
-                <Grid Name="printGridArea"
-                      Width="200"
-                      Height="200"
-                      HorizontalAlignment="Left"
-                      RenderTransformOrigin="0.5,0.5">
+                <Button
+                    Margin="0,0,0,100"
+                    Click="Button_Click_1"
+                    Content="print grid" />
+                <Grid
+                    Name="printGridArea"
+                    Width="200"
+                    Height="200"
+                    HorizontalAlignment="Left"
+                    RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <RotateTransform Angle="0" />
                     </Grid.RenderTransform>
@@ -104,33 +179,39 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0"
-                           Grid.Column="1"
-                           Content="时间:" />
-                    <Label Grid.Row="0"
-                           Grid.Column="2"
-                           Content="2018-02-01 12:12:12" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Content="时间:" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Content="2018-02-01 12:12:12" />
 
-                    <Label Grid.Row="1"
-                           Grid.Column="1"
-                           Content="地点:" />
-                    <Label Grid.Row="1"
-                           Grid.Column="2"
-                           Content="上海光大安石中心" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="地点:" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Content="上海光大安石中心" />
 
-                    <Label Grid.Row="2"
-                           Grid.Column="1"
-                           Content="人物:" />
-                    <Label Grid.Row="2"
-                           Grid.Column="2"
-                           Content="杨某人" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Content="人物:" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Content="杨某人" />
                 </Grid>
             </StackPanel>
 
         </TabItem>
 
         <TabItem Header="自定义控件打印">
-            <Button Content="Print" Click="Button_Click_2" />
+            <Button Click="Button_Click_2" Content="Print" />
         </TabItem>
     </TabControl>
 
