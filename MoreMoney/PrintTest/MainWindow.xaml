@@ -8,6 +8,7 @@
     Title="Print Test"
     Width="525"
     Height="500"
+    FontFamily="微软雅黑"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
@@ -26,8 +27,8 @@
             <StackPanel Orientation="Vertical">
                 <Grid
                     Name="printArea"
-                    Width="300"
-                    Height="260"
+                    Width="290"
+                    Height="175"
                     HorizontalAlignment="Left">
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -125,7 +126,7 @@
                             Margin="0,0,10,0"
                             VerticalAlignment="Center"
                             Foreground="White"
-                            Text="光 大 安 石" />
+                            Text="信利康运营" />
                     </Grid>
 
                 </Grid>
