@@ -117,6 +117,7 @@
   <ItemGroup>
     <Resource Include="images\smoke.png" />
     <Resource Include="images\take.png" />
+    <Resource Include="sf.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
