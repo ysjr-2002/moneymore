@@ -74,6 +74,11 @@
                         Height="30"
                         Click="Button_Click2"
                         Content="print zebra" />
+
+                <Button Width="100"
+                        Height="30"
+                        Click="Button_Click3"
+                        Content="条码" />
             </StackPanel>
         </TabItem>
 
@@ -130,7 +135,7 @@
         </TabItem>
 
         <TabItem Header="自定义控件打印">
-            <Button Content="Print" Click="Button_Click_2" />
+            <Button Click="Button_Click_2" Content="Print" />
         </TabItem>
     </TabControl>
 

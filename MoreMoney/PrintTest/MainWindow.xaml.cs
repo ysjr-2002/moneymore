@@ -36,7 +36,7 @@ namespace PrintTest
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             PrintDialog pd = new PrintDialog();
-            if (pd.ShowDialog().GetValueOrDefault())
+            //if (pd.ShowDialog().GetValueOrDefault())
             {
                 pd.PrintVisual(printArea, "print test");
             }
@@ -110,7 +110,7 @@ namespace PrintTest
         private void SendByTcp(string content)
         {
             TcpClient tcp = new TcpClient();
-            tcp.Connect(new IPEndPoint(IPAddress.Parse("192.168.0.5"), 9100));
+            tcp.Connect(new IPEndPoint(IPAddress.Parse("192.168.0.2"), 9100));
             NetworkStream nws = tcp.GetStream();
             var data = Encoding.UTF8.GetBytes(content);
             nws.Write(data, 0, data.Length);
@@ -139,6 +139,21 @@ namespace PrintTest
             //pt.CopyCount = 2;
             pd.PrintTicket = pt;
             pd.PrintVisual(print, "est");
+        }
+
+        private void Button_Click3(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("^XA");
+            sb.Append("^FO130,10^BY3");
+            sb.Append("^BAN,20,Y,N,N");
+            sb.Append("^FD0123456789ABCDE^FS");
+            sb.Append("^FO300,60");
+            sb.Append("^BQ,2,10");
+            sb.Append("^FDQA,0123456789ABCDEFGHKJKFDJKFDJFKDJFDKF^FS");
+            sb.Append("^XZ");
+
+            SendByTcp(sb.ToString());
         }
     }
 }
