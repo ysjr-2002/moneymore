@@ -50,7 +50,8 @@
     <Compile Include="CashIn\CashReceiver.cs" />
     <Compile Include="CashIn\Charge.cs" />
     <Compile Include="CashIn\Enums.cs" />
-    <Compile Include="CoinOutEx\Class1.cs" />
+    <Compile Include="CoinOutEx\CRC.cs" />
+    <Compile Include="CoinOutEx\MyCharge.cs" />
     <Compile Include="CoinOut\CoinCharge.cs" />
     <Compile Include="CoinOut\CoinChargeAnswer.cs" />
     <Compile Include="CoinIn\Checksumms\Checksum.cs" />

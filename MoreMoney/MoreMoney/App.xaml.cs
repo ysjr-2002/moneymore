@@ -1,4 +1,5 @@
-﻿using MoreMoney.Core;
+﻿using MoneyCore.CoinOutEx;
+using MoreMoney.Core;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,8 +17,18 @@ namespace MoreMoney
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var n = 439041101;
-            var hex = n.ToString("X2");
+            byte[] data = { 0x7F, 0x00, 0x01, 0x07 };
+
+            for (int i = 1; i < data.Length; i++)
+            {
+                byte b = data[i];
+                CRC.Update_CRC(b);
+            }
+
+            var ll = CRC.CRCL;
+            var hh = CRC.CRCH;
+            var l = CRC.CRCL.ToString("X2");
+            var h = CRC.CRCH.ToString("X2");
 
             MainWindow x = new MainWindow();
             x.Show();

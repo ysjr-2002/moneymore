@@ -19,6 +19,7 @@ using dk.CctalkLib.Devices;
 using MoneyCore;
 using MoneyCore.Cash;
 using dk.CctalkLib.Connections;
+using MoneyCore.CoinOutEx;
 
 namespace MoreMoney
 {
@@ -63,6 +64,7 @@ namespace MoreMoney
             cmbICPorts.ItemsSource = ports;
             cmbM1Ports.ItemsSource = ports;
             cmbM5Ports.ItemsSource = ports;
+            cmbMxPorts.ItemsSource = ports;
 
             if (ports.Length >= 1)
                 cmbICPorts.SelectedIndex = 0;
@@ -76,6 +78,9 @@ namespace MoreMoney
                 cmbM1Ports.SelectedIndex = 4;
             if (ports.Length >= 5)
                 cmbM5Ports.SelectedIndex = 5;
+
+            if (ports.Length >= 1)
+                cmbMxPorts.SelectedIndex = 0;
         }
 
         CashReceiver receiver = null;
@@ -426,6 +431,21 @@ namespace MoreMoney
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             log.Document.Blocks.Clear();
+        }
+
+        /// <summary>
+        /// 新硬币找零
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnMXOpen_click(object sender, RoutedEventArgs e)
+        {
+            new MyCharge().test();
+        }
+
+        private void btnMXChargeStart_click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
