@@ -19,7 +19,7 @@ using dk.CctalkLib.Devices;
 using MoneyCore;
 using MoneyCore.Cash;
 using dk.CctalkLib.Connections;
-using MoneyCore.CoinOutEx;
+using MoneyCore.CashInEx;
 
 namespace MoreMoney
 {
@@ -433,19 +433,31 @@ namespace MoreMoney
             log.Document.Blocks.Clear();
         }
 
+        CashReceiverValidator cashEx = null;
         /// <summary>
-        /// 新硬币找零
+        /// 新纸币接收
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnMXOpen_click(object sender, RoutedEventArgs e)
         {
-            new MyCharge().test();
+            cashEx = new CashReceiverValidator();
+            var open = cashEx.Open(cmbMxPorts.Text);
+            if (open)
+            {
+                btnCashNewPool.IsEnabled = true;
+                btnCashNewStopPool.IsEnabled = true;
+            }
         }
 
-        private void btnMXChargeStart_click(object sender, RoutedEventArgs e)
+        private void btnCashNewPool_click(object sender, RoutedEventArgs e)
         {
+            cashEx.Init();
+        }
 
+        private void btnCashNewStopPool_click(object sender, RoutedEventArgs e)
+        {
+            cashEx.StopPool();
         }
     }
 }

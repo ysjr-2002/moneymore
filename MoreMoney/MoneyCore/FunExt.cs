@@ -48,6 +48,15 @@ namespace MoneyCore
             return str;
         }
 
+        public static string ToHex(this byte[] bytes)
+        {
+            if (bytes == null)
+                return "empty";
+
+            var str = string.Join(" ", bytes.Select(s => s.ToString("X2")));
+            return str;
+        }
+
         public static byte[] ToAscii(this string str)
         {
             return Encoding.ASCII.GetBytes(str);
